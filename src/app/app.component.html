@@ -1,0 +1,57 @@
+
+
+
+
+
+<div class = "appbar" [style.background-color]="'#24292e'">
+
+  <div class="box_left">
+    <div class="A" >
+      <a [routerLink]="path.home" (click) = "HomeAppbarChange()">
+        Home
+      </a>
+    </div>
+
+    <div class="B">
+      <a (click) ="WorkSpcaeAppbarChange()" [routerLink]="path.workspace">
+        Workspace
+      </a>
+    </div>
+
+  </div>
+  <div class="box_mid" *ngIf="StaticAppbarPlace">
+
+  </div>
+  <div class="box_mid" *ngIf="WorkSpaceAppbarPlace" style="font-size: medium; color: white;">
+    <div class="E">Pull requests</div>
+    <div class="E">Issues</div>
+    <div class="E">Marketplace</div>
+    <div class="E">Explore</div>
+  </div>
+
+
+
+
+
+
+  <div class="box_right" *ngIf="StaticAppbarPlace" >
+
+    <div class="C"><a [routerLink]="path.login">Login</a></div>
+    <div class="D"><a [routerLink]="path.signin">Signing</a></div>
+
+  </div>
+  <div class = "box_right" *ngIf="WorkSpaceAppbarPlace">
+
+  </div>
+
+</div>
+
+<div class = "back" [style.background-color]="'#2b3137'">
+  <router-outlet></router-outlet>
+</div>
+
+
+<div class = "footer" [style.background-color]="'white'">
+  <a>Here is footer</a>
+</div>
+

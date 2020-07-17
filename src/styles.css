@@ -1,0 +1,15 @@
+/* You can add global styles to this file, and also import other style files */
+header nav {
+  position: absolute;
+  top: 0px;
+  right: 120px;
+}
+
+html, body{
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
