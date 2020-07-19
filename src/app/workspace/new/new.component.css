@@ -1,0 +1,84 @@
+.test{
+  position: fixed;
+  top: 10vh;
+  left: 35vw;
+
+}
+.back{
+
+  height:300vh;
+  width: 100vw;
+  position: fixed;
+  top: 0vh;
+  max-width:100%;
+  margin: 0;
+  padding: 0;
+
+}
+
+.basic{
+  position: relative;
+  display: flex;
+  top: -300vh;
+  left: 25vw;
+  min-height: 100vh;
+  width: 40vw;
+  flex-direction: column;
+
+  background: rgb(241, 241, 206) ;
+  padding:2.5vw;
+
+}
+.first_box{
+  flex:2;
+  display: flex;
+  min-height: 1vh;
+  max-height: 15vh;
+  flex-flow: column nowrap ;
+}
+
+.second_box{
+  flex:2;
+  display: flex;
+  min-height: 1vh;
+  flex-flow: column nowrap ;
+}
+
+.third_box{
+  flex:2;
+  display: flex;
+  min-height: 1vh;
+  flex-flow: column nowrap ;
+}
+.four_box{
+  flex:2;
+  display: flex;
+  min-height: 1vh;
+  flex-flow: column nowrap ;
+}
+
+.fifth_box{
+  flex:1;
+  display: flex;
+  min-height: 1vh;
+  flex-flow: column nowrap ;
+}
+
+.second_part{
+  line-height: 1rem;
+}
+
+.second_repository_name{
+  border-radius: 0.5rem ;
+  line-height: 1.5rem;
+}
+
+.second_Description{
+  border-radius: 0.5rem ;
+  size: 100 ;
+  line-height: 2rem;
+}
+
+.third_part{
+  line-height: 3rem;
+}

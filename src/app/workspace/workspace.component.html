@@ -1,5 +1,15 @@
-<p>workspace works!</p>
 
 
-<div class = "back" [style.background-color]="'gray'"></div>
+<div class = "back" [style.background-color]="'gray'">
 
+</div>
+<div class="test">
+
+  <p>data num:</p>
+
+
+  <button (click)="plus()" >+1</button>
+  <button (click)="getsum()" >Get</button>
+  <button [routerLink]="wspath.new">new</button>
+</div>
+<router-outlet></router-outlet>
