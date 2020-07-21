@@ -1,11 +1,23 @@
 
 
-<div class = "back" [style.background-color]="'gray'">
+<div class = "back" [style.background-color]="'gray'"></div>
 
+
+<div class="basic">
+  <div class="repository">
+    <div *ngFor="let responsitory of heroes">
+    {{responsitory}}
+    </div>
+  </div>
+
+
+  <div class="display"></div>
 </div>
+
+
 <div class="test">
 
-  <p>data num:</p>
+
 
 
   <button (click)="plus()" >+1</button>

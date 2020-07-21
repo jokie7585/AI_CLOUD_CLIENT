@@ -8,8 +8,8 @@ import {environment} from 'src/environments/environment' ;
   styleUrls: ['./signin.component.css']
 })
 export class SigninComponent implements OnInit {
-  InputAccount: string = '' ;
-  Inputpassword: string = '' ;
+  InputAccount: '' ;
+  Inputpassword: '' ;
   EnterPlace: boolean = true ;
   SuccessPlace: boolean = false ;
   ErrorPlace: boolean = false ;

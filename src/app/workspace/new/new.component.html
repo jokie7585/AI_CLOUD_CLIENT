@@ -20,7 +20,10 @@
     </div>
     <div>
       username   /
-      &nbsp;&nbsp;<input class="second_repository_name">
+      &nbsp;&nbsp;
+      <div class="second_repository_name">
+        <input  name="Inputnewrepository" [(ngModel)]="Inputnewrepository">
+      </div>
     </div>
     <a>Great repository names are short and memorable. Need inspiration? How about sturdy-umbrella?</a><br>
     <a>Description (optional)  </a>
@@ -36,7 +39,7 @@
     test4
   </div>
   <div class="fifth_box">
-    test5
+    <button (click)="newrepository()" >repository</button>
   </div>
 
 

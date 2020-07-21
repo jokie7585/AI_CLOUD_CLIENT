@@ -9,6 +9,7 @@ import { from } from 'rxjs';
 import { NewComponent } from './new/new.component';
 import { FilesystemComponent } from './filesystem/filesystem.component';
 
+import { FormsModule } from '@angular/forms';
 
 
 
@@ -16,6 +17,7 @@ import { FilesystemComponent } from './filesystem/filesystem.component';
   declarations: [WorkspaceComponent, NewComponent, FilesystemComponent],
   imports: [
     CommonModule,
+    FormsModule,
     WorkspaceRoutingModule
   ],
   providers:[CookieService]
