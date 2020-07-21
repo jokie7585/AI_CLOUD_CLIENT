@@ -14,6 +14,7 @@ import { cookieList} from 'src/utility/cookie' ;
 
 export class WorkspaceComponent implements OnInit {
   private cookieValue: string ;
+  newCookieValue: string = null;
 
   wspath = WSPath ;
   title = 'Tour of Heroes';
@@ -44,7 +45,6 @@ export class WorkspaceComponent implements OnInit {
       this.sum = 0;
     }
   }
-
 
 
 }
