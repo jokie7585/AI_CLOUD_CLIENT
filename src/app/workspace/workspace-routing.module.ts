@@ -4,6 +4,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { WorkspaceComponent } from './workspace.component';
 import {WSPath} from './workspace-path.const' ;
 
+import { from } from 'rxjs';
+
 const routes: Routes = [
   {
     path: WSPath.workspace,
@@ -12,6 +14,10 @@ const routes: Routes = [
   {
     path: WSPath.new,
     loadChildren: () => import('./new/new.module').then(m => m.NewModule)
+  },
+  {
+    path: WSPath.filesystem,
+    loadChildren: () => import('./filesystem/filesystem.module').then( m => m.FilesystemModule)
   },
 
   {

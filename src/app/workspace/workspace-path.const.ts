@@ -4,6 +4,7 @@ export const WSPath  = {
   workspace: '',
   // 新增
   new: 'new',
-
+  // filesystem
+  filesystem: 'filesystem',
 
 };
