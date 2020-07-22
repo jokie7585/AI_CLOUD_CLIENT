@@ -1,0 +1,9 @@
+.pagebase {
+    position: absolute;
+    top: 0px;
+    z-index: 10;
+    min-height: 100vh;
+    min-width: 100vw;
+    background-color: #f9f9f9;
+    text-align: center;
+  }

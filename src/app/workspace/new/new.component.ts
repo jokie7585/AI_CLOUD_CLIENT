@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-
+import {HttpClient} from '@angular/common/http';
 import { CookieService} from 'ngx-cookie-service' ;
+import {environment} from 'src/environments/environment' ;
+import { cookieList} from 'src/utility/cookie' ;
 import { from } from 'rxjs';
 
 
@@ -13,17 +15,35 @@ import { from } from 'rxjs';
 export class NewComponent implements OnInit {
   private cookieValue: string ;
   Inputnewrepository: string ;
-  list: Array<number>;
-  constructor(private cookieService: CookieService) { }
+  userId: string = null;
+  constructor(private cookieService: CookieService,
+              private http: HttpClient) { }
 
   newrepository(){
-    this.cookieService.set('newrepository', this.Inputnewrepository) ;
+    let url = `http://${environment.apiserver}/users/${this.userId}/management/api/createWorkspace` ;
+    let body = {
+      WSName: this.Inputnewrepository
+    }
+    let options = {
+      headers: {
+        'Content-Type' : 'application/json'},
+        withCredentials: true,
+        'Cookie': 'token',
+    };
+
+
+    this.http.post<any>(url,body, options)
+    .subscribe((res => {
+      window.location.assign('workspace')
+    }),
+    err => {
+      window.location.assign('login')
+    });
   }
 
 
 public ngOnInit(): void {
-
-  this.list = JSON.parse(this.cookieService.get('LIST')) ;
+  this.userId = this.cookieService.get(cookieList.userID);
   }
 
 }

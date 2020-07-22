@@ -4,9 +4,13 @@ import { Routes, RouterModule } from '@angular/router';
 import {FilesystemComponent} from './filesystem.component' ;
 const routes: Routes = [
   {
-    path: ':userId',
-    component: FilesystemComponent
+    path: '',
+    component: FilesystemComponent,
   },
+  {
+    path: ':path',
+    component: FilesystemComponent,
+  }
 ];
 
 @NgModule({

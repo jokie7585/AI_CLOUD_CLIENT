@@ -1,44 +1,89 @@
 
 .login{
-  position: fixed;
-  left:50%;
-  top:50%;
-  transform: translate(-50%,-50%);
-  background: rgba(0, 0, 0, 0.5);
-  text-align: center;
-  color:#ffffff;
+  position: relative;
+  min-width: 187px;
+  text-align: left;
+  display: inline-block;
   font-family: "微軟正黑體", sans-serif;
-  border-radius: 10px;
-  padding:30px;
+  background-color: #ffffff;
+  border: solid 1px;
+  border-radius: 3px;
+  border-color: rgb(214, 214, 214);
+  padding:20px;
+  margin: 16 0 0 0;
 
 }
-.login i{
-  font-size: 100px;
-  margin:20px auto;
 
+.pagebase {
+  position: absolute;
+  top: 0px;
+  z-index: 10;
+  min-height: 100vh;
+  min-width: 100vw;
+  background-color: #f9f9f9;
+  text-align: center;
 }
-input[type="text"], input[type="password"] {
-  font-size: 16px;
-  font-family: "微軟正黑體",sans-serif;
-  padding: 5px;
-  border-radius:4px ;
-  margin: 0 auto;
+
+.appicon {
   display: block;
-  width: 100%;
+  text-align: center;
+  padding: 32px 0px 24px;
 }
+
+input[type="text"], input[type="password"] {
+  font-family: "微軟正黑體",sans-serif;
+  padding: 5px 12px;
+  border-radius:4px ;
+  border: solid 1px;
+  border-color: rgb(214, 214, 214);
+  min-width: 187px;
+  min-height: 20px;
+  margin: 5px 0px 15px;
+  display: block;
+}
+
 button{
   border: 0;
-  padding: 4px 8px;
-  font-size: 18px;
+  padding: 5px 12px;
+  margin: 5px 0px 15px;
+  font-size: 14px;
+  border-radius: 10px;
   font-family: "微軟正黑體",sans-serif;
-  background: #ffffff;
-  color: black;
+  min-width: 213px;
+  min-height: 20px;
+  background: #2ea44f;
+  color: white;
 }
-@media(max-width: 450px){
-  .login{
-      width: 70%;
-  }
+
+button:hover {
+  background: #20833c;
+  cursor: pointer;
 }
+
+button:disabled {
+  background: #6fb883;
+}
+
 .signin{
   margin-left: 80%;
+}
+
+
+h1 {
+  font-size: 24px;
+  font-family: "微軟正黑體",sans-serif;
+  color: #333;
+  font-weight: lighter;
+}
+
+label {
+  color: #333;
+  font-weight: bold;
+}
+
+
+.msg {
+  font-size: 10px;
+  max-width: 187px;
+  color: red;
 }

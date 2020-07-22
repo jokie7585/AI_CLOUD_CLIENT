@@ -1,8 +1,5 @@
 
 
-
-
-
 <div class = "appbar" [style.background-color]="'#24292e'">
 
   <div class="box_left">
@@ -36,8 +33,8 @@
 
   <div class="box_right" *ngIf="StaticAppbarPlace" >
 
-    <div class="C"><a [routerLink]="path.login">Login</a></div>
-    <div class="D"><a [routerLink]="path.signin">Signing</a></div>
+    <a [routerLink]="path.login">Sign in</a>
+    <a [routerLink]="path.signin">Sign up</a>
 
   </div>
   <div class = "box_right" *ngIf="WorkSpaceAppbarPlace">
@@ -47,9 +44,9 @@
 </div>
 
 <div class = "back" [style.background-color]="'#2b3137'">
-
+  <router-outlet></router-outlet>
 </div>
-<router-outlet></router-outlet>
+
 
 <div class = "footer" [style.background-color]="'white'">
   <a>Here is footer</a>

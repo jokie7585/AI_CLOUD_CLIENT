@@ -3,8 +3,8 @@ export const WSPath  = {
   // 工作區
   workspace: '',
   // 新增
-  new: 'new',
+  new: 'manage/new',
   // filesystem
-  filesystem: 'filesystem',
+  filesystem: ':wsName/filesystem',
 
 };

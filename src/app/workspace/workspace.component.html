@@ -1,12 +1,15 @@
 
+<div class = "back" [style.background-color]="'gray'">
 
-<div class = "back" [style.background-color]="'gray'"></div>
+
+</div>
 
 
 <div class="basic">
   <div class="repository">
-    <div *ngFor="let responsitory of heroes">
-    {{responsitory}}
+    <div *ngFor="let responsitory of workspaceList"
+          (click)="onClick(responsitory.name)">
+    {{responsitory.name}}
     </div>
   </div>
 
@@ -14,14 +17,4 @@
   <div class="display"></div>
 </div>
 
-
-<div class="test">
-
-
-
-
-  <button (click)="plus()" >+1</button>
-  <button (click)="getsum()" >Get</button>
-  <button [routerLink]="wspath.new">new</button>
-</div>
 <router-outlet></router-outlet>

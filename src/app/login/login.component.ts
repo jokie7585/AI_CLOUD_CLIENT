@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import { CookieService } from 'ngx-cookie-service';
+import {cookieList} from 'src/utility/cookie'
+import { from } from 'rxjs';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -9,10 +12,10 @@ export class LoginComponent implements OnInit {
   InputAccount: string = '' ;
   Inputpassword: string = '' ;
   ServerMessage: string = null;
-  constructor(private http: HttpClient ) {}
+  constructor(private http: HttpClient, private cookie: CookieService ) {}
 
 
-  login(){
+  login(event){
     let body = {
       username: this.InputAccount,
       password: this.Inputpassword
@@ -25,18 +28,22 @@ export class LoginComponent implements OnInit {
         'Content-Type' : 'application/json'},
       withCredentials: true
     };
+    
+    // disable clickable
+    let el: HTMLButtonElement = event.target;
+    el.disabled = true;
 
     this.http.post<any>(url, body, options)
       .subscribe( (res) => {
           console.log(res);
           this.ServerMessage =  res.message ;
-          alert( this.ServerMessage )  ;
+          this.cookie.set(cookieList.userID, this.InputAccount);
           window.location.assign('workspace');
         },
         (err) => {
           console.log(err);
           this.ServerMessage =  err.error.message ;
-          alert( this.ServerMessage )  ;
+          el.disabled = false; 
         }
       );
 

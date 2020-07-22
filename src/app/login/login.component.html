@@ -1,20 +1,27 @@
+<div class='pagebase'>
+
+  <div class="appicon">
+     <img src="assets/github.svg">
+  </div>
+
+  <div>
+    <h1>Sign in to Cytus</h1>
+
+    <div class="login">
+      <label>Username</label>
+      <input type = "text" name = "InputAccount" [(ngModel)]="InputAccount" placeholder="username">
+      <label>Password</label>
+      <input type="text" name = "Inputpassword" [(ngModel)]="Inputpassword" placeholder="password">
+  
+      <div class="msg">
+        {{this.ServerMessage}}
+      </div>
+      <button (click)="login($event)">Sign in</button>
+  
+    </div>
+
+  </div>
 
 
-
-<form action="" class="login">
-  <h1>登入</h1>
-  <h2>帳號</h2>
-  <input type = "text" name = "InputAccount" [(ngModel)]="InputAccount" placeholder="請輸入帳號">
-  <h2>密碼</h2>
-  <input type="text" name = "Inputpassword" [(ngModel)]="Inputpassword" placeholder="請輸入密碼">
-
-
-  <button (click)="login()">Login</button>
-
-  <button onclick = "history.back()">Back</button>
-
-</form>
-
-<div>
-  {{this.ServerMessage}}
 </div>
+

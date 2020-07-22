@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {environment} from 'src/environments/environment' ;
 import {HttpClient} from '@angular/common/http';
+import { CookieService } from 'ngx-cookie-service' ;
+import { cookieList} from 'src/utility/cookie' ;
 
 interface data {
   name: string
@@ -16,20 +18,34 @@ interface data {
 })
 export class FilesystemComponent implements OnInit {
 
-  WorkspaceList: Array<data> = [];
-  userId: string = null;
+  wsName: string = null;
+  userId: string = '';
+  path: string = '';
+  dirList: Array<data> = [];
 
 
-  constructor(private http: HttpClient, private route: ActivatedRoute) { }
+  constructor(private http: HttpClient, 
+              private route: ActivatedRoute,
+              private cookieService: CookieService,) { }
 
   ngOnInit(): void {
-    this.userId = this.route.snapshot.paramMap.get('userId');
-    this.getWSLIST();
+    this.wsName = this.route.snapshot.paramMap.get('wsName');
+    this.userId = this.cookieService.get(cookieList.userID);
+    this.path = this.wsName;
+    this.loadpath();
   }
 
-  getWSLIST(){
+  cd(dir: string){
 
-    let url = `http://${environment.apiserver}/users/${this.userId}/management/api/loadWorkspaceList` ;
+  }
+
+  preDir(){
+
+  }
+
+  loadpath(){
+    let pathURL: string = encodeURI('root>>'.concat(this.path));
+    let url = `http://${environment.apiserver}/users/${this.userId}/${pathURL}` ;
 
     let options = {
       headers: {
@@ -41,10 +57,10 @@ export class FilesystemComponent implements OnInit {
 
     this.http.get<any>(url, options)
     .subscribe((res => {
-      this.WorkspaceList = res;
+      this.dirList = res;
     }),
     err => {
-      alert('no jwt')
+      window.location.assign('login')
     });
   }
 

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import { RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service' ;
+import { cookieList} from 'src/utility/cookie' ;
 import {environment} from 'src/environments/environment' ;
 @Component({
   selector: 'app-signin',
@@ -16,10 +18,12 @@ export class SigninComponent implements OnInit {
   ServerMessage: string = null;
 
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, 
+              private cookieService: CookieService,
+              private route: Router) { }
 
 
-  getAlert(){
+  signUp(){
     let body = {
         account: this.InputAccount,
         password: this.Inputpassword
@@ -40,8 +44,9 @@ export class SigninComponent implements OnInit {
           this.EnterPlace = false ;
           this.SuccessPlace = true ;
           alert( this.ServerMessage )  ;
+          let route = this.route;
           setTimeout( function() {
-            window.location.assign("login");
+            route.navigateByUrl('login')
           }, 3000) ;
 
         },
