@@ -60,7 +60,7 @@ export class WorkspaceComponent implements OnInit {
   }
 
   onClick(wsName: string) {
-    this.router.navigate([`${wsName}/filesystem`], {relativeTo: this.route});
+    this.router.navigate([`${wsName}`], {relativeTo: this.route});
   }
 
   // 跳轉到new頁面

@@ -7,14 +7,15 @@ import { WorkspaceRoutingModule } from './workspace-routing.module';
 import { WorkspaceComponent } from './workspace.component';
 import { from } from 'rxjs';
 import { NewComponent } from './new/new.component';
-import { FilesystemComponent } from './filesystem/filesystem.component';
+import { FilesystemComponent } from './agent/filesystem/filesystem.component';
 
 import { FormsModule } from '@angular/forms';
+import { AgentComponent } from './agent/agent.component';
 
 
 
 @NgModule({
-  declarations: [WorkspaceComponent, NewComponent, FilesystemComponent],
+  declarations: [WorkspaceComponent, NewComponent, FilesystemComponent, AgentComponent],
   imports: [
     CommonModule,
     FormsModule,

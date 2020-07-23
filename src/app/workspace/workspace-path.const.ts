@@ -4,7 +4,7 @@ export const WSPath  = {
   workspace: '',
   // 新增
   new: 'manage/new',
-  // filesystem
-  filesystem: ':wsName/filesystem',
+  // Agent
+  agent: ':wsName',
 
 };
