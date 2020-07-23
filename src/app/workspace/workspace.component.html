@@ -1,20 +1,23 @@
+<div class="pagebase">
+  <div class="pageRepo">
+    <div class="pageRepo_top">
+      <h1>Respositorires</h1>
+      <button (click)="jumpToNew()"> New</button>
 
-<div class = "back" [style.background-color]="'gray'">
+      <input type="text" placeholder="Find a respository">
+    </div>
 
+    <div class="pageRepo_mid">
 
-</div>
+    </div>
 
+    <div class="pageRepo_buttom">
 
-<div class="basic">
-  <div class="repository">
-    <div *ngFor="let responsitory of workspaceList"
-          (click)="onClick(responsitory.name)">
-    {{responsitory.name}}
     </div>
   </div>
 
+  <div class="pageNewsfeed">
 
-  <div class="display"></div>
+  </div>
+
 </div>
-
-<router-outlet></router-outlet>

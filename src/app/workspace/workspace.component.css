@@ -1,131 +1,81 @@
-.back{
-
-  height:300vh;
-  width: 100vw;
-  position: fixed;
-  top: 0;
-  max-width:100%;
-  margin: 0;
-  padding: 0;
-
-}
-
-.basic{
-  position: relative;
+.pagebase{
+  position: absolute;
   display: flex;
-
+  top: 0px;
+  z-index: 10;
   min-height: 100vh;
-  width: 100vw;
-  max-width: 100%;
-  flex-direction: row;
-
-
-
-}
-
-.repository{
-  flex: 1 ;
+  min-width: 100vw;
   background-color: white;
+  text-align: center;
 }
 
-.display{
-  flex: 3 ;
+.pageRepo{
+  flex:3 ;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-width: 25vw;
+}
+
+.pageNewsfeed{
+  flex: 7;
+  min-height: 100vh;
+  min-width: 75vw;
   background-color:#f6f8fa ;
 }
 
-.test{
-  position: fixed;
-  top: 10vh;
-  left: 20vw;
 
-}
-
-.footer{
-
-  position: sticky bottom;
-  height: 10vh;
-  width: 100vw;
-  max-width:100%;
-  bottom: 0;
-
-}
-
-.box_right{
-  flex:2;
-  position: sticky;
+.pageRepo_top{
+  min-height: 15vh;
+  min-width: 25vw;
   display: flex;
-  flex-flow: row nowrap ;
-  justify-content: space-evenly;
-  align-items: center;
-  min-height: 10vh;
-
-}
-.box_mid{
-  flex:4;
-  position: sticky;
-  display: flex;
-  flex-flow: row nowrap ;
-  justify-content: space-evenly;
-
-  align-items: center;
-  min-height: 10vh;
+  text-align: left;
+  justify-content: space-between ;
+  flex-direction: row ;
+  flex-wrap: wrap ;
+  background-color: rgb(255, 154, 154);
 }
 
-.box_left {
-  flex:4;
-  position: sticky;
-  display: flex;
-  flex-flow: row nowrap ;
-  justify-content: space-evenly;
+h1{
+  font-size: 15px;
+  margin: 30px 0px 0px 15px ;
 
-  align-items: center;
-  min-height: 10vh;
+  font-weight: 300;
+  max-width: 10vw;
+  max-height: 5vh;
+}
+button{
+  border: 0;
+  text-align: right;
+  margin: 30px 20px 10px 0px;
+  font-size: 14px;
+  border-radius: 8px;
+  font-family: "微軟正黑體",sans-serif;
+  min-width: 6vw;
+  max-width: 11vw;
+  max-height: 3.5vh;
+  background: #2ea44f;
+  color: white;
+}
 
+input[type="text"]{
+  font-family: "微軟正黑體",sans-serif;
+  min-width: 25vw;
+  border-radius: 5px;
+  border: 0;
+  margin: 5px 10px 20px 10px;
+  padding: 5px 12px;
+}
+.pageRepo_mid{
+  min-height: 20vh;
+  min-width: 25vw;
+  background-color: wheat;
+}
 
-  }
-
-  .box div.A {
-    order:1 ;
-
-
-    min-width: 0 ;
-    min-height: auto ;
-    height: 10px;
-    }
-
-  .box div.B {
-    order: 2  ;
-
-
-    min-width: 0 ;
-    min-height: auto;
-    height: 10px;
-    }
-
-  .box2 div.C {
-    order: 3  ;
-
-    min-width: 0 ;
-    min-height: auto;
-    height: 10px;
-    }
-  .box2 div.D {
-    order: 4  ;
-    justify-content: flex-end;
-    min-width: 0 ;
-    min-height: auto;
-    height: 10px;
-    }
-
-    a{
-      color: 	white;
-      font-size: 20px;
-      text-decoration: none;
-    }
+.pageRepo_buttom{
+  min-height: 20vh;
+  min-width: 25vw;
+  background-color: rgb(177, 177, 247);
+}
 
 
-
-
-    .router-link-active {
-      text-decoration: none;
-    }

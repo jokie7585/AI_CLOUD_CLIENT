@@ -21,8 +21,9 @@ interface data {
 
 })
 export class WorkspaceComponent implements OnInit {
-  
+
   workspaceList: Array<data> = [];
+
   userId: string = '';
 
   constructor(private cookieService: CookieService,
@@ -30,7 +31,7 @@ export class WorkspaceComponent implements OnInit {
               private router: Router,
               private route: ActivatedRoute) { }
 
-  
+
 
 
   public ngOnInit(): void {
@@ -55,7 +56,7 @@ export class WorkspaceComponent implements OnInit {
       this.workspaceList = res;
     }),
     err => {
-      window.location.assign('login')
+      // window.location.assign('login') ;
     });
   }
 
