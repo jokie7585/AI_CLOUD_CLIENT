@@ -16,8 +16,8 @@ const routes: Routes = [
     loadChildren: () => import('./new/new.module').then(m => m.NewModule)
   },
   {
-    path: WSPath.filesystem,
-    loadChildren: () => import('./filesystem/filesystem.module').then( m => m.FilesystemModule)
+    path: WSPath.agent,
+    loadChildren: () => import('./agent/agent.module').then( m => m.AgentModule)
   },
 
   {
