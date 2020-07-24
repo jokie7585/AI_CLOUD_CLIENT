@@ -14,20 +14,16 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  min-width: 25vw;
+  min-width: 15vw;
 }
 
-.pageNewsfeed{
-  flex: 7;
-  min-height: 100vh;
-  min-width: 75vw;
-  background-color:#f6f8fa ;
-}
+
 
 
 .pageRepo_top{
   min-height: 15vh;
-  min-width: 25vw;
+  min-width: 15vw;
+
   display: flex;
   text-align: left;
   justify-content: space-between ;
@@ -39,7 +35,6 @@
 h1{
   font-size: 15px;
   margin: 30px 0px 0px 15px ;
-
   font-weight: 300;
   max-width: 10vw;
   max-height: 5vh;
@@ -58,12 +53,50 @@ button{
   color: white;
 }
 
+.newicon{
+  display: flex;
+  background-color: #2ea44f;
+  border-radius: 4px;
+  min-width: 69px;
+  min-height: 28px;
+  margin: 30px 15px 0px 0px;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.newicon:hover{
+  display: flex;
+  background-color: #0a9632;
+  border-radius: 4px;
+  min-width: 69px;
+  min-height: 28px;
+  margin: 30px 15px 0px 0px;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.newicon_icon{
+  display: flex;
+  justify-content: center;
+
+  flex: 1;
+
+}
+
+.newicon_text{
+  flex: 1 ;
+
+  color: white;
+}
+
 input[type="text"]{
   font-family: "微軟正黑體",sans-serif;
-  min-width: 25vw;
+  min-width: 15vw;
   border-radius: 5px;
   border: 0;
-  margin: 5px 10px 20px 10px;
+  margin: 5px 20px 20px 10px;
   padding: 5px 12px;
 }
 .pageRepo_mid{
@@ -72,10 +105,55 @@ input[type="text"]{
   background-color: wheat;
 }
 
+.wslist{
+  text-align: left;
+  margin: 10px 0px 0px 15px;
+  color: #0370dd;
+  font-weight: bold;
+}
+
 .pageRepo_buttom{
   min-height: 20vh;
-  min-width: 25vw;
+  min-width: 15vw;
   background-color: rgb(177, 177, 247);
+
+}
+
+h2{
+  margin: 15px 0px 0px 15px;
+  max-height: 5vh;
+  font-size: 16px;
+  text-align: left;
+}
+
+.organization_intro{
+  margin: 10px 20px 0px 15px;
+  max-height: 5vh;
+  font-size: 15px;
+  text-align: left;
+  color: #545c61;
+}
+
+.createOrg_button{
+  margin-right: 17vw;
+  padding: 0;
+
+  min-height: 4vh ;
+  min-width: 10vw;
+  border-radius: 6px;
+  background: #d0d5da;
+  color: #0370dd;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.pageNewsfeedAndfooter{
+  flex: 7;
+  display: flex;
+  min-height: 100vh;
+  min-width: 85vw;
+  background-color:#f6f8fa ;
 }
 
 

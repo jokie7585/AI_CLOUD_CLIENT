@@ -2,21 +2,39 @@
   <div class="pageRepo">
     <div class="pageRepo_top">
       <h1>Respositorires</h1>
-      <button (click)="jumpToNew()"> New</button>
+
+      <div class= "newicon" (click)="jumpToNew()"  >
+        <div class="newicon_icon">
+          <img src="/assets/workspace_new.svg">
+        </div>
+        <div class="newicon_text">
+          new
+        </div>
+
+      </div>
+
 
       <input type="text" placeholder="Find a respository">
     </div>
 
-    <div class="pageRepo_mid">
+    <div class="pageRepo_mid" >
+      <div class="wslist" (click)="onClick(WSList.name)"  *ngFor="let WSList of workspaceList">
+       {{userId}}/{{WSList.name}}
+      </div>
 
     </div>
 
     <div class="pageRepo_buttom">
-
+      <hr color="gray" size="0.3px" width="90%" >
+      <h2>Working with a team?</h2>
+      <div class="organization_intro">
+        GitHub is built for collaboration. Set up an organization to improve the way your team works together, and get access to more features.
+      </div>
+      <button class="createOrg_button">Create an Organization</button>
     </div>
   </div>
 
-  <div class="pageNewsfeed">
+  <div class="pageNewsfeedAndfooter">
 
   </div>
 
