@@ -1,0 +1,110 @@
+.pagebase {
+    position: absolute;
+    top: 0px;
+    z-index: 10;
+    min-height: 100vh;
+    min-width: 100vw;
+    background-color: #f9f9f9;
+    text-align: center;
+  }
+
+  .operationbar {
+    margin-top: 1rem;
+    min-height: 15vh;
+    min-width: 100vw;
+    z-index: 11;
+  }
+
+  .operationbar-info {
+    margin-left: 2rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .icon {   
+    display: inline-block;
+    min-height: 2rem;
+    min-width: 2rem;
+  }
+
+  .text {
+    display: flex;
+    min-height: 2rem;
+    min-width: 1.6rem;
+    font-size: 1.6rem;
+    font-weight: lighter;
+    align-items: center;
+    justify-content: center;
+    margin: 0px 0.2rem;
+  }
+
+  .textItem{
+      margin-left: 0.2rem;
+      margin-right: 0.2rem;
+  }
+
+  .clickable {
+      cursor: pointer;
+      color: rgb(57, 57, 202);
+  }
+
+  .clickable:hover{
+    background-color: #c0c0c0;
+  }
+
+  .operationbar-function {
+      margin-top: 2.5rem;
+      margin-left: 3rem;
+      margin-right: 3rem;
+  }
+
+  .fuctionList{
+    display: flex;
+    flex-direction: row;
+  }
+
+  .function {
+      display: flex;
+      flex-direction: row;
+      min-height: 3rem;
+      align-items: center;
+      margin-right: 2rem;
+      cursor: pointer;
+  }
+
+  .function:hover {
+    border-bottom: solid gray 1px;
+  }
+
+  .functionicon {   
+    min-height: 1.4rem;
+    min-width: 1.4rem;
+    max-height: 1.4rem;
+    max-width: 1.4rem;
+  }
+
+  .function-seleted {
+    display: flex;
+    flex-direction: row;
+    min-height: 3rem;
+    align-items: center;
+    margin-right: 2rem;
+    cursor: pointer;
+    font-weight: 600;
+    border-bottom: solid rgb(255, 153, 0) 1px;
+}
+
+  .functiontext {
+    display: flex;
+    min-height: 1rem;
+    min-width: 0.8rem;
+    font-size: 14px;
+    font-weight: lighter;
+    align-items: center;
+    margin: 0px 0.2rem;
+  }
+  .functiontextItem{
+    margin-left: 0.1rem;
+    margin-right: 0.1rem;
+}

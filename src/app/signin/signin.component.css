@@ -1,17 +1,30 @@
-.welcome{
+.message{
   position: absolute;
   left:20vw;
-  top: 40vh;
+  top: 20vh;
   color: 	white;
-  font-size: 5rem;
+  font-size: 7rem;
   text-align: left;
+  max-width: 40vw;
   padding:1px;
 }
 
-b{
+.detail{
+  color: 	rgb(184, 183, 183);
+  font-size: 1.5rem;
+  text-align: left;
+  max-width: 30vw;
+  padding:1px;
+}
+
+p{
   font-size: small;
   color: #24292E;
   
+}
+
+span{
+  color: white;
 }
 
 .clickable:hover{
@@ -22,7 +35,7 @@ b{
 .signUp{
   position: absolute;
   left:70vw;
-  top:50vh;
+  top:45vh;
   transform: translate(-50%,-50%);
   background: rgb(255, 255, 255);
   background-size: cover;
@@ -30,6 +43,8 @@ b{
   color: 	DarkSlateGray;
   font-family: "微軟正黑體", sans-serif;
   border-radius: 10px;
+  width: 378px;
+  min-height: 50vh;
   padding:2.5vw;
   line-height: 2rem ;
 
@@ -38,30 +53,27 @@ b{
 
 
 input[type="text"], input[type="password"] {
-  font-size: 25px;
+  font-size: 20px;
   font-family: "微軟正黑體",sans-serif;
   padding: 5px;
-  border-radius:4px ;
-  margin: 0 auto;
-  display: block;
-  width: 100%;
+  border: solid 1px;
+  border-color: rgb(214, 214, 214);
+  width: 378px;
   line-height: 1rem ;
+  display: block;
 }
 button{
 
   border: 0;
-  padding: 1rem 7rem;
+  padding: 5px;
   margin-top: 1rem;
   font-size: 18px;
   border-radius: 10px;
   font-family: "微軟正黑體",sans-serif;
   background: #2ebc4f;
+  min-height: 5rem;
   color: white;
+  width: 378px;
 }
 
 
-@media(max-width: 450px){
-  .login{
-      width: 70%;
-  }
-}

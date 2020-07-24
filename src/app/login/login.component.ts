@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import {cookieList} from 'src/utility/cookie'
-import { from } from 'rxjs';
+import {environment} from 'src/environments/environment';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
       password: this.Inputpassword
     };
 
-    let url = 'http://192.168.43.219:3001/api/auth/logIn' ;
+    let url = `http://${environment.apiserver}/api/auth/logIn` ;
 
     let options = {
       headers: {
@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit {
 
 
   ngOnInit(): void {
-    // this.getAlert();
+    window.scroll({top:0})
   }
 
 }

@@ -29,18 +29,22 @@ export class FilesystemComponent implements OnInit {
               private cookieService: CookieService,) { }
 
   ngOnInit(): void {
-    this.wsName = this.route.snapshot.paramMap.get('wsName');
+    this.wsName = this.route.snapshot.parent.paramMap.get('wsName')
+    console.log(this.route.snapshot.paramMap)
     this.userId = this.cookieService.get(cookieList.userID);
     this.path = this.wsName;
     this.loadpath();
   }
 
-  cd(dir: string){
-
+  cd(file: data){
+    if(file.type === "dir") {
+      this.path = this.path.concat(`>>${file.name}`)
+    }
+    this.loadpath()
   }
 
   preDir(){
-
+    this.path
   }
 
   loadpath(){

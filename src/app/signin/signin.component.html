@@ -1,37 +1,41 @@
-    <form class = "welcome"  >
-      AI Cloud
-    </form>
-
-
-    <form class="signUp" [style.background-color]="'white'">
-      <div *ngIf="EnterPlace">
-        Username
-        <input type = "text" name = "InputAccount" [(ngModel)]="InputAccount" placeholder="">
-        Password
-        <input type="text" name = "Inputpassword" [(ngModel)]="Inputpassword" placeholder="">
-
-        <b>Make sure it's at least 15 characters OR at least 8 characters including a number and a lowercase letter. </b>
-
-        <div *ngIf="ErrorPlace" style="color: red;">
-           {{this.ServerMessage}}
-        </div>
-        <button (click)="signUp()" >Sign Up for Cetus</button>
-      </div>
-
-
-
-
-      <div *ngIf = "SuccessPlace" >
-        {{this.ServerMessage}}
-        <p class="clickable" (click)= "jumpToLogin()">click here to Login</p>
-      </div>
-
-
-
-    </form>
-    <div [style.background-color]="'SlateGray'">
-
+   
+<div [style.background-color]="'SlateGray'">
+  <div class = "message"  >
+    Cytus
+    <div class="detail">
+      the cloud plateform for tensorflow training! Cytus wrape your application into <span>containerlized application </span>, the differance is that you write a shell script instead of using ssh to communicate
+      with your app. this feature let us provide more exiting feature for you...
     </div>
+  </div>
+
+
+  <form class="signUp" [style.background-color]="'white'">
+    <div *ngIf="EnterPlace">
+      <label>Username</label>
+      <input type = "text" name = "InputAccount" [(ngModel)]="InputAccount" placeholder="">
+      <label>Password</label>
+      <input type="text" name = "Inputpassword" [(ngModel)]="Inputpassword" placeholder="">
+
+      <p>Make sure it's at least 15 characters OR at least 8 characters including a number and a lowercase letter. </p>
+
+      <div *ngIf="ErrorPlace" style="color: red;">
+         {{this.ServerMessage}}
+      </div>
+      <button (click)="signUp()" >Sign Up for Cetus</button>
+    </div>
+
+
+
+
+    <div *ngIf = "SuccessPlace" >
+      {{this.ServerMessage}}
+      <p class="clickable" (click)= "jumpToLogin()">click here to Login</p>
+    </div>
+
+
+
+  </form>
+</div>
 
 
 

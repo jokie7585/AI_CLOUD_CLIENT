@@ -1,1 +1,75 @@
-<router-outlet></router-outlet>
+<div class="pagebase">
+
+    <div class="operationbar">
+
+        <div class="operationbar-info">
+            <div class=icon>
+                <img src="assets/folder.svg" alt="">
+            </div>
+            <div class=text>
+              <div class="clickable textItem"
+                   (click)="jumpWorkspace()"
+              >
+                {{userId}}
+              </div>
+              /
+              <div class="clickable textItem">
+                {{wsName}}
+              </div>
+            </div>
+        </div>
+
+        <div class="operationbar-function">
+            <div class="fuctionList">
+                <div class="function"
+                     id=fsFunction>
+                    <div class=functionicon>
+                        <img src="assets/folder.svg" alt="">
+                    </div>
+                    <div class=functiontext>
+                      <div class=" functiontextItem"
+                           (click)="jumpWorkspace()"
+                      >
+                       File system
+                      </div>
+                    </div>
+                </div>
+                <div class="function"
+                     id=HsFunction>
+                    <div class=functionicon>
+                        <img src="assets/folder.svg" alt="">
+                    </div>
+                    <div class=functiontext>
+                      <div class=" functiontextItem"
+                           (click)="jumpWorkspace()"
+                      >
+                      History
+                      </div>
+                    </div>
+                </div>
+                <div class="function"
+                     id=StFunction>
+                    <div class=functionicon>
+                        <img src="assets/folder.svg" alt="">
+                    </div>
+                    <div class=functiontext>
+                      <div class=" functiontextItem"
+                           (click)="jumpWorkspace()"
+                      >
+                      Settings
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="functionDisplay">
+        <router-outlet></router-outlet>
+    </div>
+
+
+</div>
+

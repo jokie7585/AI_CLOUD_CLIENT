@@ -3,23 +3,23 @@
 <div class = "appbar" [style.background-color]="'#24292e'">
 
   <div class="box_left">
-    <div class="A" >
-      <a [routerLink]="path.home" (click) = "HomeAppbarChange()">
-        Home
-      </a>
-    </div>
 
-    <div class="B">
-      <a (click) ="WorkSpcaeAppbarChange()" [routerLink]="path.workspace">
-        Workspace
+      <div class="appicon">
+        <div class="appiconlimiter">
+          <img src="assets/github.svg" alt="">
+        </div>
+      </div>
+  
+      <a [routerLink]="path.home" (click) = "jumpHome()">
+        Why Cytus?
       </a>
-    </div>
+    
 
   </div>
-  <div class="box_mid" *ngIf="StaticAppbarPlace">
+  <div class="box_mid" *ngIf="showSingInUp">
 
   </div>
-  <div class="box_mid" *ngIf="WorkSpaceAppbarPlace" style="font-size: medium; color: white;">
+  <div class="box_mid" *ngIf="showWorkspaceFunction" style="font-size: medium; color: white;">
     <div class="E">Pull requests</div>
     <div class="E">Issues</div>
     <div class="E">Marketplace</div>
@@ -31,13 +31,13 @@
 
 
 
-  <div class="box_right" *ngIf="StaticAppbarPlace" >
+  <div class="box_right" *ngIf="showSingInUp" >
 
     <a [routerLink]="path.login">Sign in</a>
-    <a [routerLink]="path.signin">Sign up</a>
+    <a [routerLink]="path.signin" class=emphisis>Sign up</a>
 
   </div>
-  <div class = "box_right" *ngIf="WorkSpaceAppbarPlace">
+  <div class = "box_right" *ngIf="showWorkspaceFunction">
 
   </div>
 

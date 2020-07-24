@@ -46,7 +46,8 @@
             "aot": true,
             "assets": [
               "src/favicon.ico",
-              "src/assets/github.svg"
+              "src/assets/github.svg",
+              "src/assets/folder.svg"
             ],
             "styles": [
               "src/styles.css"

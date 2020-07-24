@@ -1,6 +1,7 @@
 
 <div class="pagebase">
-    <div *ngFor="let item of dirList">
+    <div *ngFor="let item of dirList"
+         (click)="cd(item)">
         <div>
             {{item.name}}
         </div>
