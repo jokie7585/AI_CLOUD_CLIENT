@@ -1,131 +1,159 @@
-.back{
+.pagebase{
+  position: absolute;
+  display: flex;
+  top: 0px;
+  z-index: 10;
+  min-height: 100vh;
+  min-width: 100vw;
+  background-color: white;
+  text-align: center;
+}
 
-  height:300vh;
-  width: 100vw;
-  position: fixed;
-  top: 0;
-  max-width:100%;
-  margin: 0;
+.pageRepo{
+  flex:3 ;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-width: 15vw;
+}
+
+
+
+
+.pageRepo_top{
+  min-height: 15vh;
+  min-width: 15vw;
+
+  display: flex;
+  text-align: left;
+  justify-content: space-between ;
+  flex-direction: row ;
+  flex-wrap: wrap ;
+  background-color: rgb(255, 154, 154);
+}
+
+h1{
+  font-size: 15px;
+  margin: 30px 0px 0px 15px ;
+  font-weight: 300;
+  max-width: 10vw;
+  max-height: 5vh;
+}
+button{
+  border: 0;
+  text-align: right;
+  margin: 30px 20px 10px 0px;
+  font-size: 14px;
+  border-radius: 8px;
+  font-family: "微軟正黑體",sans-serif;
+  min-width: 6vw;
+  max-width: 11vw;
+  max-height: 3.5vh;
+  background: #2ea44f;
+  color: white;
+}
+
+.newicon{
+  display: flex;
+  background-color: #2ea44f;
+  border-radius: 4px;
+  min-width: 69px;
+  min-height: 28px;
+  margin: 30px 15px 0px 0px;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.newicon:hover{
+  display: flex;
+  background-color: #0a9632;
+  border-radius: 4px;
+  min-width: 69px;
+  min-height: 28px;
+  margin: 30px 15px 0px 0px;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.newicon_icon{
+  display: flex;
+  justify-content: center;
+
+  flex: 1;
+
+}
+
+.newicon_text{
+  flex: 1 ;
+
+  color: white;
+}
+
+input[type="text"]{
+  font-family: "微軟正黑體",sans-serif;
+  min-width: 15vw;
+  border-radius: 5px;
+  border: 0;
+  margin: 5px 20px 20px 10px;
+  padding: 5px 12px;
+}
+.pageRepo_mid{
+  min-height: 20vh;
+  min-width: 25vw;
+  background-color: wheat;
+}
+
+.wslist{
+  text-align: left;
+  margin: 10px 0px 0px 15px;
+  color: #0370dd;
+  font-weight: bold;
+}
+
+.pageRepo_buttom{
+  min-height: 20vh;
+  min-width: 15vw;
+  background-color: rgb(177, 177, 247);
+
+}
+
+h2{
+  margin: 15px 0px 0px 15px;
+  max-height: 5vh;
+  font-size: 16px;
+  text-align: left;
+}
+
+.organization_intro{
+  margin: 10px 20px 0px 15px;
+  max-height: 5vh;
+  font-size: 15px;
+  text-align: left;
+  color: #545c61;
+}
+
+.createOrg_button{
+  margin-right: 17vw;
   padding: 0;
 
+  min-height: 4vh ;
+  min-width: 10vw;
+  border-radius: 6px;
+  background: #d0d5da;
+  color: #0370dd;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
 }
 
-.basic{
-  position: relative;
+.pageNewsfeedAndfooter{
+  flex: 7;
   display: flex;
-
   min-height: 100vh;
-  width: 100vw;
-  max-width: 100%;
-  flex-direction: row;
-
-
-
-}
-
-.repository{
-  flex: 1 ;
-  background-color: white;
-}
-
-.display{
-  flex: 3 ;
+  min-width: 85vw;
   background-color:#f6f8fa ;
 }
 
-.test{
-  position: fixed;
-  top: 10vh;
-  left: 20vw;
 
-}
-
-.footer{
-
-  position: sticky bottom;
-  height: 10vh;
-  width: 100vw;
-  max-width:100%;
-  bottom: 0;
-
-}
-
-.box_right{
-  flex:2;
-  position: sticky;
-  display: flex;
-  flex-flow: row nowrap ;
-  justify-content: space-evenly;
-  align-items: center;
-  min-height: 10vh;
-
-}
-.box_mid{
-  flex:4;
-  position: sticky;
-  display: flex;
-  flex-flow: row nowrap ;
-  justify-content: space-evenly;
-
-  align-items: center;
-  min-height: 10vh;
-}
-
-.box_left {
-  flex:4;
-  position: sticky;
-  display: flex;
-  flex-flow: row nowrap ;
-  justify-content: space-evenly;
-
-  align-items: center;
-  min-height: 10vh;
-
-
-  }
-
-  .box div.A {
-    order:1 ;
-
-
-    min-width: 0 ;
-    min-height: auto ;
-    height: 10px;
-    }
-
-  .box div.B {
-    order: 2  ;
-
-
-    min-width: 0 ;
-    min-height: auto;
-    height: 10px;
-    }
-
-  .box2 div.C {
-    order: 3  ;
-
-    min-width: 0 ;
-    min-height: auto;
-    height: 10px;
-    }
-  .box2 div.D {
-    order: 4  ;
-    justify-content: flex-end;
-    min-width: 0 ;
-    min-height: auto;
-    height: 10px;
-    }
-
-    a{
-      color: 	white;
-      font-size: 20px;
-      text-decoration: none;
-    }
-
-
-
-
-    .router-link-active {
-      text-decoration: none;
-    }

@@ -47,7 +47,9 @@
             "assets": [
               "src/favicon.ico",
               "src/assets/github.svg",
-              "src/assets/folder.svg"
+              "src/assets/folder.svg",
+              "src/assets/workspace_new.svg",
+              "src/assets/workspace_lock.svg"
             ],
             "styles": [
               "src/styles.css"
