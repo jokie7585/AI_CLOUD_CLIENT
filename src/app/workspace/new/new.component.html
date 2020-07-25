@@ -1,49 +1,65 @@
-
-<div class = "back" [style.background-color]="'white'"></div>
-
-
-<div class="basic">
-  <div class="first_box">
-    <div>
-      <div style="font-size: 1.5rem;">
-        Create a new repository
-      </div>
+<div class="pagebase">
+  <div class="pageCreateNew">
+    <div class="box_intro">
+      <h1>Create a new repository</h1>
 
       A repository contains all project files, including the revision history. Already have a project repository elsewhere?
-      <hr>
+      <div class="box_intro_importrepository">Import a repository</div>
     </div>
-  </div>
+    <hr color="#a9a9a9" size="0.1px" width="100%">
+    <div class="box_input">
+      <div class="box_input_main">
+        <div class="box_input_main_username">
+          Owner *
+          <div class="box_input_main_username_button">
+            {{userId}}
+          </div>
 
-  <div class="second_box">
-    <div class="second_part">
-      Owner &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Repository name*
-    </div>
-    <div>
-      username   /
-      &nbsp;&nbsp;
-      <div class="second_repository_name">
-        <input  name="Inputnewrepository" [(ngModel)]="Inputnewrepository">
+        </div>
+        <div class="box_input_main_mid">
+          /
+        </div>
+        <div class="box_input_main_repository">
+          Repository name*
+          <div class="box_input_main_repository_input">
+            <input type="text" name="Inputnewrepository" [(ngModel)]="Inputnewrepository">
+          </div>
+        </div>
+
       </div>
+
+      <div class="box_input_description">
+        Great repository names are short and memorable. Need inspiration? How about fictional-waffle?
+        <div>
+          Description(optional)
+          <div>
+            <input type="text" size="100vw">
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
-    <a>Great repository names are short and memorable. Need inspiration? How about sturdy-umbrella?</a><br>
-    <a>Description (optional)  </a>
-    <input class="second_Description"  >
-    <hr>
 
-  </div>
+    <div class="box_checkbox">
+    <hr color="#a9a9a9" size="0.1px" width="100%">
 
-  <div class="third_box">
-    test3
-  </div>
-  <div class="four_box">
-    test4
-  </div>
-  <div class="fifth_box">
-    <button (click)="newrepository()" >create</button>
-  </div>
 
+    </div>
+
+    <div class="box_repository-auto-init-options">
+    <hr color="#a9a9a9" size="0.1px" width="100%">
+    Skip this step if you’re importing an existing repository.
+    <hr color="#a9a9a9" size="0.1px" width="100%">
+    </div>
+
+    <div class="createbutton" (onlick)="newrepository()">
+      <div class="createbutton_text">
+        Create a repository
+      </div>
+
+    </div>
+  </div>
 
 </div>
-
-
-

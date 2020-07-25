@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
+import {ReactiveFormsModule} from '@angular/forms' ;
 import { NewRoutingModule } from './new-routing.module';
 import { NewComponent } from './new.component';
+import { from } from 'rxjs';
 
 
 @NgModule({
@@ -12,6 +13,7 @@ import { NewComponent } from './new.component';
 
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     NewRoutingModule
 
   ]

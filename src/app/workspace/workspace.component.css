@@ -29,7 +29,7 @@
   justify-content: space-between ;
   flex-direction: row ;
   flex-wrap: wrap ;
-  background-color: rgb(255, 154, 154);
+
 }
 
 h1{
@@ -102,7 +102,7 @@ input[type="text"]{
 .pageRepo_mid{
   min-height: 20vh;
   min-width: 25vw;
-  background-color: wheat;
+
 }
 
 .wslist{
@@ -115,7 +115,7 @@ input[type="text"]{
 .pageRepo_buttom{
   min-height: 20vh;
   min-width: 15vw;
-  background-color: rgb(177, 177, 247);
+
 
 }
 

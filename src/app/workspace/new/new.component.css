@@ -1,83 +1,191 @@
-.test{
-  position: fixed;
-  top: 10vh;
-  left: 35vw;
-
-}
-.back{
-
-  height:300vh;
-  width: 100vw;
-  position: fixed;
-  top: 0vh;
-  max-width:100%;
-  margin: 0;
-  padding: 0;
-
-}
-
-.basic{
-  position: relative;
-  display: flex;
-  left: 25vw;
+.pagebase {
+  position: absolute;
+  top: 0px;
+  z-index: 10;
   min-height: 100vh;
-  width: 40vw;
-  flex-direction: column;
+  min-width: 100vw;
+  background-color: #f9f9f9;
+  text-align: center;
 
-  background: rgb(241, 241, 206) ;
+}
+.pageCreateNew{
+  display: flex;
+  min-height: 85vh;
+  width: 50vw;
+  margin-left: 25vw;
+  justify-content: space-between ;
+  flex-direction: column ;
+  flex-wrap: wrap ;
+
   padding:2.5vw;
+}
+
+.box_intro{
+  flex:0.3 ;
+  text-align: left;
+  min-height: 10vh ;
+  max-height: 25vh;
 
 }
-.first_box{
-  flex:2;
+    .box_intro_importrepository{
+      color: rgb(84, 138, 238);
+
+    }
+    .box_intro_importrepository:hover{
+      color: rgb(43, 97, 197);
+      cursor: pointer;
+      text-decoration:underline;
+
+    }
+
+
+h1{
+  font-size: 20px;
+  font-weight: bold;
+  font-family: "微軟正黑體",sans-serif;
+}
+
+
+
+.box_input{
+  flex: 4;
   display: flex;
-  min-height: 1vh;
+  min-height: 10vh ;
+  flex-direction: column;
+  text-align: left;
+  margin-top: 5px;
+  max-height: 30vh;
+}
+
+
+  .box_input_main{
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 5px;
+    max-height: 120px;
+  }
+
+  .box_input_main_username{
+
+    flex: 1;
+
+
+  }
+    .box_input_main_username_button{
+    border-radius: 4px;
+    background-color: rgb(243, 243, 243);
+    max-width: 125px;
+    min-height: 40px;
+    text-align: center;
+    line-height: 35px;
+    margin-top: 2vh;
+    }
+
+    .box_input_main_username_button:hover{
+      border-radius: 4px;
+      background-color: rgb(141, 140, 140);
+      max-width: 125px;
+      min-height: 40px;
+      text-align: center;
+      line-height: 35px;
+      margin-top: 2vh;
+      cursor: pointer;
+    }
+
+    .box_input_main_repository{
+      margin-left: 1vw;
+      flex: 4;
+      text-align: left;
+    }
+
+    .box_input_main_repository_input{
+      margin-top: 2vh;
+      line-height: 10px;
+    }
+
+input[type="text"]{
+  font-family: "微軟正黑體",sans-serif;
+  min-width: 15vw;
+  line-height: 20px;
+  border-radius: 5px;
+  border: 1;
+  border-color: rgb(241, 241, 241);
+  margin: 0px 20px 20px 0px;
+  padding: 5px 12px;
+}
+
+input[type="text"]:focus{
+  outline: none;
+  font-family: "微軟正黑體",sans-serif;
+  min-width: 15vw;
+  line-height: 20px;
+  border-radius: 5px;
+  border: 1;
+  border-color: rgb(103, 174, 255);
+  margin: 0px 20px 20px 0px;
+  padding: 5px 12px;
+}
+
+
+
+.box_input_main_mid{
+  min-height: auto;
+  margin-top: 30px;
+  min-width: 5px;
+  font-size: 2rem;
+  text-align: center;
+  font-weight: bold;
+  padding: 0;
+}
+
+.box_input_text{
+  width: 50vw;
+
+}
+.box_input_description{
+  line-height: 5vh;
   max-height: 15vh;
-  flex-flow: column nowrap ;
+  flex: 3;
 }
 
-.second_box{
-  flex:2;
-  display: flex;
-  min-height: 1vh;
-  flex-flow: column nowrap ;
+
+.box_checkbox{
+  flex: 2;
+  min-height: 10vh ;
 }
 
-.third_box{
-  flex:2;
-  display: flex;
-  min-height: 1vh;
-  flex-flow: column nowrap ;
-}
-.four_box{
-  flex:2;
-  display: flex;
-  min-height: 1vh;
-  flex-flow: column nowrap ;
+.box_repository-auto-init-options{
+  flex: 2;
+  min-height: 10vh ;
+  text-align: left;
 }
 
-.fifth_box{
-  flex:1;
-  display: flex;
-  min-height: 1vh;
-  flex-flow: column nowrap ;
+.createbutton{
+  background-color: #38c560;
+  border-radius: 4px;
+  min-width: 30px;
+  max-width: 10vw;
+  min-height: 28px;
+  margin: 30px 15px 0px 0px;
+  justify-content: center;
+  align-items: center;
 }
 
-.second_part{
-  line-height: 1rem;
+.createbutton:hover{
+  background-color: #1aa140;
+  border-radius: 4px;
+  min-width: 30px;
+  max-width: 10vw;
+  min-height: 28px;
+  margin: 30px 15px 0px 0px;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 }
 
-.second_repository_name{
-  border-radius: 0.5rem ;
-  line-height: 1.5rem;
-}
-
-.second_Description{
-  border-radius: 0.5rem ;
-  size: 100 ;
-  line-height: 2rem;
-}
-
-.third_part{
-  line-height: 3rem;
+.createbutton_text{
+  line-height: 30px;
+  text-align: center;
 }
