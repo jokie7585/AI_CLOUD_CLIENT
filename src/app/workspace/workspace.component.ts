@@ -7,6 +7,7 @@ import {HttpClient} from '@angular/common/http';
 import { NumberSymbol } from '@angular/common';
 import { cookieList} from 'src/utility/cookie' ;
 import {environment} from 'src/environments/environment' ;
+import {AppbarControllerService} from 'src/myservice/appbar-controller.service';
 
 
 interface data {
@@ -18,7 +19,7 @@ interface data {
   selector: 'app-workspace',
   templateUrl: './workspace.component.html',
   styleUrls: ['./workspace.component.css'],
-
+  providers: [AppbarControllerService]
 })
 export class WorkspaceComponent implements OnInit {
 
@@ -29,12 +30,14 @@ export class WorkspaceComponent implements OnInit {
   constructor(private cookieService: CookieService,
               private http: HttpClient,
               private router: Router,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute,
+              private appbarCtr: AppbarControllerService) { }
 
 
 
 
   public ngOnInit(): void {
+    this.appbarCtr.userMode();
     this.userId = this.cookieService.get(cookieList.userID)
     this.getWSLIST();
   }
@@ -56,7 +59,8 @@ export class WorkspaceComponent implements OnInit {
       this.workspaceList = res;
     }),
     err => {
-      // window.location.assign('login') ;
+      this.cookieService.deleteAll();
+      window.location.assign('login') ;
     });
   }
 

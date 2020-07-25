@@ -18,13 +18,24 @@
 }
 
 p{
-  font-size: small;
-  color: #24292E;
-  
+  font-size: 12px;
+  color: rgb(43, 48, 53);
+  line-height: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 span{
   color: white;
+}
+
+.clickableword {
+  color: blue;
+}
+
+.clickableword:hover {
+  border: solid blue 1px;
+  cursor: pointer;
 }
 
 .clickable:hover{
@@ -53,20 +64,23 @@ span{
 
 
 input[type="text"], input[type="password"] {
-  font-size: 20px;
+  font-size: 16px;
   font-family: "微軟正黑體",sans-serif;
-  padding: 5px;
+  padding: 10px 5px;
   border: solid 1px;
   border-color: rgb(214, 214, 214);
   width: 378px;
+  height: 23px;
   line-height: 1rem ;
   display: block;
+  margin-bottom: 1rem;
 }
 button{
 
   border: 0;
   padding: 5px;
-  margin-top: 1rem;
+  margin-top: 0.8rem;
+  margin-bottom: 0.8rem;
   font-size: 18px;
   border-radius: 10px;
   font-family: "微軟正黑體",sans-serif;

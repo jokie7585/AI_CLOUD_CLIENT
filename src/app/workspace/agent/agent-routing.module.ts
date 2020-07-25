@@ -9,6 +9,11 @@ const routes: Routes = [
     component: AgentComponent,
     children:[
       {
+        path: '',
+        redirectTo: 'filesystem',
+        component: FilesystemComponent,
+      },
+      {
         path: 'filesystem',
         component: FilesystemComponent,
       }

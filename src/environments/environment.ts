@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  apiserver: '140.135.11.224:3001',
-  // apiserver: '192.168.43.219:3001'
+  // apiserver: '140.135.11.224:3001',
+  apiserver: '192.168.43.219:3001'
 };
 
 /*

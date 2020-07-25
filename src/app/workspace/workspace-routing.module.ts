@@ -16,6 +16,7 @@ const routes: Routes = [
     loadChildren: () => import('./new/new.module').then(m => m.NewModule)
   },
   {
+    // agent is a component to controll a workspace(a cetus app)
     path: WSPath.agent,
     loadChildren: () => import('./agent/agent.module').then( m => m.AgentModule)
   },
