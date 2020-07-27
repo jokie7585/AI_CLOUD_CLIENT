@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit {
 
 
   ngOnInit(): void {
-    window.scroll({top:0})
+    window.scroll({top: 0} )
   }
 
 }

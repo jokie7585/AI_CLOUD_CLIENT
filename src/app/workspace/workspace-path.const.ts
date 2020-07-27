@@ -4,6 +4,7 @@ export const WSPath  = {
   workspace: '',
   // 新增
   new: 'manage/new',
+  marketplace: 'manage/marketplace',
   // Agent
   agent: ':wsName',
 

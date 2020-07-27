@@ -44,13 +44,52 @@
 
     <div class="box_checkbox">
     <hr color="#a9a9a9" size="0.1px" width="100%">
+    <mat-radio-group aria-label="Select an option" style="text-align: left;">
+      <div>
+        <mat-radio-button value="1">
+          <div class="checkboxicon">
+            <div class="iconlimiter">
+              <img src="/assets/workspace_lock.svg" alt="消失啦">
+            </div>
+            <div class="icontext">
+              Public
+            </div>
 
+          </div>
+          <div class="MRB_text">
+            Anyone on the internet can see this repository. You choose who can commit.
+          </div>
+        </mat-radio-button>
+      </div>
+      <div>
+        <mat-radio-button value="2">
+          <div class="checkboxicon">
+            <div class="iconlimiter">
+              <img src="/assets/workspace_lock.svg" alt="消失啦">
+            </div>
+            <div class="icontext">
+              Private
+            </div>
+
+          </div>
+          <div class="MRB_text">
+          You choose who can see and commit to this repository.
+          </div>
+        </mat-radio-button>
+      </div>
+
+
+    </mat-radio-group>
 
     </div>
 
     <div class="box_repository-auto-init-options">
     <hr color="#a9a9a9" size="0.1px" width="100%">
-    Skip this step if you’re importing an existing repository.
+    <div>Skip this step if you’re importing an existing repository.</div>
+    <mat-checkbox>Initialize this repository with a README</mat-checkbox>
+    <div class="box_repository-auto-init-options_text">
+      This will let you immediately clone the repository to your computer.
+    </div>
     <hr color="#a9a9a9" size="0.1px" width="100%">
     </div>
 

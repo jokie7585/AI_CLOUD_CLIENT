@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { WorkspaceComponent } from './workspace.component';
 import {WSPath} from './workspace-path.const' ;
 
+
 import { from } from 'rxjs';
 
 const routes: Routes = [
@@ -14,6 +15,11 @@ const routes: Routes = [
   {
     path: WSPath.new,
     loadChildren: () => import('./new/new.module').then(m => m.NewModule)
+  },
+  {
+    // agent is a component to controll a workspace(a cetus app)
+    path: 'manage/marketplace',
+    loadChildren: () => import('./marketplace/marketplace.module').then( m => m.MarketplaceModule)
   },
   {
     // agent is a component to controll a workspace(a cetus app)

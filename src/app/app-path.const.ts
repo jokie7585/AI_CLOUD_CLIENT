@@ -7,7 +7,8 @@ export const appPath  = {
   // 登入
   login: 'login',
   // 工作區
-  workspace: 'workspace'
+  workspace: 'workspace',
+  marketplace: 'workspace/manage/marketplace'
 
 
 };
