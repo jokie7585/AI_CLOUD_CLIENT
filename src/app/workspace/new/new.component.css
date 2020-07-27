@@ -156,12 +156,74 @@ input[type="text"]:focus{
   min-height: 10vh ;
 }
 
+mat-radio-group{
+  text-align: left;
+  line-height: 6vh;
+}
+
+
+.mat-radio-button{
+  font-size: large;
+
+}
+
+.iconlimiter {
+  flex: 1;
+  display: flex;
+  max-height: 4vh;
+  max-width: 4vh;
+  justify-content: center;
+  margin: 15px 0 0 5px;
+
+}
+
+.checkboxicon{
+  display: flex;
+  flex-direction: row;
+
+}
+
+.icontext{
+  flex:5 ;
+  margin-left: 25px;
+}
+
+.MRB_text{
+  font-size: 14px;
+  line-height: 1.5;
+  margin-left: 4vw;
+  text-align: center;
+}
+
+  ::ng-deep .mat-radio-label-content{
+    margin-top: 20px;
+  }
+  ::ng-deep .mat-radio-container .mat-radio-outer-circle,
+  ::ng-deep .mat-radio-container .mat-radio-inner-circle {
+  border: none;
+  width: 0;
+  }
+
 .box_repository-auto-init-options{
   flex: 2;
   min-height: 10vh ;
   text-align: left;
 }
 
+.box_repository-auto-init-options_text{
+  color: rgb(172, 172, 172);
+  margin-left: 22px;
+  font-size: 14px;
+}
+
+::ng-deep .mat-checkbox-inner-container  .mat-checkbox-frame {
+  border: none ;
+  width:0 ;
+}
+
+::ng-deep  .mat-checkbox-background .mat-checkbox-checkmark{
+  width:0 ;
+}
 .createbutton{
   background-color: #38c560;
   border-radius: 4px;

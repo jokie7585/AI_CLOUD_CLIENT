@@ -8,7 +8,9 @@ import { WorkspaceComponent } from './workspace.component';
 import { from } from 'rxjs';
 import { NewComponent } from './new/new.component';
 import { FilesystemComponent } from './agent/filesystem/filesystem.component';
+import {MatRadioModule} from '@angular/material/radio' ;
 
+import {MatCheckboxModule} from '@angular/material/checkbox' ;
 import { FormsModule } from '@angular/forms';
 import { AgentComponent } from './agent/agent.component';
 
@@ -20,8 +22,9 @@ import { AgentComponent } from './agent/agent.component';
     CommonModule,
     FormsModule,
     MatRadioModule,
+    MatCheckboxModule,
     WorkspaceRoutingModule
   ],
-  providers:[CookieService]
+  providers: [CookieService]
 })
 export class WorkspaceModule { }
