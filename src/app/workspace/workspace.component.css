@@ -4,7 +4,7 @@
   top: 0px;
   z-index: 10;
   min-height: 100vh;
-  min-width: 100vw;
+  min-width: 100%;
   background-color: white;
   text-align: center;
 }
@@ -14,7 +14,7 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  min-width: 15vw;
+  max-width: 20vw;
 }
 
 
@@ -22,23 +22,29 @@
 
 .pageRepo_top{
   min-height: 15vh;
-  min-width: 15vw;
-
+  min-width: 100%;
   display: flex;
+  flex-direction: column ;
+
+}
+
+.pageRepo_top_top {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  min-width: 100%;
+  margin-top: 2rem;
+}
+
+.pageRepo_top_top_text{
+  font-size: 14px;
   text-align: left;
-  justify-content: space-between ;
-  flex-direction: row ;
-  flex-wrap: wrap ;
-
+  flex: 1;
+  padding-left: 1rem;
+  font-weight: 400;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
-h1{
-  font-size: 15px;
-  margin: 30px 0px 0px 15px ;
-  font-weight: 300;
-  max-width: 10vw;
-  max-height: 5vh;
-}
 button{
   border: 0;
   text-align: right;
@@ -54,24 +60,31 @@ button{
 }
 
 .newicon{
-  display: flex;
+  flex: 1;
+  display: inline-flex;
   background-color: #2ea44f;
   border-radius: 4px;
   min-width: 69px;
-  min-height: 28px;
-  margin: 30px 15px 0px 0px;
+  min-height: 20px;
+  max-width: 69px;
+  max-height: 20px;
+  margin-right: 1rem;
+  padding: 4px;
   justify-content: center;
   align-items: center;
-
+  justify-self: right;
 }
 
 .newicon:hover{
   display: flex;
-  background-color: #0a9632;
+  background-color: #187a34;
   border-radius: 4px;
   min-width: 69px;
-  min-height: 28px;
-  margin: 30px 15px 0px 0px;
+  min-height: 20px;
+  max-width: 69px;
+  max-height: 20px;
+  margin-right: 1rem;
+  padding: 4px;
   justify-content: center;
   align-items: center;
   cursor: pointer;
@@ -80,7 +93,9 @@ button{
 .newicon_icon{
   display: flex;
   justify-content: center;
-
+  max-height: 1rem;
+  max-width: 1rem;
+  margin-left: 0.4rem;
   flex: 1;
 
 }
@@ -93,15 +108,19 @@ button{
 
 input[type="text"]{
   font-family: "微軟正黑體",sans-serif;
-  min-width: 15vw;
+  font-size: 14px;
   border-radius: 5px;
-  border: 0;
-  margin: 5px 20px 20px 10px;
+  width: 17vw;
+  border: #d1caca91 solid 1px;
+  margin-top: 0.5rem ;
+  margin-left: 1rem;
   padding: 5px 12px;
+  display: flex;
+  justify-self: center;
 }
 .pageRepo_mid{
   min-height: 20vh;
-  min-width: 25vw;
+
 
 }
 
@@ -151,8 +170,6 @@ h2{
 .pageNewsfeedAndfooter{
   flex: 7;
   display: flex;
-  min-height: 100vh;
-  min-width: 85vw;
   background-color:#f6f8fa ;
 }
 

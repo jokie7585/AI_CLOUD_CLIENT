@@ -20,7 +20,7 @@ export class FilesystemComponent implements OnInit {
 
   wsName: string = null;
   userId: string = '';
-  path: string = '';
+  path: Array<string> = [];
   dirList: Array<data> = [];
 
 
@@ -29,26 +29,43 @@ export class FilesystemComponent implements OnInit {
               private cookieService: CookieService,) { }
 
   ngOnInit(): void {
+    
     this.wsName = this.route.snapshot.parent.paramMap.get('wsName')
     console.log(this.route.snapshot.paramMap)
     this.userId = this.cookieService.get(cookieList.userID);
-    this.path = this.wsName;
+    this.path.push(this.wsName);
     this.loadpath();
   }
 
-  cd(file: data){
-    if(file.type === "dir") {
-      this.path = this.path.concat(`>>${file.name}`)
+  iconSelector(type: string) {
+    if(type === 'dir') {
+      return 'assets/directory.svg'
     }
-    this.loadpath()
+
+    return 'assets/file.svg'
+  }
+
+  exeuteClick(file: data){
+    if(file.type === "dir") {
+      this.path.push(file.name);
+      this.loadpath()
+    }
+    else {
+      
+    }
+    
   }
 
   preDir(){
-    this.path
+    if(this.path.length > 1) {
+      this.path = this.path.slice(0, -1);
+      this.loadpath()
+    }
   }
 
   loadpath(){
-    let pathURL: string = encodeURI('root>>'.concat(this.path));
+    let path = ['root'].concat(this.path);
+    let pathURL: string = encodeURI(path.join('>>'));
     let url = `http://${environment.apiserver}/users/${this.userId}/${pathURL}` ;
 
     let options = {
@@ -66,6 +83,10 @@ export class FilesystemComponent implements OnInit {
     err => {
       window.location.assign('login')
     });
+  }
+
+  upload(){
+
   }
 
 }

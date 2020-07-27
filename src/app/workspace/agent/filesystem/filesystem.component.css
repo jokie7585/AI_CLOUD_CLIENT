@@ -1,7 +1,88 @@
 .pagebase {
+    display: flex;
+    flex-direction: row;
     z-index: 11;
     min-height: 100vh;
-    min-width: 100vw;
+    min-width: 100%;
     background-color: #ffffff;
     text-align: center;
+  }
+
+  .placehoder{
+    flex: 1;
+  }
+
+  .fsArea{
+    flex: 7;
+    margin-top: 2rem;
+    margin-left: 2rem;
+    margin-bottom: 1rem;
+    margin-right: 2rem;
+  }
+  .navBar{
+    display: flex;
+    min-height: 5vh;
+    background-color: #f1f8ff;
+    border: solid 1px #c8e1ff;
+    align-items: center;
+  }
+
+  .navBar-icon{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 0.8rem;
+    margin-right: 0.5rem;
+    min-height: 2rem;
+    min-width: 2rem;
+  }
+
+  .currpath{
+    display: flex;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    align-items: baseline;
+  }
+
+  .fileList{
+    display: flex;
+    flex-direction: column;
+    
+  }
+
+  .fileList-item{
+    display: flex;
+    align-items: center;
+    border-bottom: solid 1px rgb(199, 199, 199);
+    border-left: solid 1px rgb(199, 199, 199);
+    border-right: solid 1px rgb(199, 199, 199);
+    min-height: 38px;
+  }
+
+  .fileList-item-icon {
+    margin-left: 0.5rem;
+    margin-right: 1rem;
+  }
+
+  .fileList-item-name{
+    display: flex;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: lighter;
+    font-size: 14px;
+    justify-content: left;
+    color: rgb(48, 47, 47);
+    cursor: pointer;
+  }
+
+  .fileList-item-name:hover {
+    border-bottom: solid 1px rgb(48, 47, 47);
+  }
+
+  .fsOperationBar{
+    display: flex;
+  }
+
+  .CetusoperationArea{
+    flex: 5;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
   }

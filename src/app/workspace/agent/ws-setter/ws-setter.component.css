@@ -1,0 +1,61 @@
+.pagebase {
+    display: flex;
+    top: 0px;
+    z-index: 10;
+    min-height: 100vh;
+    min-width: 100%;
+    background-color: white;
+    text-align: left;
+  }
+
+
+.sideNavbar{
+    flex: 1;
+}
+
+.setArea{
+    flex:3;
+    margin-top: 2rem;
+    margin-right: 5rem ;
+}
+
+.function-head{
+    border-bottom: solid gray 1px;
+}
+
+.function-head-text{
+    font-size: 24px;
+    margin-bottom: 0.5rem;
+}
+
+.subArea{
+    display: flex;
+    flex-direction: column;
+    margin-top: 2rem;
+}
+
+.subTitle{
+    font-size: 17px;
+    color: rgb(53, 52, 52);
+}
+
+.mySelector {
+    position: relative;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    margin-left: 1rem;
+}
+
+.mySelector select{
+    max-width: 200px;
+    min-height: 40px;
+    font-size: 16px;
+    padding-left: 0.8rem ;
+}
+
+.mySelector label{
+    font-size: 14px;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}

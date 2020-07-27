@@ -18,48 +18,49 @@
                 >
                 /
                 </div>
-              <div class="clickable textItem">
+              <div class="clickable boldtextItem">
                 {{wsName}}
               </div>
             </div>
+        </div>
         </div>
 
         <div class="operationbar-function">
             <div class="fuctionList">
                 <div class="function"
-                     id=fsFunction>
+                     id='filesystem'
+                     (click)="seleteFunction('filesystem')">
                     <div class=functionicon>
-                        <img src="assets/folder.svg" alt="">
+                        <img src="assets/code.svg" alt="">
                     </div>
                     <div class=functiontext>
                       <div class=" functiontextItem"
-                           (click)="jumpWorkspace()"
                       >
                        File system
                       </div>
                     </div>
                 </div>
                 <div class="function"
-                     id=HsFunction>
+                     id='history'
+                     (click)="seleteFunction('history')">
                     <div class=functionicon>
-                        <img src="assets/folder.svg" alt="">
+                        <img src="assets/history.svg" alt="">
                     </div>
                     <div class=functiontext>
                       <div class=" functiontextItem"
-                           (click)="jumpWorkspace()"
                       >
                       History
                       </div>
                     </div>
                 </div>
                 <div class="function"
-                     id=StFunction>
+                     id='setting'
+                     (click)="seleteFunction('setting')">
                     <div class=functionicon>
-                        <img src="assets/folder.svg" alt="">
+                        <img src="assets/settings.svg" alt="">
                     </div>
                     <div class=functiontext>
                       <div class=" functiontextItem"
-                           (click)="jumpWorkspace()"
                       >
                       Settings
                       </div>

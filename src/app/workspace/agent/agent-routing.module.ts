@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import {AgentComponent} from './agent.component' ;
 import {FilesystemComponent} from './filesystem/filesystem.component'
+import {WsSetterComponent} from './ws-setter/ws-setter.component'
 const routes: Routes = [
   {
     path: '',
@@ -16,6 +17,13 @@ const routes: Routes = [
       {
         path: 'filesystem',
         component: FilesystemComponent,
+      },
+      {
+        path: 'history'
+      },
+      {
+        path: 'setting',
+        component: WsSetterComponent
       }
     ]
   }

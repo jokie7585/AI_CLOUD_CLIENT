@@ -23,7 +23,11 @@ export class AppComponent implements OnInit{
               private appbarCtr:AppbarControllerService) {}
 
   jumpHome(){
-    this.router.navigate([''])
+    this.router.navigate(['']);
+  }
+
+  jumpWorkspace(){
+    window.location.assign('workspace');
   }
 
   ngOnInit() {

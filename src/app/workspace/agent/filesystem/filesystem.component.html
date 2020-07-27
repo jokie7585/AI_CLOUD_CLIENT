@@ -1,10 +1,48 @@
 
 <div class="pagebase">
-    <div *ngFor="let item of dirList"
-         (click)="cd(item)">
-        <div>
-            {{item.name}}
+    <div class="placehoder">
+
+    </div>
+    <div class="fsArea">
+        <div class="fsOperationBar">
+            <div class="fsOperationBar-item"
+                 (click)="preDir()"
+            >
+                <div class="fsOperationBar-item-icon">
+
+                </div>
+                <div class="fsOperationBar-item-yexy">
+                    preDir
+                </div>
+            </div>
+        </div>
+        <div class="navBar">
+            <div class="navBar-icon">
+                <img src="assets/desktop.svg" alt="">
+            </div>
+            <div class="currpath">
+                > {{path.join(' > ')}}
+            </div>
+        </div>
+        <div class="fileList">
+
+            <div *ngFor="let item of dirList">
+                <div class="fileList-item">
+                    <div class="fileList-item-icon">
+                        <img src={{iconSelector(item.type)}} alt="">
+                    </div>
+                    <div class="fileList-item-name"
+                         (click)="exeuteClick(item)">
+                        {{item.name}}
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
+    <div class="CetusoperationArea">
+
+    </div>
+
 </div>
 

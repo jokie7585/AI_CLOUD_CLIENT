@@ -20,6 +20,7 @@ export class NewComponent implements OnInit {
               private http: HttpClient) { }
 
   newrepository(){
+    console.log('create ws')
     let url = `http://${environment.apiserver}/users/${this.userId}/management/api/createWorkspace` ;
     let body = {
       WSName: this.Inputnewrepository

@@ -19,7 +19,6 @@ import { AgentComponent } from './agent/agent.component';
   imports: [
     CommonModule,
     FormsModule,
-    MatRadioModule,
     WorkspaceRoutingModule
   ],
   providers:[CookieService]

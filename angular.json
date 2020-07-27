@@ -48,6 +48,12 @@
               "src/favicon.ico",
               "src/assets/github.svg",
               "src/assets/folder.svg",
+              "src/assets/settings.svg",
+              "src/assets/history.svg",
+              "src/assets/code.svg",
+              "src/assets/desktop.svg",
+              "src/assets/file.svg",
+              "src/assets/directory.svg",
               "src/assets/workspace_new.svg",
               "src/assets/workspace_lock.svg"
             ],

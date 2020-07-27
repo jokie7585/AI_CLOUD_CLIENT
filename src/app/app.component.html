@@ -2,7 +2,7 @@
 
 <div class = "appbar" [style.background-color]="'#24292e'">
 
-  <div class="box_left">
+  <div class="box_left" *ngIf="showSingInUp">
 
       <div class="appicon">
         <div class="appiconlimiter">
@@ -16,6 +16,23 @@
     
 
   </div>
+
+  <div class="box_left" *ngIf="showWorkspaceFunction">
+
+    <div class="appicon">
+      <div class="appiconlimiter">
+        <img src="assets/github.svg" alt="">
+      </div>
+    </div>
+
+    <a [routerLink]="path.home" (click) = "jumpWorkspace()">
+      Why Cytus?
+    </a>
+  
+
+</div>
+
+
   <div class="box_mid" *ngIf="showSingInUp">
 
   </div>

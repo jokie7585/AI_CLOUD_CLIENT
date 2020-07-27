@@ -37,7 +37,7 @@
 }
 
 .box_left {
-  flex:4;
+  flex:1.5;
   display: flex;
   flex-flow: row nowrap ;
   align-items: center;
