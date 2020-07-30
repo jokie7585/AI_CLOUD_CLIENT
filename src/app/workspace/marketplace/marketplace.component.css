@@ -1,0 +1,62 @@
+.pagebase {
+  position: absolute;
+  top: 0px;
+  z-index: 10;
+  min-height: 100vh;
+  min-width: 100vw;
+  background-color: #f9f9f9;
+  text-align: center;
+
+}
+
+.pageChoosebase{
+  display: flex;
+  min-height: 85vh;
+  width: 45vw;
+  margin-left: 30vw;
+
+  flex-direction: column ;
+  flex-wrap: wrap ;
+  background-color: wheat;
+  padding:2.5vw;
+}
+
+.pageLebal{
+  flex: 1;
+  min-height: 10vh;
+}
+
+.pageChooseBox{
+  flex: 4;
+  display: flex;
+  min-height: 10vh;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+  .ChooseBox_A{
+    flex: 1;
+    border: 1px;
+    border-style: solid;
+    border-radius: 5px;
+    border-color: grey;
+    margin: 10px;
+  }
+
+  .ChooseBox_B{
+    flex: 1;
+    border: 1px;
+    border-style: solid;
+    border-radius: 5px;
+    border-color: grey;
+    margin: 10px;
+  }
+
+  .ChooseBox_C{
+    flex: 1;
+    border: 1px;
+    border-style: solid;
+    border-radius: 5px;
+    border-color: grey;
+    margin: 10px;
+  }
