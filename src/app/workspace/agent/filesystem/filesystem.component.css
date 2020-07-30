@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: row;
     z-index: 11;
-    min-height: 100vh;
+    min-height: 85vh;
     min-width: 100%;
     background-color: #ffffff;
     text-align: center;
@@ -16,7 +16,6 @@
     flex: 7;
     margin-top: 2rem;
     margin-left: 2rem;
-    margin-bottom: 1rem;
     margin-right: 2rem;
   }
   .navBar{
@@ -77,12 +76,112 @@
     border-bottom: solid 1px rgb(48, 47, 47);
   }
 
+  .fileList-item-function {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  .fileList-item-function_item {
+    display:flex;
+    margin-right: 0.5rem ;
+  }
+
+  .fileList-item-function_item:hover {
+    cursor: pointer;
+  }
+
   .fsOperationBar{
     display: flex;
+    margin-bottom: 1rem ;
+  }
+
+  .fsOperationBar-item{
+    display: flex;
+    min-height: 32px;
+    min-width: 110px;
+    max-height: 32px;
+    border: solid 1px rgb(27, 41, 35, .15);
+    border-radius: 4px;
+    background-color: #fafbfc;
+    color: #24292e;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+  }
+  .fsOperationBar-item:hover{
+    cursor: pointer;
+    background-color: #d4d4d4;
+  }
+
+  .fsOperationBar-item-icon{
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 0.5rem ;
+    margin-right: 0.5rem ;
+  }
+
+  .fsOperationBar-item-text{
+    text-align: left;
+    flex: 3;
   }
 
   .CetusoperationArea{
     flex: 5;
     margin-top: 2rem;
-    margin-bottom: 1rem;
+  }
+
+  .locator{
+    position: absolute;
+    min-width: 100vw;
+    max-width: 100vw;
+    min-height: 100vh;
+    max-height: 100vh;
+  }
+
+  /*below is uploadmodule*/
+  .uploadModule{
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    min-width: 362px;
+    max-width: 362px;
+    right: 2rem;
+    bottom: 24px;
+    z-index: 1001;
+  }
+
+  .uploadModule-bar{
+    display: flex;
+    min-height: 45px;
+    background-color: #323232;
+    color: white;
+  }
+
+  .uploadModule-bar-msg{
+    flex: 5;
+    display: flex;
+    margin-left: 2rem;
+    justify-content: left;
+    align-items: center;
+  }
+
+  .uploadModule-bar-function{
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .uploadModule-bar-function:hover{
+    fill: rgb(194, 192, 192);
+    cursor: pointer;
+  }
+
+  .uploadModule-processList{
+    
   }

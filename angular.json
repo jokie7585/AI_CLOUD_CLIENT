@@ -53,6 +53,11 @@
               "src/assets/code.svg",
               "src/assets/desktop.svg",
               "src/assets/file.svg",
+              "src/assets/back.svg",
+              "src/assets/download.svg",
+              "src/assets/smallest.svg",
+              "src/assets/upload.svg",
+              "src/assets/path.svg",
               "src/assets/directory.svg",
               "src/assets/workspace_new.svg",
               "src/assets/workspace_lock.svg"

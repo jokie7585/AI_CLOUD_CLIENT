@@ -1,8 +1,9 @@
 .pagebase {
-    position: absolute;
+    display: flex;
+    flex-direction: column;
     top: 0px;
     z-index: 10;
-    min-height: 100vh;
+    min-height: 85vh;
     min-width: 100%;
     background-color: #f9f9f9;
     text-align: center;
@@ -118,4 +119,8 @@
   .functiontextItem{
     margin-left: 0.1rem;
     margin-right: 0.1rem;
+}
+
+.functionDisplay{
+  flex: 1;
 }

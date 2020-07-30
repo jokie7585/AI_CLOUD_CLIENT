@@ -9,10 +9,10 @@
                  (click)="preDir()"
             >
                 <div class="fsOperationBar-item-icon">
-
+                    <img src="assets/back.svg" alt="">
                 </div>
-                <div class="fsOperationBar-item-yexy">
-                    preDir
+                <div class="fsOperationBar-item-text">
+                    Pre dir
                 </div>
             </div>
         </div>
@@ -35,6 +35,18 @@
                          (click)="exeuteClick(item)">
                         {{item.name}}
                     </div>
+                    <div class="fileList-item-function">
+                        <div class="fileList-item-function_item"
+                             (click)="download(item.name)"
+                        >
+                            <img src="assets/download.svg" alt="">
+                        </div>
+                        <div class="fileList-item-function_item"
+                             (click)="getPath(item.name)"
+                        >
+                            <img src="assets/path.svg" alt="">
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -43,6 +55,22 @@
     <div class="CetusoperationArea">
 
     </div>
+
+    <div class="uploadModule" *ngIf="showUploader">
+        <div class="uploadModule-bar">
+            <div class="uploadModule-bar-msg">
+                Upload Module
+            </div>
+            <div class="uploadModule-bar-function">
+                <img src="assets/smallest.svg" alt="">
+            </div>
+        </div>
+        <div class="uploadModule-processList">
+
+        </div>
+    </div>
+
+    <a id="Fsdownloader" href="" download=""></a>
 
 </div>
 

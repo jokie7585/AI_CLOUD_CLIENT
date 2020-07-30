@@ -26,7 +26,9 @@ export class agantCtr {
   currentFunctionId = new Subject<string>();
   cytusAppconfig = new Subject<workspaceconfig>();
   currentWs = new Subject<string>();
-  fileUploadList = new Subject<Array<File>>();
+  // fs component add file(listen input-onchange)
+  fileUploadList = new Subject<FileList>();
+  // show on upload dashboard
   uploadingProcess = new Subject<Array<uploadingProcess>>();
 
   // create stream
@@ -39,10 +41,10 @@ export class agantCtr {
       url: environment.fileSocketServer
     });
     this.cytusAppconfig$.subscribe( config => {
-        
+        // 串接後端api (post)
     })
-    this.uploadSocket.subscribe(val => {
-      console.log(val)
+    this.uploadSocket.subscribe(msg => {
+      
     })
 
   }
@@ -57,9 +59,18 @@ export class agantCtr {
     this.cytusAppconfig.next(config);
   }
 
-  // Fileupload
-  upload(file: string) {
-    this.uploadSocket.next(file)
+  // addfile to upload queue
+  stageUploadfile(relativePath:string, filelist:FileList) {
+
   }
+
+  // generate upload process from file upload queue
+  assignProcess(relativePath:string, file:File){
+
+  }
+  // process SolidSocketFrame
+  // send
+
+  // comfirme
 
 }

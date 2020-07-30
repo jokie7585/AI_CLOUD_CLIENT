@@ -11,13 +11,13 @@
   margin: 0;
   padding: 0;
   flex-direction: row;
-  z-index: 11;
+  z-index: 1001;
 
 }
 
 .back{
 
-  height:100vh;
+  height:85vh;
   width: 100vw;
   position: relative;
   max-width:100%;
@@ -27,8 +27,6 @@
 }
 
 .footer{
-
-  position: sticky bottom;
   height: 10vh;
   width: 100vw;
   max-width:100%;
