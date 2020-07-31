@@ -15,6 +15,8 @@ import { FormsModule } from '@angular/forms';
 import { AgentComponent } from './agent/agent.component';
 import { MarketplaceComponent } from './marketplace/marketplace.component';
 
+import {agantCtr} from 'src/myservice/agentCtr.service'
+
 
 
 @NgModule({
@@ -26,6 +28,6 @@ import { MarketplaceComponent } from './marketplace/marketplace.component';
     MatCheckboxModule,
     WorkspaceRoutingModule
   ],
-  providers: [CookieService]
+  providers: [CookieService,agantCtr]
 })
 export class WorkspaceModule { }

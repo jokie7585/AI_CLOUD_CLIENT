@@ -43,6 +43,7 @@ export class AgentComponent implements OnInit {
     document.getElementById(this.currentFunctionId).setAttribute('class', 'function-seleted');
     this.userId = this.cookieService.get(cookieList.userID);
     this.wsName = this.route.snapshot.parent.paramMap.get('wsName');
+    this.agentCtr.currentWs.next(this.wsName);
   }
 
   seleteFunction(htmlId: string){

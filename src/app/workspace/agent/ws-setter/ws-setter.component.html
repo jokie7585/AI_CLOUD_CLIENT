@@ -15,7 +15,7 @@
             </div>
             <div class="mySelector">
                 <label>Tensorflow version</label>
-                <select (change)="bind_TsVersion($event)">
+                <select id="tsV-i" (change)="bind_TsVersion($event)">
                     <option value="1.6.0">1.6.0</option>
                     <option value="1.7.0">1.7.0</option>
                     <option value="1.8.0">1.8.0</option>
@@ -25,14 +25,15 @@
                     <option value="2.2.0">2.2.0</option>
                 </select>
                 <label>GPU</label>
-                <select (change)="bind_GpuNum($event)">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
+                <select id="gpu-i" (change)="bind_GpuNum($event)">
+                    <option value=0>0</option>
+                    <option value=1>1</option>
+                    <option value=2>2</option>
+                    <option value=3>3</option>
+                    <option value=4>4</option>
+                    <option value=5>5</option>
+                    <option value=6>6</option>
+                    <option value=7>7</option>
                 </select>
             </div>
         </div>

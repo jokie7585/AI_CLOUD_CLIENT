@@ -11,13 +11,18 @@ export class WsSetterComponent implements OnInit {
 
   constructor(private agent:agantCtr) { }
 
-  TsVersion: string;
-  GpuNum: number;
+  TsVersion: HTMLInputElement;
+  GpuNum: HTMLInputElement;
 
   ngOnInit(): void {
+    this.TsVersion = document.getElementById('tsV-i') as HTMLInputElement;
+    this.GpuNum = document.getElementById('gpu-i') as HTMLInputElement;
+    this.TsVersion.value = this.agent.cytusappconfig.tensorflowVersion;
+    this.GpuNum.value = this.agent.cytusappconfig.GpuNum.toString();
+    // subscrube
     this.agent.cytusAppconfig$.subscribe(config => {
-      this.TsVersion = config.tensorflowVersion;
-      this.GpuNum = config.GpuNum;
+      this.TsVersion.value = config.tensorflowVersion;
+      this.GpuNum.value = config.GpuNum.toString();
     })
   }
 
@@ -25,13 +30,13 @@ export class WsSetterComponent implements OnInit {
     let target: HTMLSelectElement = event.target;
     this.agent.setConfig({
       tensorflowVersion: target.value,
-      GpuNum: this.GpuNum
+      GpuNum:  Number.parseInt(this.GpuNum.value, 10)
     });
   }
   bind_GpuNum(event): void{
     let target: HTMLSelectElement = event.target;
     this.agent.setConfig({
-      tensorflowVersion: target.value,
+      tensorflowVersion: this.TsVersion.value,
       GpuNum: Number.parseInt(target.value,10)
     });
   }

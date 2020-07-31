@@ -1,9 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {environment} from 'src/environments/environment' ;
 import {HttpClient, HttpResponse, HttpEvent} from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service' ;
 import { cookieList} from 'src/utility/cookie' ;
+import { agantCtr } from 'src/myservice/agentCtr.service';
+import { TerminalService } from 'src/myservice/terminal.service';
+import { TexteditorService, Line } from 'src/myservice/texteditor.service';
+
 
 interface data {
   name: string
@@ -23,20 +27,57 @@ export class FilesystemComponent implements OnInit {
   path: Array<string> = [];
   dirList: Array<data> = [];
   downloader: HTMLElement;
-  showUploader: boolean = false;
+  uploader: HTMLInputElement;
+  showUploadList: boolean = false;
+  // clipboard
+  clipbaordDisplay: string = 'none';
+  clipboard: HTMLInputElement;
+  cilpboardCordinate: {left: number, top:number} = {left:0, top:0}
+  // script / terminal
+  showconsole: boolean = false;
+  // script: Array<Line>;
+  script: HTMLTextAreaElement;
+  scriptContent: Array<Line>;
+  //
+  showTerminal: boolean = false;
+  TerminalContent: Array<Line>;
 
 
   constructor(private http: HttpClient, 
               private route: ActivatedRoute,
-              private cookieService: CookieService,) { }
+              private cookieService: CookieService,
+              private agent: agantCtr,
+              private editorCtr: TexteditorService,
+              private terminal: TerminalService,
+              private ngzone: NgZone) { }
 
   ngOnInit(): void {
+    this.agent.fileList.subscribe(data => {
+      this.dirList = data;
+    })
+    this.script = document.getElementById('fsConsole-input') as HTMLTextAreaElement
     this.downloader = document.getElementById('Fsdownloader')
+    this.uploader = document.getElementById('FsUploader') as HTMLInputElement
+    this.clipboard = document.getElementById('fsClipboard') as HTMLInputElement
     this.wsName = this.route.snapshot.parent.paramMap.get('wsName')
     console.log(this.route.snapshot.paramMap)
     this.userId = this.cookieService.get(cookieList.userID);
     this.path.push(this.wsName);
     this.loadpath();
+    // init service
+    this.editorCtr.initByAgent(this.wsName, this.userId);
+    this.terminal.initByAgent(this.wsName, this.userId);
+    this.editorCtr.content.subscribe(data => {
+      this.scriptContent = data;
+    })
+
+    this.terminal.simulateLog.subscribe(data=> {
+      this.TerminalContent = data;
+    })
+  }
+
+  muteAll(){
+    this.clipbaordDisplay='none'
   }
 
   iconSelector(type: string) {
@@ -112,12 +153,75 @@ export class FilesystemComponent implements OnInit {
 
   }
 
-  getPath(name: string){
-
+  setmyclipboard(event: MouseEvent,name: string){
+    event.stopPropagation();
+    let path = this.path.concat(name).slice(1).join('/');
+    let bottum: HTMLElement = event.target as HTMLElement;
+    // forced update view
+    this.clipboard.value = path; 
+    this.cilpboardCordinate.left = bottum.offsetLeft+20
+    this.cilpboardCordinate.top = bottum.offsetTop+10
+    this.clipbaordDisplay = 'flex'
   }
 
-  upload(){
+  getpath(event:Event){
+    event.preventDefault();
+    this.clipboard.select();
+    document.execCommand('COPY')
+    this.clipbaordDisplay='none'
+  }
 
+  upload(event: Event){
+    console.log('onchange is called')
+    let target: HTMLInputElement = event.target as HTMLInputElement;
+    this.agent.stageUploadfile(this.path.join('/'), target.files);
+  }
+
+  openTerminal(){
+    this.showTerminal = !this.showTerminal;
+    this.terminal.getLogs()
+  }
+
+  openScripWriter(){
+    this.showconsole = !this.showconsole;
+    if(this.showconsole == true) {
+      // 重要細節！！！ docuent的執行scope不在此context內，因此用arrow綁定
+      document.onkeydown = this.consolChange;
+    }
+    else{
+      document.onkeydown = ()=>{};
+    }
+    
+  }
+
+  consolChange = (event: KeyboardEvent) =>{
+    this.editorCtr.eventProcess(event);
+  }
+
+  saveScript(){
+    this.showconsole = false;
+    this.editorCtr.save()
+  }
+
+  runworkspace(){
+    let url = `http://${environment.apiserver}/users/${this.userId}/management/api/runWorkspace/${this.wsName}` ;
+
+    let options = {
+      headers: {
+        'Content-Type' : 'application/json'},
+        withCredentials: true,
+    };
+
+
+    this.http.get<any>(url, options)
+    .subscribe((res => {
+      let {message} = res;
+      console.log(message)
+      alert(message)
+    }),
+    err => {
+      
+    });
   }
 
 }

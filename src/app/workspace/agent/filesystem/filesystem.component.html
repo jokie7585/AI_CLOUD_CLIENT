@@ -1,5 +1,5 @@
 
-<div class="pagebase">
+<div class="pagebase" (click)="muteAll()">
     <div class="placehoder">
 
     </div>
@@ -15,7 +15,52 @@
                     Pre dir
                 </div>
             </div>
+
+            <div class="fsOperationBar-item"
+                 (click)="openScripWriter()"
+            >
+                <div class="fsOperationBar-item-icon">
+                    <img src="assets/script.svg" alt="">
+                </div>
+                <div class="fsOperationBar-item-text">
+                    Script
+                </div>
+            </div>
+
+            <div class="fsOperationBar-item"
+                 (click)="openTerminal()"
+            >
+                <div class="fsOperationBar-item-icon">
+                    <img src="assets/terminal.svg" alt="">
+                </div>
+                <div class="fsOperationBar-item-text">
+                    Terminal
+                </div>
+            </div>
+
+            <div class="fsOperationBar-item"
+                 (click)="uploader.click()"
+            >
+                <div class="fsOperationBar-item-icon">
+                    <img src="assets/upload.svg" alt="">
+                </div>
+                <div class="fsOperationBar-item-text">
+                    Upload
+                </div>
+            </div>
+
+            <div class="fsOperationBar-item"
+                 (click)="runworkspace()"
+            >
+                <div class="fsOperationBar-item-icon">
+                    <img src="assets/upload.svg" alt="">
+                </div>
+                <div class="fsOperationBar-item-text">
+                    RunWorkspace
+                </div>
+            </div>
         </div>
+        
         <div class="navBar">
             <div class="navBar-icon">
                 <img src="assets/desktop.svg" alt="">
@@ -42,7 +87,7 @@
                             <img src="assets/download.svg" alt="">
                         </div>
                         <div class="fileList-item-function_item"
-                             (click)="getPath(item.name)"
+                             (click)="setmyclipboard($event,item.name)"
                         >
                             <img src="assets/path.svg" alt="">
                         </div>
@@ -53,10 +98,9 @@
         </div>
     </div>
     <div class="CetusoperationArea">
-
     </div>
 
-    <div class="uploadModule" *ngIf="showUploader">
+    <div class="uploadModule" *ngIf="showUploadList">
         <div class="uploadModule-bar">
             <div class="uploadModule-bar-msg">
                 Upload Module
@@ -70,7 +114,43 @@
         </div>
     </div>
 
-    <a id="Fsdownloader" href="" download=""></a>
-
 </div>
+
+<a id="Fsdownloader" href="" download="" class="notdisplay"></a>
+<input type="file" multiple id="FsUploader" class="notdisplay" (change)="upload($event)">
+
+<div class="fsclipboard" [style.display]="clipbaordDisplay" [style.left.px]="cilpboardCordinate.left" [style.top.px]="cilpboardCordinate.top">
+    <div class="fsclipboard-msg">
+        Copy path in container
+    </div>
+    <input (click)="getpath($event)" class="fsclipboardContent" type="text" id="fsClipboard">
+</div>
+
+<div class="fsConsole" *ngIf="showconsole">
+    <div class="fsConsole-title"
+         (click)="saveScript()"
+    >
+        {{userId}}/{{wsName}}'s shellScript
+    </div>
+    <div class="fsConsole-content">
+        <div *ngFor="let line of scriptContent">
+            {{line.content}}
+        </div>
+    </div>
+   
+</div>
+
+<div class="fsConsole" *ngIf="showTerminal">
+    <div class="fsConsole-title"
+    >
+        {{userId}}/{{wsName}}'s Terminal
+    </div>
+    <div class="fsConsole-content">
+        <div *ngFor="let line of TerminalContent">
+            {{line.content}}
+        </div>
+    </div>
+   
+</div>
+
 

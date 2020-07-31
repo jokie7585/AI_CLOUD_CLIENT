@@ -9,7 +9,6 @@ import { cookieList} from 'src/utility/cookie' ;
 import {environment} from 'src/environments/environment' ;
 import {AppbarControllerService} from 'src/myservice/appbar-controller.service';
 
-
 interface data {
   name: string
   type: string
@@ -31,7 +30,7 @@ export class WorkspaceComponent implements OnInit {
               private http: HttpClient,
               private router: Router,
               private route: ActivatedRoute,
-              private appbarCtr: AppbarControllerService) { }
+              private appbarCtr: AppbarControllerService,) { }
 
 
 
