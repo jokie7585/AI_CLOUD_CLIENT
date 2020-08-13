@@ -187,4 +187,27 @@ export class agantCtr {
     this.curUploadProcessManager.uploadProcessList.next(newList);
   }
 
+  deleteWs(){
+    let url = `http://${environment.apiserver}/users/${this.userId}/management/api/deleteWorkspace`;
+    let payload = {
+      WsName: this.curWs
+    };
+
+    this.http.post<any>(url, payload, {
+      headers: {
+        'Content-Type' : 'application/json'},
+      withCredentials:true,
+      responseType: 'json',
+      observe: 'response',
+    }).subscribe(Response => {
+      console.log(Response);
+
+      if(!Response.ok) {
+        alert('something wrong happens... please reloadPage!')
+      }
+
+      location.reload();
+    })
+  }
+
 }

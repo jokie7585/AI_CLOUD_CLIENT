@@ -55,7 +55,7 @@
                     </div>
                 </div>
                 <div class="subArea-item-fnc">
-                    <button (click)="openComfirmBoard()">
+                    <button (click)="openDeleteWorkspaceComfirmBoard()">
                         Delete Workspace
                     </button>
                 </div>
@@ -86,7 +86,41 @@
     </div>
 </div>
 
+<div class="comfirmBoard-backBoard" *ngIf="isShowComfirmBoard"
+     (click)="closeComfirmBoard()"
+>
+</div>
+
 <div class="comfirmBoard-pagebase" *ngIf="isShowComfirmBoard"
-     (click)="closeComfirmBoard()">
-    
+     (click)="closeComfirmBoard()"
+>
+    <div class="comfirmBoard-formbase" *ngIf="isShowDeleteWorkspaceBoard"
+         (click)="stopProbgation($event)"
+    >
+        <div class="comfirmBoard-title">
+            Are you ablolutely sure ?  
+        </div>
+        <div class="comfirmBoard-waringMsg">
+            This Action will delete workspcae Unrecoverable!
+        </div>
+        <div class="comfirmBoard-Detail">
+            This action cannot be undone.All Data, Files, Logs will complete remove from
+            Cetus System and unrecoverable.
+        </div>
+        <div class="comfirmBoard-ActionArea">
+            <div class="comfirmBoard-ActionArea-templateText">
+                if you wish, type <span class="boldText">{{ComfirmBoard_ComfirmMessageTeplete}}</span> to enable buttom
+            </div>
+            <div class="comfirmBoard-ActionArea-inputArea">
+                <input id="comfirmBoard-input" type="text">
+            </div>
+            <div class="comfirmBoard-ActionArea-comfirmButtom">
+                <button class="comfirmBoardBt" [disabled]="!isComfirmed"
+                        (click)="comfirmBoardAction()"
+                >
+                    I understand the consquences, Delete the workspace
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
