@@ -14,17 +14,17 @@
                 Config your runtime
             </div>
             <div class="mySelector">
-                <label>Tensorflow version</label>
+                <label>- Tensorflow version</label>
                 <select id="tsV-i" (change)="bind_TsVersion($event)">
                     <option value="1.6.0">1.6.0</option>
                     <option value="1.7.0">1.7.0</option>
                     <option value="1.8.0">1.8.0</option>
                     <option value="1.9.0">1.9.0</option>
-                    <option value="2.2.0">2.0.0</option>
+                    <option value="2.0.0">2.0.0</option>
                     <option value="2.1.0">2.1.0</option>
                     <option value="2.2.0">2.2.0</option>
                 </select>
-                <label>GPU</label>
+                <label>- GPU</label>
                 <select id="gpu-i" (change)="bind_GpuNum($event)">
                     <option value=0>0</option>
                     <option value=1>1</option>
@@ -38,5 +38,55 @@
             </div>
         </div>
 
+        <div class="function-head">
+            <div class="function-head-text">
+                Danger Zone
+            </div>
+        </div>
+
+        <div class="subArea-danger">
+            <div class="subArea-item">
+                <div class="subArea-item-text">
+                    <div class="subArea-item-text-title">
+                        Delete this workspace
+                    </div>
+                    <div class="subArea-item-text-detail">
+                        Once you delete a workspace, there is no going back. Please be certain.
+                    </div>
+                </div>
+                <div class="subArea-item-fnc">
+                    <button (click)="openComfirmBoard()">
+                        Delete Workspace
+                    </button>
+                </div>
+            </div>
+
+            <div class="subArea-item">
+                <div class="subArea-item-text">
+                    <div class="subArea-item-text-title">
+                        Delete cach
+                    </div>
+                    <div class="subArea-item-text-detail">
+                        Once you delete cach, the new catch default is the current workspace's. Please be certain.
+                    </div>
+                </div>
+                <div class="subArea-item-fnc">
+                    <button>
+                        Clean Cach
+                    </button>
+                </div>
+            </div>
+            
+        </div>
+
     </div>
+
+    <div class="right-placehoder">
+
+    </div>
+</div>
+
+<div class="comfirmBoard-pagebase" *ngIf="isShowComfirmBoard"
+     (click)="closeComfirmBoard()">
+    
 </div>

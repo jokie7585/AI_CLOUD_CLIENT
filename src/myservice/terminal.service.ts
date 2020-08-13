@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject, from } from 'rxjs';
+import { Observable, Subject, from, BehaviorSubject } from 'rxjs';
 import {webSocket, WebSocketSubject} from 'rxjs/webSocket'
 import {environment} from 'src/environments/environment' ;
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpResponse} from '@angular/common/http';
 
 interface Fetchconfig {
   wsName: string, userId: string
 }
 
-interface Line {
-  content: string,
-  isEditing: boolean
+export interface TerminalLine {
+  content: string
 }
 
 @Injectable({
@@ -18,23 +17,28 @@ interface Line {
 })
 export class TerminalService {
 
-  content: Subject<Array<Line>> = new Subject<Array<Line>>();
+  content: Subject<Array<TerminalLine>> = new Subject<Array<TerminalLine>>();
   config: Subject<Fetchconfig> = new Subject<Fetchconfig>();
-  simulateLog :Subject<Array<Line>> = new Subject<Array<Line>>();
+  simulateLog :BehaviorSubject<Array<TerminalLine>> = new BehaviorSubject<Array<TerminalLine>>([{content:''}]);
+  
 
-  content$: Array<Line> = [];
+  content$: Array<TerminalLine> = [];
   config$ :Fetchconfig;
+  endLog$ : boolean = false;
+  Intervel;
+  logEnding:false;
+  isgattingLog:boolean= false;
   
 
   constructor(private http: HttpClient) {
-    this.content$ = [{content: '', isEditing: true}];
+    this.content$ = [{content: ''}];
     this.config.subscribe((config)=> {
         this.config$ = config
     })
     this.content.subscribe(data => {
         let sumulateLog = '';
             let logStorage = data
-            let NewconsoleSimulatLog: Array<Line> = [];
+            let NewconsoleSimulatLog: Array<TerminalLine> = [];
             logStorage.forEach((el,index) => {
                 let samlineOutput = el.content.split('\r');
 
@@ -49,13 +53,13 @@ export class TerminalService {
 
                 let temp = sumulateLog;
                 // 將處理好的log加入儲存中
-                NewconsoleSimulatLog.push({content: temp, isEditing: false});
+                NewconsoleSimulatLog.push({content: temp});
                 // console.log('previous: ' + el);
                 // console.log('after: ' + temp);
                 // 初始化
                 sumulateLog = '';
             })
-
+            this.isgattingLog = false;
             this.simulateLog.next(NewconsoleSimulatLog);
     
   })
@@ -65,7 +69,7 @@ export class TerminalService {
 
   initByAgent(wsName:string, userId:string){
       console.log('init terminal')
-    this.config.next({wsName: wsName, userId:userId});
+      this.config.next({wsName: wsName, userId:userId});
   }
 
   initLogProcess(){
@@ -73,42 +77,48 @@ export class TerminalService {
   }
 
   getLogs(){
+    if(this.isgattingLog) {
+      return false;
+    }
+    // if not getting logs
+    this.isgattingLog = true;
 
     let url = `http://${environment.apiserver}/users/${this.config$.userId}/management/api/getWorkspaceLog/${this.config$.wsName}` ;
 
 
-    this.http.get<Response>(url, {
-         headers: {
-          },
-          withCredentials: true,
-          observe: "response"
-          
+    this.http.get(url, {
+        responseType: 'json',
+        observe: 'response',
+        withCredentials: true,
       })
     .subscribe((res => {
-      let isLogEnd = res.headers.get('X-AICLOUD-ENDLOG');
-
-      res.body.blob()
-      .then(fileBlob => {
-        fileBlob.text()
-        .then(textStream => {
-            let arr = textStream.split('\n')
+      console.log(res);
+        let isLogEnd = res.headers.get('X-AICLOUD-ENDLOG');
+        let {logs} = res.body as any;
+        let textStream = logs as string;
+        let arr = textStream.split('\n')
             this.content$ = arr.map(el => {
                 return {
                     content: el,
                     isEditing:false
-                } as Line
+                } as TerminalLine
             })
             this.content.next(this.content$);
-            if(!isLogEnd) {
-                this.getLogs()
-            }
-        })
+            let that = this;
+            setTimeout(function() {
+              if(isLogEnd==='true') {
+              }
+              else{
+                that.getLogs()
+              }
+            }, 1000)
+      
         
-    })
+    
     }),
     err => {
         console.log(err);
-        let {message} = err
+        let {message} = err.error
         alert(message)
     });
 

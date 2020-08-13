@@ -1,65 +1,63 @@
 
 <div class="pagebase" (click)="muteAll()">
-    <div class="placehoder">
-
-    </div>
-    <div class="fsArea">
-        <div class="fsOperationBar">
-            <div class="fsOperationBar-item"
-                 (click)="preDir()"
-            >
-                <div class="fsOperationBar-item-icon">
-                    <img src="assets/back.svg" alt="">
-                </div>
-                <div class="fsOperationBar-item-text">
-                    Pre dir
-                </div>
+    <div class="fsOperationBar">
+        <div class="fsOperationBar-item"
+             (click)="preDir()"
+        >
+            <div class="fsOperationBar-item-icon">
+                <img src="assets/back.svg" alt="">
             </div>
-
-            <div class="fsOperationBar-item"
-                 (click)="openScripWriter()"
-            >
-                <div class="fsOperationBar-item-icon">
-                    <img src="assets/script.svg" alt="">
-                </div>
-                <div class="fsOperationBar-item-text">
-                    Script
-                </div>
-            </div>
-
-            <div class="fsOperationBar-item"
-                 (click)="openTerminal()"
-            >
-                <div class="fsOperationBar-item-icon">
-                    <img src="assets/terminal.svg" alt="">
-                </div>
-                <div class="fsOperationBar-item-text">
-                    Terminal
-                </div>
-            </div>
-
-            <div class="fsOperationBar-item"
-                 (click)="uploader.click()"
-            >
-                <div class="fsOperationBar-item-icon">
-                    <img src="assets/upload.svg" alt="">
-                </div>
-                <div class="fsOperationBar-item-text">
-                    Upload
-                </div>
-            </div>
-
-            <div class="fsOperationBar-item"
-                 (click)="runworkspace()"
-            >
-                <div class="fsOperationBar-item-icon">
-                    <img src="assets/upload.svg" alt="">
-                </div>
-                <div class="fsOperationBar-item-text">
-                    RunWorkspace
-                </div>
+            <div class="fsOperationBar-item-text">
+                Pre dir
             </div>
         </div>
+
+        <div class="fsOperationBar-item"
+             (click)="openScripWriter()"
+        >
+            <div class="fsOperationBar-item-icon">
+                <img src="assets/script.svg" alt="">
+            </div>
+            <div class="fsOperationBar-item-text">
+                Script
+            </div>
+        </div>
+
+        <div class="fsOperationBar-item"
+             (click)="openTerminal()"
+             [style.pointer-events]="IsmuteTerminalButtom"
+        >
+            <div class="fsOperationBar-item-icon">
+                <img src="assets/terminal.svg" alt="">
+            </div>
+            <div class="fsOperationBar-item-text">
+                Terminal
+            </div>
+        </div>
+
+        <div class="fsOperationBar-item"
+             (click)="uploader.click()"
+        >
+            <div class="fsOperationBar-item-icon">
+                <img src="assets/upload.svg" alt="">
+            </div>
+            <div class="fsOperationBar-item-text">
+                Upload
+            </div>
+        </div>
+
+        <div class="fsOperationBar-item"
+             (click)="runworkspace()"
+        >
+            <div class="fsOperationBar-item-icon">
+                <img src="assets/start-button.svg" alt="">
+            </div>
+            <div class="fsOperationBar-item-text">
+                Run
+            </div>
+        </div>
+    </div>
+    <div class="fsArea">
         
         <div class="navBar">
             <div class="navBar-icon">
@@ -67,6 +65,14 @@
             </div>
             <div class="currpath">
                 > {{path.join(' > ')}}
+            </div>
+            <div class="navBar-end">
+                <div class="navBar-func">
+                    <div class="navBar-icon"
+                         (click)="setmyclipboard($event)">
+                        <img src="assets/path_White.svg" alt="">
+                    </div>
+                </div>
             </div>
         </div>
         <div class="fileList">
@@ -100,17 +106,44 @@
     <div class="CetusoperationArea">
     </div>
 
-    <div class="uploadModule" *ngIf="showUploadList">
+    <div class="uploadModule" [style.display]="isShow(showUploadList)">
         <div class="uploadModule-bar">
             <div class="uploadModule-bar-msg">
                 Upload Module
             </div>
-            <div class="uploadModule-bar-function">
+            <div class="uploadModule-bar-function"
+                 (click)="muteUploadModule()"
+            >
                 <img src="assets/smallest.svg" alt="">
             </div>
         </div>
-        <div class="uploadModule-processList">
-
+        <div class="uploadModule-processList" *ngFor="let item of uploadList">
+            
+                <div class="uploadModule-processList-item"
+                     (mouseleave)="hideCloseButtom()"
+                     (mouseenter)="hidProgressbar()">
+                    <div class="uploadModule-processList-item-name">
+                        <span class="uploadModule-processList-item-name-text">
+                            {{item.name}}
+                        </span>
+                    </div>
+                    <div class="uploadModule-processList-item-percent" >
+                        {{item.percent}} %
+                    </div>
+                    <div class="uploadModule-processList-item-progress"
+                         *ngIf="!showUploadListFn"
+                    >
+                        <circle-progress size=5px percentage={{item.percent}} backgroundcolor="white" color="#28FF28"></circle-progress>
+                    </div>
+                    <div class="uploadModule-processList-item-func"
+                        *ngIf="showUploadListFn"
+                        (click)="deleteProcess(item)"
+                    >
+                        <img src="assets/close.svg" alt="">
+                    </div>
+                </div>
+                
+            
         </div>
     </div>
 
@@ -126,31 +159,64 @@
     <input (click)="getpath($event)" class="fsclipboardContent" type="text" id="fsClipboard">
 </div>
 
-<div class="fsConsole" *ngIf="showconsole">
+<input type="text" id="fsScriptInput" 
+        class="fsScriptInputEl"
+       (change)="scriptInputOnchange($event)"
+       (focus)="FocusScript()"
+       (blur)="UnFocusScript()"
+       >
+       
+
+<div class="fsConsole" [style.display]="isShow(showconsole)"
+     id="fsScript"
+     (click)="focusFsConsole()"
+     [style.height]="getHight()"
+>
     <div class="fsConsole-title"
-         (click)="saveScript()"
+         (mousedown)="ZoomTerminal($event)"
+         [style.background-color]="titleBackground"
     >
         {{userId}}/{{wsName}}'s shellScript
     </div>
     <div class="fsConsole-content">
         <div *ngFor="let line of scriptContent">
-            {{line.content}}
+            <div class="fsConsole-content-item">
+                <span class="fsConsole-content-item-text" id={{line.elId}}>
+                    {{line.content}}
+                </span>
+            </div>
         </div>
     </div>
-   
+
+    <div class="Mycursor" [style.left.px]="cursorCoordinate.left" [style.top.px]="cursorCoordinate.top"
+         [style.display]="isShow(showCursor)">
+        |
+    </div>
 </div>
 
-<div class="fsConsole" *ngIf="showTerminal">
+<div class="fsConsole" [style.display]="isShow(showTerminal)"
+     [style.height]="getHight()"
+>
     <div class="fsConsole-title"
+         (mousedown)="ZoomTerminal($event)"
     >
         {{userId}}/{{wsName}}'s Terminal
     </div>
-    <div class="fsConsole-content">
+    <div class="fsConsole-content" id="fsTerminal" id="fsTerminal"
+         (wheel)="isTraceTerminalLastLine($event)">
         <div *ngFor="let line of TerminalContent">
-            {{line.content}}
+            <div class="fsConsole-content-item">
+                {{line.content}}
+            </div>
         </div>
     </div>
    
 </div>
 
+<div class="dragBoard"
+     (mousemove)="traceMouse($event)"
+     (mouseup)="UnZoomTerminal($event)"
+     (mouseleave)="UnZoomTerminal($event)"
+     *ngIf="ontrace">
 
+</div>

@@ -9,6 +9,7 @@ export class AppbarControllerService {
 
   showWorkspaceFunction = new Subject<boolean>();
   showSingInUp = new Subject<boolean>();
+  showFooter = new Subject<boolean>();
   
 
   // create stream
@@ -26,6 +27,13 @@ export class AppbarControllerService {
     this.showSingInUp.next(true);
     this.showWorkspaceFunction.next(false);
     console.log('guest mode render')
+  }
+
+  Showfooter(){
+    this.showFooter.next(true);
+  }
+  closefooter(){
+    this.showFooter.next(false);
   }
 
 }

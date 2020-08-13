@@ -22,7 +22,7 @@
                 {{wsName}}
               </div>
             </div>
-        </div>
+            </div>
         </div>
 
         <div class="operationbar-function">
@@ -76,6 +76,67 @@
         <router-outlet></router-outlet>
     </div>
 
+    <div class="statusBar">
+      <div class="functionList">
+        <div class="functionList-right">
+          <div class="statusBar-item"
+           (click)="togleMuteUploadList()"
+          >
+            <div class="statusBar-item-notifyPoint-border"
+               *ngIf="isHasRunningUploadProcess"
+            >
+              <div class="statusBar-item-notifyPoint-innerCircle">
 
+              </div>
+            </div>
+            <div class="statusBar-item-icon">
+              <img src="assets/upload_statusbar.svg" alt="">
+            </div>
+          </div>
+
+          <div class="statusBar-item"
+           (click)="togleNotifycation()"
+          >
+            <div class="statusBar-item-notifyPoint-border"
+               *ngIf="isHasNotification"
+            >
+              <div class="statusBar-item-notifyPoint-innerCircle"></div>
+            </div>
+            <div class="statusBar-item-icon">
+              <img src="assets/notification.svg" alt="">
+            </div>
+
+            <!-- there is "notifycationModule"--->
+            <div class="notifycationModule" *ngIf="showNotificationList">
+              <div class="notifycationModule-bar">
+                <div class="notifycationModule-bar-title">
+                  NO NEW NOTIFICATIONS
+                </div>
+                <div class="notifycationModule-bar-fnc">
+
+                </div>
+              </div>
+
+              <div class=notifycationModule-list>
+                <div class=notifycationModule-list-item>
+                  <div class="notifycationModule-list-item-title">
+
+                  </div>
+                  <div class="notifycationModule-list-item-detaile">
+
+                  </div>
+                  <div class="notifycationModule-list-item-fuction">
+                    <img src="" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    
 </div>
 

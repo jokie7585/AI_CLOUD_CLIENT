@@ -1,3 +1,10 @@
+.pagebase{
+  min-height: 85vh;
+  min-width: 100%;
+  max-width: 100%;
+  
+}
+
 .Cetus{
   position: absolute;
   top: 30vh;

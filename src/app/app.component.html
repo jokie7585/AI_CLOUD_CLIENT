@@ -1,17 +1,19 @@
+<div class="my-app-root">
 
 
-<div class = "appbar" [style.background-color]="'#24292e'">
+
+<div class = "appbar">
 
   <div class="box_left" *ngIf="showSingInUp">
 
-      <div class="appicon">
+      <div class="appicon" (click)="jumpHome()">
         <div class="appiconlimiter">
           <img src="assets/github.svg" alt="">
         </div>
       </div>
   
       <a [routerLink]="path.home" (click) = "jumpHome()">
-        Why Cytus?
+        Why Cetus?
       </a>
     
 
@@ -19,14 +21,14 @@
 
   <div class="box_left" *ngIf="showWorkspaceFunction">
 
-    <div class="appicon">
+    <div class="appicon" (click)="jumpHome()">
       <div class="appiconlimiter">
         <img src="assets/github.svg" alt="">
       </div>
     </div>
 
     <a [routerLink]="path.home" (click) = "jumpWorkspace()">
-      Why Cytus?
+      Workspace
     </a>
   
 
@@ -37,10 +39,10 @@
 
   </div>
   <div class="box_mid" *ngIf="showWorkspaceFunction" style="font-size: medium; color: white;">
-    <a >Pull requests</a>
+    <a >Data-Set</a>
     <a >Issues</a>
     <a [routerLink]="path.marketplace">Marketplace</a>
-    <a >Explore</a>
+    <a >Tortorial</a>
   </div>
 
 
@@ -55,17 +57,25 @@
 
   </div>
   <div class = "box_right" *ngIf="showWorkspaceFunction">
+    <div class="userDropdown" > 
 
+    </div>
+    <div class="NotificationDropdown" > 
+
+    </div>
   </div>
 
 </div>
 
-<div class = "back" [style.background-color]="'#2b3137'">
+<div class = "back">
   <router-outlet></router-outlet>
 </div>
 
 
-<div class = "footer" [style.background-color]="'white'">
-  <a>Here is footer</a>
+<div class = "footer" *ngIf="showFooter">
+  
 </div>
 
+
+
+</div>

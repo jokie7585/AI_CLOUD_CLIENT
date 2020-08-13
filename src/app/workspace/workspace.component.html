@@ -22,9 +22,11 @@
     
     </div>
 
-    <div class="pageRepo_mid" >
+    <div class="pageRepo_mid">
       <div class="wslist" (click)="onClick(WSList.name)"  *ngFor="let WSList of workspaceList">
-       {{userId}}/{{WSList.name}}
+       <div class="wslist-text">
+        {{userId}}/{{WSList.name}}
+       </div>
       </div>
 
     </div>
@@ -33,9 +35,11 @@
       <hr color="gray" size="0.3px" width="90%" >
       <h2>Working with a team?</h2>
       <div class="organization_intro">
-        GitHub is built for collaboration. Set up an organization to improve the way your team works together, and get access to more features.
+        Cetus is not built for collaboration. But could Set up an organization to improve the way your team works together, and get access to more features.
       </div>
-      <button class="createOrg_button">Create an Organization</button>
+      <div class="createOrg_button">
+        Create an Organization
+      </div>
     </div>
   </div>
 

@@ -10,8 +10,8 @@ import {environment} from 'src/environments/environment' ;
   styleUrls: ['./signin.component.css']
 })
 export class SigninComponent implements OnInit {
-  InputAccount: '' ;
-  Inputpassword: '' ;
+  InputAccount:string = '' ;
+  Inputpassword:string = '' ;
   EnterPlace: boolean = true ;
   SuccessPlace: boolean = false ;
   ErrorPlace: boolean = false ;
@@ -52,9 +52,9 @@ export class SigninComponent implements OnInit {
         },
         (err) => {
           console.log(err);
-          this.ServerMessage =  err.error.message ;
-          this.ErrorPlace = true ;
-          alert( this.ServerMessage )  ;
+          this.ErrorPlace = true
+          let {message} = err.error
+          this.ServerMessage =  message;
         }
       );
 

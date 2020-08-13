@@ -4,7 +4,7 @@
      <img src="assets/github.svg">
   </div>
 
-  <div>
+  
     <h1>Sign in to Cytus</h1>
 
     <div class="login">
@@ -13,13 +13,20 @@
       <label>Password</label>
       <input type="text" name = "Inputpassword" [(ngModel)]="Inputpassword" placeholder="password">
   
-      <div class="msg">
+      <div class="msg-s" *ngIf="showSuccessMsg">
+        {{this.ServerMessage}}
+      </div>
+      <div class="msg-f" *ngIf="showFailMsg">
         {{this.ServerMessage}}
       </div>
       <button (click)="login($event)">Sign in</button>
   
     </div>
 
+
+
+  <div class="singinRedirector">
+    New to Cetus? <span class="linkText" (click)="jumpSignUp()">Create your account.</span>
   </div>
 
 

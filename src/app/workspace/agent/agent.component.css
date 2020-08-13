@@ -3,7 +3,7 @@
     flex-direction: column;
     top: 0px;
     z-index: 10;
-    min-height: 85vh;
+    min-height: 100%;
     min-width: 100%;
     background-color: #f9f9f9;
     text-align: center;
@@ -12,16 +12,20 @@
   .operationbar {
     display: flex;
     flex-direction: column;
-    margin-top: 1rem;
     min-width: 100%;
+    min-height: 93px;
+    max-height: 10vh;
     z-index: 11;
+    background-color: inherit;
   }
 
   .operationbar-info {
     margin-left: 2rem;
     display: flex;
+    flex: 1;
     flex-direction: row;
     align-items: center;
+    background-color: inherit;
   }
 
   .icon {   
@@ -34,7 +38,6 @@
   .text {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     display: flex;
-    min-height: 2rem;
     min-width: 1.6rem;
     font-size: 1.6rem;
     font-weight: lighter;
@@ -65,12 +68,15 @@
   }
 
   .operationbar-function {
-      margin-top: 2.5rem;
+      flex: 1;
+      display: flex;
       margin-left: 2rem;
       margin-right: 2rem;
+      background-color: inherit;
   }
 
   .fuctionList{
+    flex: 1;
     display: flex;
     flex-direction: row;
   }
@@ -81,6 +87,7 @@
       align-items: center;
       cursor: pointer;
       padding: 8px 10px;
+      border-bottom: solid #f9f9f9 1px;
   }
 
   .function:hover {
@@ -123,4 +130,123 @@
 
 .functionDisplay{
   flex: 1;
+}
+
+.statusBar{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  min-height: 22px;
+  max-height: 4vh;
+  min-width: 100%;
+  display: flex;
+  font-size: 10px;
+  border-radius: 0px 0px 5px 5px;
+  background-color: #2276d6;
+  z-index: 5000;
+  align-items: center;
+}
+
+.functionList{
+  position: relative;
+  min-height: 18.73px;
+  max-height: 3vh;
+  min-width: 98%;
+  display: flex;
+  align-items: center;
+  font-size: 10px;
+  z-index: 1501;
+  margin-left: 1%;
+}
+
+.functionList-right{
+  position: relative;
+  min-height: 18.73px;
+  max-height: 2vh;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 0.5em;
+  margin-left: auto;
+  justify-self: right;
+}
+
+.statusBar-item{
+  position: relative;
+  min-height: 18.73px;
+  max-height: 2vh;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 1em;
+  justify-self: right;
+}
+
+.statusBar-item:hover{
+  cursor: pointer;
+  background-color:#508ed4; ;
+}
+
+.statusBar-item-notifyPoint-border{
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 9.36px;
+  max-height: 1vh;
+  min-width: 50%;
+  max-width: 50%;
+  /* 根據icon大小 */
+  left: 1em;
+  top: 0;
+}
+
+.statusBar-item-notifyPoint-innerCircle{
+  border-radius: 50%;
+  min-height: 0.5em;
+  max-height: 0.5em;
+  min-width: 0.5em;
+  max-width: 0.5em;
+  background-color: red;
+}
+
+.statusBar-item-icon{
+  height: 1.5em;
+  width: 1.5em;
+}
+
+.statusBar-item-newC{
+  height: 2em;
+  width: 2em;
+}
+
+
+.notifycationModule{
+  position: absolute;
+  display: flex;
+  bottom: 3vh;
+  right: -1vw;
+}
+
+.notifycationModule:hover{
+  cursor: default;
+}
+
+.notifycationModule-bar{
+  color: #e0e0e0;
+  display: flex;
+  min-width: 350px;
+  min-height: 35px;
+  max-height: 2.5vh;
+  max-width: 25vw;
+  background-color: black;
+}
+
+.notifycationModule-bar-title{
+  font-family: monospace;
+  display: flex;
+  font-size: 10px;
+  justify-content: left;
+  align-items: center;
+  margin-left: 1em;
 }

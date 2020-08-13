@@ -4,11 +4,10 @@ import {HttpClientModule} from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import {AppbarControllerService} from 'src/myservice/appbar-controller.service'
-
+import {AppbarControllerService} from 'src/myservice/appbar-controller.service';
 @NgModule({
   declarations: [
-    AppComponent,
+    AppComponent
   ],
   imports: [
     BrowserModule,
@@ -17,5 +16,6 @@ import {AppbarControllerService} from 'src/myservice/appbar-controller.service'
   ],
   providers: [AppbarControllerService],
   bootstrap: [AppComponent],
+  entryComponents:[]
 })
 export class AppModule { }

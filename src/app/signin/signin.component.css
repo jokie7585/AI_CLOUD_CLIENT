@@ -1,19 +1,35 @@
+.pagebase {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  top: 0px;
+  z-index: 10;
+  min-width: 100%;
+  min-height: 95vh;
+  background: none;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+
 .message{
-  position: absolute;
-  left:20vw;
-  top: 20vh;
+  display: flex;
+  flex: 1 1 150px;
+  flex-direction: column;
   color: 	white;
   font-size: 7rem;
   text-align: left;
   max-width: 40vw;
   padding:1px;
+  margin: 2rem;
 }
 
 .detail{
   color: 	rgb(184, 183, 183);
   font-size: 1.5rem;
   text-align: left;
-  max-width: 30vw;
+  max-width: 100%;
+  min-width: 100%;
   padding:1px;
 }
 
@@ -44,17 +60,16 @@ span{
 }
 
 .signUp{
-  position: absolute;
-  left:70vw;
-  top:45vh;
-  transform: translate(-50%,-50%);
+  display: flex;
+  flex: 1 1 150px;
+  flex-direction: column;
   background: rgb(255, 255, 255);
   background-size: cover;
   text-align: left;
   color: 	DarkSlateGray;
   font-family: "微軟正黑體", sans-serif;
   border-radius: 10px;
-  width: 378px;
+  max-width: 378px;
   min-height: 50vh;
   padding:2.5vw;
   line-height: 2rem ;
@@ -88,6 +103,11 @@ button{
   min-height: 5rem;
   color: white;
   width: 378px;
+}
+
+button:hover{
+  background: #14802d;
+  cursor: pointer;
 }
 
 

@@ -1,0 +1,96 @@
+.circle-bar{
+    display: flex;
+    font-size: inherit;
+    position: relative;
+    width: 4em;
+    height: 4em;
+    background-color: black;
+    /* 圓形 */
+    z-index: 49;
+    justify-content: center;
+}
+
+.circle-bar-base{
+    display: flex;
+    font-size: inherit;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4em;
+    height: 4em;
+    border-radius: 50%; 
+    /* 圓形 */
+    background-color: green;
+    z-index: 50;
+
+}
+
+.circle-bar-leftMask-border{
+    display: flex;
+    font-size: inherit;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4em;
+    height: 4em;
+    z-index: 51;
+    transform: rotate(0turn);
+    
+}
+
+.circle-bar-leftMask{
+    display: flex;
+    font-size: inherit;
+    position: absolute;
+    top: 0;
+    left: 0em;
+    width: 2em;
+    height: 4em;
+    border-radius: 2em 0em  0em  2em; 
+    /* 圓形 */
+    justify-content: center;
+    z-index: 51;
+    align-items: center;
+}
+
+.circle-bar-rightMask-border{
+    display: flex;
+    font-size: inherit;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4em;
+    height: 4em;
+    z-index: 52;
+    transform: rotate(0turn);
+}
+
+.circle-bar-rightMask{
+    display: flex;
+    font-size: inherit;
+    position: absolute;
+    top: 0;
+    left: 2em;
+    width: 2em;
+    height: 4em;
+    border-radius: 0em 2em 2em 0em; 
+    /* 圓形 */
+    background-color: rgb(245, 11, 11);
+    justify-content: center;
+    align-items: center;
+    z-index: 52;
+}
+
+
+.circle-bar-middleMask{
+    display: flex;
+    border-radius: 50%;
+    position: relative;
+    height: 2em;
+    width: 2em;
+    background-color: inherit;
+    z-index: 53;
+    /* 沒有justify-self 但有alignItem, 不過flex中*/
+    margin: auto;
+    
+}

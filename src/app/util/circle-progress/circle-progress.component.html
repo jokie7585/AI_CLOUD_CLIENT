@@ -1,0 +1,28 @@
+<!-- bar is the color that progress bar -->
+<!-- and it is the base of this component-->
+<div class="circle-bar"
+     [style.font-size]="size$"
+     [style.background-color]="backgroundcolor$"
+>
+    <div class="circle-bar-base"
+          [style.background-color]="color$">
+
+    </div>
+
+    <div class="circle-bar-leftMask-border"
+         [style.transform]="calculateLefttRotate()">
+        <div class="circle-bar-leftMask"
+             [style.background-color]="backgroundcolor$"
+        ></div>
+    </div>
+
+    <div class="circle-bar-rightMask-border"
+         [style.transform]="calculateRightRotate()">
+        <div class="circle-bar-rightMask"
+             [style.background-color]="ifRightHide()"
+        ></div>
+    </div>
+    <!-- middleMask is the color that progress bar's parent color -->
+    <div class="circle-bar-middleMask"></div>
+
+</div>

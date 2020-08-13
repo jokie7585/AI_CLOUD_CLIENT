@@ -4,6 +4,7 @@
     z-index: 11;
     min-height: 85vh;
     min-width: 100%;
+    /* background-color: #ffffff; */
     background-color: #ffffff;
     text-align: center;
   }
@@ -13,17 +14,30 @@
   }
 
   .fsArea{
-    flex: 7;
+    flex: 10;
     margin-top: 2rem;
-    margin-left: 2rem;
-    margin-right: 2rem;
   }
   .navBar{
     display: flex;
     min-height: 5vh;
-    background-color: #f1f8ff;
-    border: solid 1px #c8e1ff;
     align-items: center;
+    background-color: rgb(58, 58, 58);
+    color: #ffffff;
+  }
+
+  .navBar-end{
+    display: flex;
+    margin-left: auto;
+    justify-self: flex-end;
+  }
+
+  .navBar-func{
+    height: 100%;
+    display: flex;
+  }
+
+  .navBar-func:hover{
+    cursor: pointer;
   }
 
   .navBar-icon{
@@ -45,7 +59,22 @@
   .fileList{
     display: flex;
     flex-direction: column;
-    
+    max-height: 50vh;
+    overflow: scroll;
+  }
+
+  .fileList::-webkit-scrollbar-track{
+    background-color: #ffffff;
+    border-right: solid 1px rgb(192, 192, 192);
+  }
+  
+  .fileList::-webkit-scrollbar-thumb{
+    background-color: rgb(168, 0, 168);
+  }
+  
+  .fileList::-webkit-scrollbar{
+    width: 0.25rem;
+    height: 0rem;
   }
 
   .fileList-item{
@@ -53,7 +82,7 @@
     align-items: center;
     border-bottom: solid 1px rgb(199, 199, 199);
     border-left: solid 1px rgb(199, 199, 199);
-    border-right: solid 1px rgb(199, 199, 199);
+    /* border-right: solid 1px rgb(199, 199, 199); */
     min-height: 38px;
   }
 
@@ -82,11 +111,12 @@
     flex-direction: row;
     justify-content: flex-end;
     align-items: center;
+    margin-right: 0.3em ;
   }
 
   .fileList-item-function_item {
     display:flex;
-    margin-right: 0.5rem ;
+    margin-left: 0.5em ;
   }
 
   .fileList-item-function_item:hover {
@@ -95,22 +125,24 @@
 
   .fsOperationBar{
     display: flex;
-    margin-bottom: 1rem ;
+    flex-direction: column;
+    margin-top: 2rem ;
+    margin-left: 1.5rem ;
   }
 
   .fsOperationBar-item{
     display: flex;
+    flex-wrap: nowrap;
     min-height: 32px;
-    min-width: 110px;
+    max-width: 92px;
     max-height: 32px;
     border: solid 1px rgb(27, 41, 35, .15);
-    border-radius: 4px;
+    border-right: none;
     background-color: #fafbfc;
     color: #24292e;
     align-items: center;
     justify-content: center;
     font-size: 14px;
-    margin-right: 0.33rem;
   }
 
 
@@ -130,7 +162,16 @@
 
   .fsOperationBar-item-text{
     text-align: left;
-    flex: 3;
+    display: flex;
+    min-width: 57px;
+    overflow: hidden;
+    flex: 3 10 60px;
+  }
+
+  @media (max-width: 1300px){
+    .fsOperationBar-item-text{
+      display: none;
+    }
   }
 
   .CetusoperationArea{
@@ -155,7 +196,7 @@
     max-width: 362px;
     right: 2rem;
     bottom: 24px;
-    z-index: 1001;
+    z-index: 3000;
   }
 
   .uploadModule-bar{
@@ -168,7 +209,7 @@
   .uploadModule-bar-msg{
     flex: 5;
     display: flex;
-    margin-left: 2rem;
+    margin-left: 1rem;
     justify-content: left;
     align-items: center;
   }
@@ -186,7 +227,81 @@
   }
 
   .uploadModule-processList{
-    
+    background-color: white;
+  }
+
+  .uploadModule-processList-item{
+    display: flex;
+    align-items: center;
+    border: solid 1px #cccbcb;
+    border-top: none ;
+    min-height: 6vh;
+    min-width: 99%;
+  }
+
+  .uploadModule-processList-item:hover{
+    background-color: rgb(199, 228, 255);
+  }
+
+  .uploadModule-processList-item-name{
+    flex: 8;
+    display: flex;
+    justify-content: flex-start;
+    margin-left: 0.5rem;
+    margin-right: 0.25rem;
+  }
+
+  .uploadModule-processList-item-name-text{
+    overflow: hidden;
+    font-size: 14px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 282px;
+  }
+
+  .uploadModule-processList-item-name::-webkit-scrollbar-track{
+    background-color: rgb(255, 255, 255);
+  }
+  
+  .uploadModule-processList-item-name::-webkit-scrollbar-thumb{
+    background-color: rgb(168, 0, 168);
+  }
+  
+  .uploadModule-processList-item-name::-webkit-scrollbar{
+    width: 0rem;
+    height: 0.01rem;
+  }
+
+  .uploadModule-processList-item-percent{
+    -webkit-user-select: none;
+    font-size: 10px;
+    flex: 1;
+  }
+
+
+  .uploadModule-processList-item-progress{
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    min-height: 100%;
+    max-width: 100%;
+  }
+
+  .uploadModule-processList-item-func{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    flex: 1;
+    min-height: 6vh;
+    max-width: 100%;
+  }
+
+  .uploadModule-processList-item-func:hover{
+    cursor: pointer;
+    background-color: rgb(173, 197, 219);
   }
 
   .notdisplay{
@@ -194,6 +309,7 @@
   }
 
   .fsclipboard{
+    border: solid 1px rgb(36, 36, 36);
     position: absolute;
     justify-content: center;
     text-align: center;
@@ -201,11 +317,17 @@
   }
 
   .fsclipboard-msg{
+    font-size: 10px;
+    font-family: monospace;
     -moz-user-select: none;
     -webkit-user-select: none;
-    background-color: rgb(255, 210, 7);
+    background-color: rgb(0, 0, 0);
     padding: 1px;
-    color: white;
+    display: flex;
+    min-height: 20px;
+    align-items: center;
+    padding-left: 0.3em;
+    color: #e0e0e0;
   }
 
   .fsclipboardContent{
@@ -213,7 +335,7 @@
     flex: 1;
     overflow: hidden;
     display: block;
-    border-top: none;
+    border: none;
   }
 
   .fsConsole{
@@ -223,9 +345,13 @@
     left: 0;
     bottom: 0;
     min-width: 100%;
-    min-height: 30vh;
+    min-height: 20vh;
+    max-height: 100vh;
+    max-width: 100vw;
+    height: 20vh;
     background-color: black;
     color: white;
+    z-index: 2000;
   }
 
 .fsConsole-title{
@@ -233,25 +359,121 @@
    background-color: rgb(122, 119, 119);
    color: aliceblue;
     top: 0;
-    min-height: 2vh;
+    min-height: 18.73px;
     max-height: 2vh;
     z-index: 19;
     user-select: none;
     display: flex;
     flex-direction: row;
+    font-size: 14px;
     justify-content: center;
     align-items: center;
+    border-radius: 5px 5px 0px 0px;
+}
+
+.fsConsole-title:hover{
+  cursor: ns-resize;
 }
 
 .fsConsole-content{
+  margin-top: 0.2em;
+  margin-bottom: 2vh;
+  text-align: left;
+  overflow: scroll;
+  max-height: 100%;
+  max-width: 100%;
   flex: 1;
+  /* this margin used because agent.component.statusbar */
 }
 
-.fsConsole-input{
+.fsConsole-content::-webkit-scrollbar{
+  width: 0.25rem;
+}
+
+.fsConsole-content::-webkit-scrollbar-track{
+  background-color: black;
+}
+
+.fsConsole-content::-webkit-scrollbar-thumb{
+  background-color: rgb(168, 0, 168);
+}
+
+.fsConsole-content::-webkit-scrollbar-thumb:hover{
+  background-color: rgb(119, 0, 119);
+  cursor: pointer;
+}
+
+.fsConsole-content::-webkit-scrollbar-corner{
+  background-color: black;
+}
+
+.fsConsole-content-item{
   display: flex;
-  width: 100%;
-  height: 100%;
+  margin-left: 20px ;
+  margin-right: 20px ;
+  min-height: 21px;
   max-width: 100%;
-  max-height: 30vh;
-  background: none;
+}
+
+.fsConsole-content-item-text{
+  font-size: 16px;
+  font-size-adjust: 0.5;
+  font-weight: normal;
+  font-family: monospace;
+  white-space: pre;
+  letter-spacing: 1px;
+  /* overrite pre style */
+  margin: 0;
+  display: flex;
+}
+
+.dragBoard{
+  position: fixed;
+  bottom :0;
+  left: 0;
+  min-width: 100%;
+  min-height: 100vh;
+  z-index: 6000;
+  cursor: ns-resize;
+}
+
+.fsScriptInputEl{
+  position: fixed;
+  display: flex;
+  font-size: 1em;
+  border: none;
+  background:none;
+  color: black;
+  left: 0;
+  top: 0;
+  width: 0px;
+  height: 0em;
+}
+
+.fsScriptInputEl:focus{
+  min-height: 21px;
+  position: fixed;
+  display: flex;
+  font-size: 1em;
+  border: none;
+  background:none;
+  color: black;
+  left: 0;
+  top: 0;
+  width: 0px;
+  height: 1em;
+  z-index: 200;
+}
+
+.Mycursor{
+  min-height: 21px;
+  position: fixed;
+  display: flex;
+  font-size: 1em;
+  left: 0;
+  top: 0;
+  width: 0px;
+  height: 1em;
+  color: white;
+  z-index: 5999;
 }

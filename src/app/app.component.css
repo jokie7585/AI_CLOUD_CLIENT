@@ -1,13 +1,20 @@
-
+.my-app-root{
+  display: flex;
+  flex-direction: column;
+  min-width: 100%;
+  position: relative;
+  max-width:100%;
+}
 
 .appbar{
+  background-color: #24292e;
   position: sticky;
   display: flex;
   height: 5vh;
+  min-height: 47px;
   width: 100vw;
   max-width:100%;
   top: 0;
-  min-height:auto ;
   margin: 0;
   padding: 0;
   flex-direction: row;
@@ -16,28 +23,31 @@
 }
 
 .back{
-
-  height:85vh;
-  width: 100vw;
+  background-color: #2b3137;
+  min-width: 100%;
   position: relative;
   max-width:100%;
+  display: flex;
+  flex-direction: column;
   margin: 0;
   padding: 0;
 
 }
 
 .footer{
+  background-color: #20252b;
   height: 10vh;
   width: 100vw;
   max-width:100%;
+  min-height: 94px;
   bottom: 0;
 
 }
 
 .box_left {
-  flex:1.5;
   display: flex;
-  flex-flow: row nowrap ;
+  min-width: 327px;
+  max-width: 327px;
   align-items: center;
   }
 
@@ -46,8 +56,6 @@
   flex:4;
   display: flex;
   flex-flow: row nowrap ;
-  justify-content: space-evenly;
-
   align-items: center;
 }
 
@@ -107,10 +115,12 @@
 
 a{
   color: 	white;
-  font-size: 16px;
+  font-size: 14px;
   text-decoration: none;
   display: block;
   cursor: pointer;
+  margin-right: 1rem;
+  margin-left: 0.5rem;
 }
 
 a:hover {
@@ -130,20 +140,25 @@ a:hover {
   display: flex;
   background-color: white;
   border-radius: 50%;
-  min-height: 4.6vh;
-  min-width: 4.6vh;
-  max-height: 4.6vh;
-  max-width: 4.6vh;
+  min-height: 32px;
+  min-width: 32px;
+  max-height: 32px;
+  max-width: 32px;
   justify-content: center;
   align-items: center;
   margin-right: 2rem;
-  margin-left: 5rem;
+  margin-left: 2rem;
+}
+
+.appicon:hover{
+  background-color: rgb(179, 179, 179);
+  cursor: pointer;
 }
 
 .appiconlimiter {
   display: flex;
-  max-height: 4vh;
-  max-width: 4vh;
+  max-height: 24px;
+  max-width: 24px;
   justify-content: center;
 }
 

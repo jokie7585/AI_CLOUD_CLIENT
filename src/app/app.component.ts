@@ -1,11 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Injector } from '@angular/core';
+import { createCustomElement} from '@angular/elements';
 import { CookieService } from 'ngx-cookie-service' ;
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { cookieList} from 'src/utility/cookie' ;
 import {AppbarControllerService} from 'src/myservice/appbar-controller.service'
+import {CircleProgressComponent} from 'src/app/util/circle-progress/circle-progress.component'
 
 // Constant
 import { appPath } from './app-path.const';
+import { from } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -17,17 +20,24 @@ export class AppComponent implements OnInit{
   path = appPath;
   showWorkspaceFunction: boolean = false ;
   showSingInUp: boolean = true ;
+  showFooter:boolean = true;
 
   constructor(private cookieService: CookieService,
               private router: Router,
-              private appbarCtr:AppbarControllerService) {}
+              private appbarCtr:AppbarControllerService,
+              injector: Injector) {
+              }
 
   jumpHome(){
+    if(this.showWorkspaceFunction) {
+      this.router.navigate(['workspace']);
+      return
+    }
     this.router.navigate(['']);
   }
 
   jumpWorkspace(){
-    window.location.assign('workspace');
+    this.router.navigate(['workspace']);
   }
 
   ngOnInit() {
@@ -39,6 +49,9 @@ export class AppComponent implements OnInit{
     this.appbarCtr.showSingInUp$.subscribe( (value) => {
       this.showSingInUp = value;
       console.log('accept change: showSingInUp')
+    })
+    this.appbarCtr.showFooter.subscribe(value=>{
+      this.showFooter = value;
     })
     let id: string = this.cookieService.get(cookieList.userID);
     if(id != '') {

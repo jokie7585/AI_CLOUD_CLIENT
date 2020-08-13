@@ -8,6 +8,7 @@ import { config } from 'rxjs';
   styleUrls: ['./ws-setter.component.css']
 })
 export class WsSetterComponent implements OnInit {
+  isShowComfirmBoard: boolean = false;
 
   constructor(private agent:agantCtr) { }
 
@@ -41,4 +42,13 @@ export class WsSetterComponent implements OnInit {
     });
   }
 
+  openComfirmBoard() {
+    console.log('click')
+    this.isShowComfirmBoard = true;
+  }
+
+  closeComfirmBoard() {
+    console.log('click')
+    this.isShowComfirmBoard = false;
+  }
 }
