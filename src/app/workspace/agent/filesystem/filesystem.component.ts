@@ -31,6 +31,7 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
   userId: string = '';
   path: Array<string> = [];
   dirList: Array<data> = [];
+  showNoFileBoard:boolean = false;
   downloader: HTMLElement;
   uploader: HTMLInputElement;
   showUploadList: boolean = false;
@@ -325,6 +326,12 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
     this.http.get<any>(url, options)
     .subscribe((res => {
       this.dirList = res;
+      if(this.dirList.length > 0) {
+        this.showNoFileBoard = false;
+      }
+      else {
+        this.showNoFileBoard = true;
+      }
     }),
     err => {
       window.location.assign('login')
@@ -359,10 +366,11 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
 
   setmyclipboard(event: MouseEvent,name?: string){
     event.stopPropagation();
-    let path = '/' + this.path.join('/');
+    let ablulotePh = this.path.slice(1);
+    let path = '/tmp/' + ablulotePh.join('/');
 
     if(name) {
-      path = '/' + this.path.concat(name).join('/');
+      path = '/tmp/' + ablulotePh.concat(name).join('/');
     }
     let bottum: HTMLElement = event.target as HTMLElement;
     // forced update view

@@ -21,6 +21,7 @@
     display: flex;
     min-height: 5vh;
     align-items: center;
+    border-radius: 6px 6px 0px 0px;
     background-color: rgb(58, 58, 58);
     color: #ffffff;
   }
@@ -85,6 +86,19 @@
     /* border-right: solid 1px rgb(199, 199, 199); */
     min-height: 38px;
   }
+  .fileList-item-nofile{
+    display: flex;
+    align-items: center;
+    font-weight: lighter;
+    font-family: monospace;
+    border-bottom: solid 1px rgb(199, 199, 199);
+    border-left: solid 1px rgb(199, 199, 199);
+    /* border-right: solid 1px rgb(199, 199, 199); */
+    min-height: 50px;
+    justify-content: center;
+    align-items: center;
+    
+  }
 
   .fileList-item-icon {
     margin-left: 0.5rem;
@@ -125,20 +139,17 @@
 
   .fsOperationBar{
     display: flex;
+    flex: 2;
     flex-direction: column;
     margin-top: 2rem ;
-    margin-left: 1.5rem ;
   }
 
   .fsOperationBar-item{
     display: flex;
     flex-wrap: nowrap;
-    min-height: 32px;
-    max-width: 92px;
-    max-height: 32px;
-    border: solid 1px rgb(27, 41, 35, .15);
-    border-right: none;
-    background-color: #fafbfc;
+    min-height: 40px;
+    max-width: 400px;
+    max-height: 40px;
     color: #24292e;
     align-items: center;
     justify-content: center;
@@ -156,8 +167,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-left: 0.5rem ;
-    margin-right: 0.5rem ;
+    margin-left: 2rem ;
+    margin-right: 1rem ;
   }
 
   .fsOperationBar-item-text{
@@ -165,13 +176,23 @@
     display: flex;
     min-width: 57px;
     overflow: hidden;
-    flex: 3 10 60px;
+    flex: 2 10 60px;
   }
 
   @media (max-width: 1300px){
     .fsOperationBar-item-text{
       display: none;
     }
+
+    .fsOperationBar-item-icon{
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-left: auto;
+      margin-right: auto ;
+    }
+
   }
 
   .CetusoperationArea{

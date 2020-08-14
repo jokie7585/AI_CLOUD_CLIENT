@@ -77,6 +77,10 @@
         </div>
         <div class="fileList">
 
+            <div *ngIf="showNoFileBoard" class="fileList-item-nofile">
+                    No Files here! Upload your project to start training!
+            </div>
+
             <div *ngFor="let item of dirList">
                 <div class="fileList-item">
                     <div class="fileList-item-icon">
