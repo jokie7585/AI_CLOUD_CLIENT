@@ -27,7 +27,6 @@ export class TerminalService {
   endLog$ : boolean = false;
   Intervel;
   logEnding:false;
-  isgattingLog:boolean= false;
   
 
   constructor(private http: HttpClient) {
@@ -59,7 +58,6 @@ export class TerminalService {
                 // 初始化
                 sumulateLog = '';
             })
-            this.isgattingLog = false;
             this.simulateLog.next(NewconsoleSimulatLog);
     
   })
@@ -77,11 +75,8 @@ export class TerminalService {
   }
 
   getLogs(){
-    if(this.isgattingLog) {
-      return false;
-    }
+
     // if not getting logs
-    this.isgattingLog = true;
 
     let url = `http://${environment.apiserver}/users/${this.config$.userId}/management/api/getWorkspaceLog/${this.config$.wsName}` ;
 
