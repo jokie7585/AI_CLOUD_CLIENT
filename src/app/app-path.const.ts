@@ -3,7 +3,7 @@ export const appPath  = {
   // 首頁
   home: '',
   // 註冊
-  signin: 'signin',
+  signin: 'signup',
   // 登入
   login: 'login',
   // 工作區

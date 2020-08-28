@@ -13,7 +13,6 @@
   min-height: 85vh;
   width: 50vw;
   margin-left: 25vw;
-  justify-content: space-between ;
   flex-direction: column ;
   flex-wrap: wrap ;
 
@@ -21,10 +20,9 @@
 }
 
 .box_intro{
-  flex:0.3 ;
   text-align: left;
-  min-height: 10vh ;
-  max-height: 25vh;
+  padding-bottom: 0.8em;
+  border-bottom: 1px solid #a9a9a9;
 
 }
     .box_intro_importrepository{
@@ -110,8 +108,7 @@ input[type="text"]{
   min-width: 15vw;
   line-height: 20px;
   border-radius: 5px;
-  border: 1;
-  border-color: rgb(241, 241, 241);
+  border: 1px solid rgb(241, 241, 241);
   margin: 0px 20px 20px 0px;
   padding: 5px 12px;
 }

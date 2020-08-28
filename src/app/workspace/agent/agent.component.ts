@@ -52,7 +52,7 @@ export class AgentComponent implements OnInit, OnDestroy {
               private appCtr:AppbarControllerService) { }
 
   ngOnInit(): void {
-    this.appCtr.closefooter();
+    this.appCtr.Closefooter();
     this.agentCtr.currentFunctionId$.subscribe(id => {
       document.getElementById(this.currentFunctionId).setAttribute('class', 'function');
       document.getElementById(id).setAttribute('class', 'function-seleted');
@@ -81,7 +81,6 @@ export class AgentComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(){
-    this.appCtr.Showfooter();
     // unsub
     this.allSub.forEach(el => {
       el.unsubscribe();

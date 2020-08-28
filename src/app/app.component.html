@@ -27,9 +27,7 @@
       </div>
     </div>
 
-    <a [routerLink]="path.home" (click) = "jumpWorkspace()">
-      Workspace
-    </a>
+    <a class="bartitle" [routerLink]="path.home" (click) = "jumpWorkspace()">Cetus</a>
   
 
 </div>
@@ -58,12 +56,37 @@
   </div>
   <div class = "box_right" *ngIf="showWorkspaceFunction">
     <div class="userDropdown" > 
-      <div class="userDropdown-func">
+      <div class="userDropdown-func"
+          (click)="toggleUserDropdeown()">
         <img src="/assets/user.svg" alt="">
       </div>
-      <div class="Dropdown">
+      <div class="Dropdown" *ngIf="showUserDropedown">
         <div class="Dropdown-item">
-          
+          <div class="Dropdown-item-text">
+            Signed in as <b>{{userId}}</b>
+          </div>
+        </div>
+        <div class="Dropdown-item">
+          <div class="Dropdown-item-Containner">
+            <div class="Dropdown-item-fnc">
+              <div class="Dropdown-item-fncIcon">
+                <img src="/assets/folder_line.svg" alt="">
+              </div>
+              <div class="Dropdown-item-fnctxt Dropdown-item-text">
+                Your Workspaces
+              </div>
+            </div>
+            <div class="Dropdown-item-fnc"
+                 (click)="signOut()"
+            >
+              <div class="Dropdown-item-fncIcon">
+                <img src="/assets/logout.svg" alt="">
+              </div>
+              <div class="Dropdown-item-fnctxt Dropdown-item-text">
+                Sign out
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -74,7 +97,7 @@
 
 </div>
 
-<div class = "back">
+<div class = "back" (click)="muteAll()">
   <router-outlet></router-outlet>
 </div>
 

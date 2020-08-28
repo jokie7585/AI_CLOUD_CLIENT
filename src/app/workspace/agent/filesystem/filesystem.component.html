@@ -19,7 +19,7 @@
                 <img src="assets/script.svg" alt="">
             </div>
             <div class="fsOperationBar-item-text">
-                Script
+                Bash
             </div>
         </div>
 
@@ -58,6 +58,25 @@
         </div>
     </div>
     <div class="fsArea">
+
+        <div class="fsArea-import-export">
+            <div class="container">
+                <div class="fsArea-import-bt import-export-bt" (click)="totgleimportOption()">
+                    import
+                </div>
+                <div class="fsArea-import-bt-drope" *ngIf="showimportoption" (click)="loadCach()">
+                    <div class="fsArea-import-bt-drope-it">
+                        from cach
+                    </div>
+                    <div class="fsArea-import-bt-drope-it" (click)="startImport()">
+                        from host
+                    </div>
+                </div>
+            </div>
+            <div class="fsArea-export-bt import-export-bt" (click)="startCach()">
+                export
+            </div>
+        </div>
         
         <div class="navBar">
             <div class="navBar-icon">
@@ -78,7 +97,7 @@
         <div class="fileList">
 
             <div *ngIf="showNoFileBoard" class="fileList-item-nofile">
-                    No Files here! Upload your project to start training!
+                    No Files under this directory! Upload your project to start training!
             </div>
 
             <div *ngFor="let item of dirList">
@@ -121,11 +140,13 @@
                 <img src="assets/smallest.svg" alt="">
             </div>
         </div>
-        <div class="uploadModule-processList" *ngFor="let item of uploadList">
+        <div class="uploadModule-processList">
             
                 <div class="uploadModule-processList-item"
                      (mouseleave)="hideCloseButtom()"
-                     (mouseenter)="hidProgressbar()">
+                     (mouseenter)="hidProgressbar()"
+                     *ngFor="let item of uploadList"
+                     >
                     <div class="uploadModule-processList-item-name">
                         <span class="uploadModule-processList-item-name-text">
                             {{item.name}}
@@ -155,6 +176,7 @@
 
 <a id="Fsdownloader" href="" download="" class="notdisplay"></a>
 <input type="file" multiple id="FsUploader" class="notdisplay" (change)="upload($event)">
+<input type="file" multiple id="FsWsImportor" class="notdisplay" webkitdirectory (change)="import($event)">
 
 <div class="fsclipboard" [style.display]="clipbaordDisplay" [style.left.px]="cilpboardCordinate.left" [style.top.px]="cilpboardCordinate.top">
     <div class="fsclipboard-msg">
@@ -165,10 +187,10 @@
 
 <input type="text" id="fsScriptInput" 
         class="fsScriptInputEl"
-       (change)="scriptInputOnchange($event)"
        (focus)="FocusScript()"
        (blur)="UnFocusScript()"
-       >
+>
+<canvas id='scriptContentCalculator'></canvas>
        
 
 <div class="fsConsole" [style.display]="isShow(showconsole)"
@@ -177,35 +199,52 @@
      [style.height]="getHight()"
 >
     <div class="fsConsole-title"
-         (mousedown)="ZoomTerminal($event)"
          [style.background-color]="titleBackground"
     >
-        {{userId}}/{{wsName}}'s shellScript
+        <div class="fsConsole-title-zoomingBar" (mousedown)="ZoomTerminal($event)"></div>
+        <div class="fsConsole-title-func">
+            <!-- <div class="fsConsole-title-func-item">
+                <img src="assets/operationInfo.svg" class="fsConsole-title-func-item-icon" alt="">
+                <div class="consolOpInfo">
+                    1
+                </div>
+            </div> -->
+            <div class="fsConsole-title-func-item" (click)="openScripWriter()">
+                <img src="assets/collaps.svg" class="fsConsole-title-func-item-icon" alt="">
+            </div>
+        </div>
+        <div class="fsConsole-title-text">
+            {{userId}}/{{wsName}}'s bashCommand
+        </div>
     </div>
     <div class="fsConsole-content">
         <div *ngFor="let line of scriptContent">
             <div class="fsConsole-content-item">
-                <span class="fsConsole-content-item-text" id={{line.elId}}>
-                    {{line.content}}
-                </span>
+                <span class="fsConsole-content-item-text" id={{line.elId}} [style.color]="variftComment(line.content)">{{line.content}}</span>
             </div>
         </div>
     </div>
 
     <div class="Mycursor" [style.left.px]="cursorCoordinate.left" [style.top.px]="cursorCoordinate.top"
-         [style.display]="isShow(showCursor)">
-        |
-    </div>
+         [style.display]="isShow(showCursor)">|</div>
 </div>
 
+<!-- terminal vomponent -->
 <div class="fsConsole" [style.display]="isShow(showTerminal)"
      [style.height]="getHight()"
 >
-    <div class="fsConsole-title"
-         (mousedown)="ZoomTerminal($event)"
-    >
-        {{userId}}/{{wsName}}'s Terminal
+<div class="fsConsole-title"
+>
+    <div class="fsConsole-title-zoomingBar" (mousedown)="ZoomTerminal($event)"></div>
+        <div class="fsConsole-title-func">
+  
+            <div class="fsConsole-title-func-item" (click)="openTerminal()">
+                <img src="assets/collaps.svg" class="fsConsole-title-func-item-icon" alt="">
+            </div>
+        </div>
+        <div class="fsConsole-title-text">{{userId}}/{{wsName}}'s Terminal</div>
     </div>
+
     <div class="fsConsole-content" id="fsTerminal" id="fsTerminal"
          (wheel)="isTraceTerminalLastLine($event)">
         <div *ngFor="let line of TerminalContent">
@@ -213,7 +252,7 @@
                 {{line.content}}
             </div>
         </div>
-    </div>
+</div>
    
 </div>
 

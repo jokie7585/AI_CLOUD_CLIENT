@@ -12,6 +12,7 @@ import { TerminalService, TerminalLine } from 'src/myservice/terminal.service';
 import { TexteditorService, CursorPosition, Line } from 'src/myservice/texteditor.service';
 import { subscribeOn } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
+import { createComfirmStream } from 'src/utility/protocol';
 
 
 interface data {
@@ -34,6 +35,7 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
   showNoFileBoard:boolean = false;
   downloader: HTMLElement;
   uploader: HTMLInputElement;
+  importor: HTMLInputElement;
   showUploadList: boolean = false;
   showUploadListFn: boolean = false; // 交替顯示progressbar&removeBottun
   muteUploadList: boolean = false;
@@ -57,6 +59,7 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
   scriptContent: Array<Line>;
   scriptHight: number;
   sciptInput: HTMLInputElement;
+  scriptContentCalculator: HTMLCanvasElement;
   cursorCoordinate: CursorPosition;
   showCursor: boolean = true;
   cursorStyleChangeInterval = undefined;
@@ -71,6 +74,8 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
   // 計算滑鼠位移的量需要的變數
   orign_y: number = 0;
   ontrace: boolean = false;
+
+  showimportoption: boolean = false;
 
   
 
@@ -92,53 +97,91 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
     this.terminalHight = this.terminal.clientHeight;
     this.script = document.getElementById('fsScript')
     this.scriptHight = this.script.clientHeight;
+    // 介接editor需要的event
     this.sciptInput = document.getElementById('fsScriptInput')  as HTMLInputElement;
-    this.sciptInput.addEventListener('compositionend', (event)=> {
-      console.log('catch compositionend')
-      this.sciptInput.dispatchEvent(new Event('change'))
-    })
+    this.scriptContentCalculator = document.getElementById('scriptContentCalculator')  as HTMLCanvasElement;
+    this.scriptContentCalculator.getContext('2d').font = 'normal 16px monospace '
+    console.log({width: this.scriptContentCalculator.getContext('2d').measureText('123')})
+    // this.sciptInput.addEventListener('compositionend', (event)=> {
+    //   console.log('catch compositionend')
+    //   this.sciptInput.dispatchEvent(new Event('change'))
+    // })
     this.sciptInput.addEventListener('input', (event)=> {
       let e = event as InputEvent
       console.log('catch inputEvent of: '+ e.inputType)
       if(e.inputType == 'insertText') {
-        this.sciptInput.dispatchEvent(new Event('change'))
+        this.editorCtr.addToTempInputArray(this.sciptInput.value)
+        this.sciptInput.value='';
       }
       else{
-        alert('Do not support this input')
-        this.sciptInput.value = ''
+        if(event.composed) {
+          alert(`Do not support this input(${event.composed}):`  + this.sciptInput.value)
+          this.sciptInput.value = ''
+        }
       }
       
     })
+    this.sciptInput.addEventListener('NotEmptyEvent', (event) => {
+      this.editorCtr.processCharRender();
+    })
+    this.sciptInput.addEventListener('rendered', (event) => {
+      // 這邊主要是處理delete的cursor計算
+      this.editorCtr.updateCursorStack('');
+    })
     this.sciptInput.addEventListener('keydown', (event) => {
+      clearInterval(this.cursorStyleChangeInterval);
+      this.showCursor = true;
       this.editorCtr.eventProcess(event);
     })
+    this.sciptInput.addEventListener('keyup', ()=>{
+      this.setCousorBehavior();
+    })
+    this.sciptInput.addEventListener('EditorCopyEnd', ()=> {
+      console.log('catch event: Editor EditorCopyEnd')
+      this.editorCtr.copyingLock$ = false;
+    })
+    this.sciptInput.addEventListener('EditorCopyStart', ()=> {
+      console.log('catch event: Editor CopyStart')
+      // this.copyingLock$ = true;
+      this.showCursor = false;
+    })
+    this.sciptInput.onpaste = (event) => {
+      event.preventDefault();
+      this.editorCtr.formateClipboardDataAsInput(event.clipboardData.getData('text'));
+    }
+
     // up/downloader
     this.downloader = document.getElementById('Fsdownloader')
     this.uploader = document.getElementById('FsUploader') as HTMLInputElement
+    this.importor = document.getElementById('FsWsImportor') as HTMLInputElement
     this.clipboard = document.getElementById('fsClipboard') as HTMLInputElement
     // 相依性資訊設定
     this.wsName = this.route.snapshot.parent.paramMap.get('wsName')
     this.userId = this.cookieService.get(cookieList.userID);
     this.path.push(this.wsName);
     this.loadpath();
-    // init service
-    this.editorCtr.initByAgent(this.wsName, this.userId, this.sciptInput);
-    this.terminalCtr.initByAgent(this.wsName, this.userId);
     this.editorCtr.content.subscribe(data => {
       this.scriptContent = data;
+      console.log('Set render lock: true')
+      this.editorCtr.renderlock$ = true;
     })
     // set subscribe
     this.dirListSub = this.agent.fileList.subscribe(data => {
       console.log('update fs list')
       console.log({fs:data})
       this.dirList = data;
+      if(this.dirList.length > 0) {
+       this.showNoFileBoard = false; 
+      }
     })
     this.uploadListSub = this.agent.curUploadProcessManager.uploadProcessList.subscribe((list) => {
       console.log('in get new process list')
       console.log({prelist: this.uploadList})
       console.log({icommingList: list})
       if(this.muteUploadList == false) {
-        if(list.length > 0)this.showUploadList = true
+        if(list.length > 0) {
+          this.showUploadList = true
+        }
         else {
           this.showUploadList = false;
         }
@@ -150,6 +193,15 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
     this.muteUploadListSub = this.agent.muteUploadProcessList.subscribe(val => {
       this.muteUploadList = val;
       if(val === true) {
+        let allComplete = true;
+        for(let el of this.uploadList) {
+          if(el.percent != 100) {
+            allComplete = false;
+          }
+        }
+        if(allComplete) {
+          this.agent.curUploadProcessManager.uploadProcessList.next([])
+        }
         this.showUploadList = false;
       }
       else{
@@ -165,8 +217,13 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
 
     this.AllSub.push(this.editorCtr.cursorPosition.subscribe(cor=>{
       this.cursorCoordinate = cor;
+      this.sciptInput.dispatchEvent(new Event('forceUpdtaeView'))
       console.log({curCursor:cor} )
     }))
+
+    // init service
+    this.editorCtr.initByAgent(this.wsName, this.userId, this.sciptInput, this.scriptContentCalculator.getContext('2d'));
+    this.terminalCtr.initByAgent(this.wsName, this.userId);
   }
 
   ngOnDestroy(){
@@ -181,11 +238,22 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
   }
 
   ngAfterViewChecked(){
+    console.log('update')
     if(this.isTerminalTraceLastLine) {
-      console.log('trace log last line')
+      // console.log('trace log last line')
       this.terminal.scrollTo({top:this.terminal.scrollHeight})
       // 更新terminalContentScrollTop為最新的值
       this.terminalContentScrollTop = this.terminal.scrollTop
+    }
+    if(this.editorCtr.renderlock$) {
+      if(this.editorCtr.deleteMode) {
+        console.log('dispatch: rendered in ngAfterViewChecked');
+        this.sciptInput.dispatchEvent(new Event('rendered'));
+      }
+      else{
+        this.editorCtr.renderlock$=false;
+        this.editorCtr.forceUpdateCursor();
+      }
     }
   }
 
@@ -329,7 +397,7 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
       if(this.dirList.length > 0) {
         this.showNoFileBoard = false;
       }
-      else {
+      else{
         this.showNoFileBoard = true;
       }
     }),
@@ -365,19 +433,25 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
   }
 
   setmyclipboard(event: MouseEvent,name?: string){
-    event.stopPropagation();
-    let ablulotePh = this.path.slice(1);
-    let path = '/tmp/' + ablulotePh.join('/');
-
-    if(name) {
-      path = '/tmp/' + ablulotePh.concat(name).join('/');
+    if(this.clipbaordDisplay == 'flex') {
+      this.clipbaordDisplay='none'
     }
-    let bottum: HTMLElement = event.target as HTMLElement;
-    // forced update view
-    this.clipboard.value = path; 
-    this.cilpboardCordinate.left = bottum.offsetLeft+20
-    this.cilpboardCordinate.top = bottum.offsetTop+15
-    this.clipbaordDisplay = 'flex'
+    else{
+      event.stopPropagation();
+      let ablulotePh = this.path.slice(1);
+      let path = '/mnt/' + ablulotePh.join('/');
+
+      if(name) {
+        path = '/mnt/' + ablulotePh.concat(name).join('/');
+      }
+      let bottum: HTMLElement = event.target as HTMLElement;
+      // forced update view
+      this.clipboard.value = path; 
+      this.cilpboardCordinate.left = bottum.offsetLeft+20
+      this.cilpboardCordinate.top = bottum.offsetTop+15
+      this.clipbaordDisplay = 'flex'
+    }
+    
   }
 
   getpath(event:Event){
@@ -397,6 +471,29 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
     target.value='';
   }
 
+  totgleimportOption(){
+    this.showimportoption = !this.showimportoption;
+  }
+
+  startImport() {
+    this.showimportoption = !this.showimportoption;
+    this.importor.click();
+  }
+
+  loadCach(){
+    this.showimportoption = !this.showimportoption;
+    this.agent.loadCach()
+  }
+
+  startCach() {
+    this.agent.cachWs();
+  }
+
+  import(event: Event){
+    this.agent.muteUploadProcessList.next(false);
+    this.agent.importWs(this.path.join('/'), this.importor.files, this.importor);
+  }
+
   openTerminal(){
     this.showconsole = false;
     this.showTerminal = !this.showTerminal;
@@ -410,6 +507,7 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
     this.showconsole = !this.showconsole;
     if(this.showconsole == true) {
       // 重要細節！！！ docuent的執行scope不在此context內，因此用arrow綁定
+      this.editorCtr.initCommandList()
       this.sciptInput.focus()
       // closure
       // this.cursorStyleChangeInterval = setInterval(() => {
@@ -425,12 +523,20 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
     
   }
 
-  FocusScript(){
+  setCousorBehavior(){
+    clearInterval(this.cursorStyleChangeInterval);
     this.cursorStyleChangeInterval = setInterval(() => {
       this.showCursor = !this.showCursor;
     },500)
+  }
+
+  FocusScript(){
+    this.setCousorBehavior();
     this.titleBackground = 'rgb(122, 119, 119)';
-    this.editorCtr.forceUpdateCursor();
+    setTimeout(() => {
+      this.editorCtr.forceUpdateCursor();
+    }, 1);
+    
   }
 
   UnFocusScript(){
@@ -440,23 +546,6 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
 
   focusFsConsole(){
     this.sciptInput.focus()
-  }
-  scriptInputOnchange(event: Event) {
-    let target = event.target as HTMLInputElement
-    console.log('On change:' + target.value)
-    if(target.value == '\n') {
-      console.log('find lineEnter')
-    }
-    this.editorCtr.formateStringAsInput(target.value);
-    target.value="";
-  }
-
-  listenScriptInputKey(event: KeyboardEvent){
-    if(event.key === 'Enter') {
-      event.preventDefault()
-      
-      this.sciptInput.dispatchEvent(new Event('change'))
-    }
   }
 
   listenKeyEvent = (event: KeyboardEvent) =>{
@@ -469,6 +558,13 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
     }
 
     return 'none'
+  }
+
+  variftComment(content: string){
+    if(content[0] == '#') {
+      return 'green'
+    }
+    return '#c4c4c4'
   }
 
   runworkspace(){

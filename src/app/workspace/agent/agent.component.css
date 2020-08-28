@@ -239,7 +239,7 @@
   min-height: 35px;
   max-height: 2.5vh;
   max-width: 25vw;
-  background-color: black;
+  background-color: rgb(66, 65, 65);
 }
 
 .notifycationModule-bar-title{

@@ -70,7 +70,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
-    this.appCtr.closefooter();
+    this.appCtr.Closefooter();
     window.scroll({top: 0} )
   }
 

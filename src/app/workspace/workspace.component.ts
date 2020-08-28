@@ -36,8 +36,6 @@ export class WorkspaceComponent implements OnInit {
 
 
   public ngOnInit(): void {
-    this.appbarCtr.Showfooter();
-    this.appbarCtr.userMode();
     this.userId = this.cookieService.get(cookieList.userID)
     this.getWSLIST();
   }

@@ -1,12 +1,12 @@
 <div class="pagebase">
   <div class="pageCreateNew">
     <div class="box_intro">
-      <h1>Create a new repository</h1>
+      <h1>Create a new workspace</h1>
 
-      A repository contains all project files, including the revision history. Already have a project repository elsewhere?
-      <div class="box_intro_importrepository">Import a repository</div>
+      A workspace is a containerlized app contains all project files, image setting...
+      <!-- <div class="box_intro_importrepository">Import a repository</div> -->
     </div>
-    <hr color="#a9a9a9" size="0.1px" width="100%">
+    <!-- <hr color="#a9a9a9" size="0.1px" width="100%"> -->
     <div class="box_input">
       <div class="box_input_main">
         <div class="box_input_main_username">
@@ -20,7 +20,7 @@
           /
         </div>
         <div class="box_input_main_repository">
-          Repository name*
+          Workspace name*
           <div class="box_input_main_repository_input">
             <input type="text" name="Inputnewrepository" [(ngModel)]="Inputnewrepository">
           </div>
@@ -29,7 +29,7 @@
       </div>
 
       <div class="box_input_description">
-        Great repository names are short and memorable. Need inspiration? How about fictional-waffle?
+        Great workspace names are short and memorable. Need inspiration? How about catdog-identification?
         <div>
           Description(optional)
           <div>
@@ -42,7 +42,7 @@
 
     </div>
 
-    <div class="box_checkbox">
+    <!-- <div class="box_checkbox">
     <hr color="#a9a9a9" size="0.1px" width="100%">
     <mat-radio-group aria-label="Select an option" style="text-align: left;">
       <div>
@@ -91,11 +91,11 @@
       This will let you immediately clone the repository to your computer.
     </div>
     <hr color="#a9a9a9" size="0.1px" width="100%">
-    </div>
+    </div> -->
 
     <div class="createbutton" (click)="newrepository()">
       <div class="createbutton_text">
-        Create a repository
+        Create
       </div>
 
     </div>

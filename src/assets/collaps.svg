@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" height="0.85em" viewBox="0 0 512 512" width="0.85em" class="">
+  <g>
+    <path d="m432 512h-352c-44.183594 0-80-35.816406-80-80v-352c0-44.183594 35.816406-80 80-80h352c44.183594 0 80 35.816406 80 80v352c0 44.183594-35.816406 80-80 80zm0 0" fill="#e76e54" data-original="#E76E54" class="active-path" style="fill:#FFC929" data-old_color="#e76e54"></path>
+    <path d="m144 240h224c8.835938 0 16 7.164062 16 16s-7.164062 16-16 16h-224c-8.835938 0-16-7.164062-16-16s7.164062-16 16-16zm0 0" fill="#fff" data-original="#FFF" class="" data-old_color="#fff" style="fill:#FFFFFF"></path>
+  </g>
+</svg>

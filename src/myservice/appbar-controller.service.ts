@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
-
+import { Observable, Subject, BehaviorSubject } from 'rxjs';
+import { CookieService } from 'ngx-cookie-service' ;
+import { cookieList} from 'src/utility/cookie' ;
+import {Router} from '@angular/router'
+import { domain } from 'process';
 
 @Injectable({
   providedIn: 'root'
@@ -9,12 +12,19 @@ export class AppbarControllerService {
 
   showWorkspaceFunction = new Subject<boolean>();
   showSingInUp = new Subject<boolean>();
-  showFooter = new Subject<boolean>();
+  showFooter = new BehaviorSubject<boolean>(true);
+  userId: string = '';
+  
   
 
   // create stream
   showWorkspaceFunction$ = this.showWorkspaceFunction.asObservable();
   showSingInUp$ = this.showSingInUp.asObservable();
+
+  constructor(private cookieService: CookieService,
+              private router: Router){
+    this.userId = this.cookieService.get(cookieList.userID);
+  }
  
 
   userMode() {
@@ -32,8 +42,15 @@ export class AppbarControllerService {
   Showfooter(){
     this.showFooter.next(true);
   }
-  closefooter(){
+  
+  Closefooter(){
     this.showFooter.next(false);
+  }
+
+  signOut(){
+    this.cookieService.delete('userid')
+    this.router.navigate(['login']);
+    this.guestMode();
   }
 
 }

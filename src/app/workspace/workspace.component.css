@@ -98,7 +98,7 @@ input[type="text"]{
   border-radius: 5px;
   border: #d1caca91 solid 1px;
   margin-top: 0.5rem ;
-  margin-left: 1rem;
+  margin-left: 0.8rem;
   padding: 5px 12px;
   display: inline-flex;
   justify-self: center;
@@ -140,8 +140,8 @@ input[type="text"]{
 .wslist{
   display: flex;
   align-items: center;
-  margin-left: 1rem;
   padding: 12px;
+  padding-left: 1rem ;
   max-height: 20px;
   min-height: 20px;
 }

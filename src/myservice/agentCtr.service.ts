@@ -177,8 +177,11 @@ export class agantCtr {
   }
 
   // remove uploadprocess(if not finish upload, then abort request)
+  // 有bug => 需用事件與變數鎖 或上傳process必須視為同一個process只是做UI的變化。
   removeUploadProcess(process :uploadProcess) {
+    // abort fetch api
     process.sub.unsubscribe();
+    // remove from list
     let newList = this.curUploadProcessManager.uploadProcess$;
     let processIndex = newList.indexOf(process)
     console.log({curList: newList});
@@ -186,6 +189,8 @@ export class agantCtr {
     console.log({nextList: newList});
     this.curUploadProcessManager.uploadProcessList.next(newList);
   }
+
+  
 
   deleteWs(){
     let url = `http://${environment.apiserver}/users/${this.userId}/management/api/deleteWorkspace`;
@@ -207,6 +212,59 @@ export class agantCtr {
       }
 
       location.reload();
+    })
+  }
+
+  importWs(relativePath:string, filelist:FileList, target:HTMLInputElement) {
+    let url = `http://${environment.apiserver}/users/${this.userId}/management/api/resetWorkspaceRoot/${this.curWs}`;
+    this.http.get(url, {
+      withCredentials:true,
+      responseType: 'json',
+      observe: 'response'
+    }).subscribe( res => {
+      if(res.ok) {
+        this.stageUploadfile(relativePath, filelist);
+        // reset
+        target.value = '';
+      }
+      else{
+        alert('something wrong happens... please reloadPage!')
+      }
+    })
+  }
+
+  loadCach() {
+    let url = `http://${environment.apiserver}/users/${this.userId}/management/api/loadCachasWorkspaceRoot/${this.curWs}`;
+    this.http.get(url, {
+      withCredentials:true,
+      responseType: 'json',
+      observe: 'response'
+    }).subscribe( res => {
+      if(res.ok) {
+        alert('cach load successfully!')
+        console.log(res)
+        this.fileList.next(res.body);
+      }
+      else{
+        alert('something wrong happens... please reloadPage!')
+      }
+    })
+  }
+
+  cachWs() {
+    let url = `http://${environment.apiserver}/users/${this.userId}/management/api/cachWorkspaceRoot/${this.curWs}`;
+
+    this.http.get(url, {
+      withCredentials:true,
+      responseType: 'json',
+      observe: 'response'
+    }).subscribe( res => {
+      if(res.ok) {
+        alert('cach set successfully!')
+      }
+      else{
+        alert('something wrong happens... please reloadPage!')
+      }
     })
   }
 
