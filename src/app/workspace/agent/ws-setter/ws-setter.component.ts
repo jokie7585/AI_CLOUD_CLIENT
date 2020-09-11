@@ -29,8 +29,6 @@ export class WsSetterComponent implements OnInit, OnDestroy,AfterViewChecked {
     // config init
     this.TsVersion = document.getElementById('tsV-i') as HTMLInputElement;
     this.GpuNum = document.getElementById('gpu-i') as HTMLInputElement;
-    this.TsVersion.value = this.agent.cytusappconfig.tensorflowVersion;
-    this.GpuNum.value = this.agent.cytusappconfig.GpuNum.toString();
     // subscrube
     this.allSub.push(
       this.agent.cytusAppconfig$.subscribe(config => {

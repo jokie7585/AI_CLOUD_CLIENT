@@ -16,13 +16,13 @@ import { FormsModule } from '@angular/forms';
 import { AgentComponent } from './agent/agent.component';
 import { MarketplaceComponent } from './marketplace/marketplace.component';
 import {agantCtr} from 'src/myservice/agentCtr.service'
-
+import {BatchComponent} from './agent/batch/batch.component'
 import { CircleProgressComponent } from 'src/app/util/circle-progress/circle-progress.component'
 
 
 
 @NgModule({
-  declarations: [ WorkspaceComponent, NewComponent, FilesystemComponent, AgentComponent, MarketplaceComponent,CircleProgressComponent],
+  declarations: [ BatchComponent, WorkspaceComponent, NewComponent, FilesystemComponent, AgentComponent, MarketplaceComponent,CircleProgressComponent],
   imports: [
     CommonModule,
     FormsModule,

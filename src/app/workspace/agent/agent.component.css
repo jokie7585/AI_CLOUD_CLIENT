@@ -9,6 +9,109 @@
     text-align: center;
   }
 
+  .taskManager {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    top: 0;
+    left: auto;
+    right: auto;
+    box-sizing: border-box;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .taskManager-runner{
+    display: flex;
+    flex-direction: column;
+    background-color: #3a3939;
+    min-width: 600px;
+    max-width: 50vw;
+    min-height: 28px;
+    box-shadow: 0 6px 12px rgb(43, 43, 43);
+  }
+
+  .taskManager-runner-query{
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 3px;
+  }
+
+  .taskManager-runner-queryinput{
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #taskManager-runner-queryinput-tg{
+    width: 98%;
+    background-color: #504e4e;
+    height: 22px;
+    font-size: 12px;
+    border-radius: 0px ;
+    font-family: monospace;
+    border: solid 1px rgb(103, 174, 255) ;
+    box-sizing: border-box;
+    color: #f9f9f9;
+    font-weight: lighter;
+  }
+
+  #taskManager-runner-queryinput-tg:focus{
+    outline: none;
+    border: 1px solid;
+    border-color: rgb(103, 174, 255);
+  }
+
+  .taskManager-runner-list{
+    padding-bottom: 8px ;
+  }
+
+  .taskManager-runner-list-item{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 20px;
+  }
+
+  .addEl{
+    border-bottom: 1px solid gray;
+  }
+
+  .taskManager-runner-list-item:hover{
+    cursor: pointer;
+    background-color: #494848;;
+  }
+
+  .taskManager-runner-list-item-icon{
+    margin-right: 1%;
+    margin-left: 1.5%;
+  }
+
+  .taskManager-runner-list-item-txt{
+    flex-direction: row;
+    color: rgb(206, 203, 203);
+    align-items: center;
+    font-weight: lighter;
+    font-family: monospace;
+    font-size: 14px;
+  }
+
+  .taskManager-runner-list-item-hotkey{
+    flex: 1;
+    text-align: right;
+    padding-right: 2%;
+    font-family: monospace;
+    font-size: 14px;
+    color: #0366D6;
+  }
+
   .operationbar {
     display: flex;
     flex-direction: column;
@@ -215,6 +318,14 @@
   width: 1.5em;
 }
 
+.statusBar-item-txt{
+  height: 1.5em;
+  font-size: 10px;
+  color: white;
+  font-family: monospace;
+  font-weight: lighter;
+}
+
 .statusBar-item-newC{
   height: 2em;
   width: 2em;
@@ -224,7 +335,7 @@
 .notifycationModule{
   position: absolute;
   display: flex;
-  bottom: 3vh;
+  bottom: 25px;
   right: -1vw;
 }
 

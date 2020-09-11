@@ -13,6 +13,55 @@ interface workspaceconfig {
     GpuNum: number
 }
 
+export interface batchConfig {
+  name: string,
+  discription: string,
+  commandTemplete: Array<CommandTemplete>,
+  branchSet: Array<Branch>
+}
+
+export interface Branch {
+  // this command list will support unique ui to set it
+  CommandList: Array<Command>,
+  logPath:string,
+  podname: string,
+  name:string,
+  status: string,
+}
+
+export interface CommandTemplete {
+  command: string,
+  optionMap: Array<string>
+}
+
+export interface Command {
+  command: string,
+  optionMap: Array<option>
+}
+
+export interface option {
+  name: string,
+  value: string, // if empty, its an boolean flag
+}
+
+/**
+ * utility protocol
+ */
+
+// notifiction protocol
+interface notification{
+  type: 'Notification' | 'Error' | 'Warnning',
+  title: string,
+  detail:string
+}
+
+export interface task {
+  name: string,
+  group:string,
+  action(): void,
+  hotKet: string
+}
+
 
 @Injectable({
   providedIn: 'root'
@@ -20,9 +69,12 @@ interface workspaceconfig {
 export class agantCtr {
   // utility: 根據當前workspace自動更新
   currentFunctionId = new Subject<string>();
-  cytusAppconfig = new Subject<workspaceconfig>();
+  cytusAppconfig = new BehaviorSubject<workspaceconfig>({tensorflowVersion: '', GpuNum: 0});
   currentWs = new Subject<string>();
-  Clipboard = new Subject<string>();
+  currentBranch = new BehaviorSubject<string>('Defalt');
+  TaskList = new BehaviorSubject<Array<task>>([]);
+  ShowTaskList =  new BehaviorSubject<boolean>(false);
+  isShowBash =  new BehaviorSubject<boolean>(false);
   // fileupload
   // fs component add file(listen input-onchange)
   muteUploadProcessList = new BehaviorSubject<boolean>(false);
@@ -34,6 +86,52 @@ export class agantCtr {
   // processManager instance
   curUploadProcessManager: UploadprocessList;
   curUploadProcessSubsription: Subscription;
+  TaskList$: Array<task>;
+
+  // batchConf
+  batchConf: BehaviorSubject<batchConfig> = new BehaviorSubject<batchConfig>({
+    name: 'tt',
+    discription: 'ttt',
+    commandTemplete: [
+      {
+        command: 'python',
+        optionMap : ['-s']
+      },
+      {
+        command: 'ls',
+        optionMap : ['-l']
+        },
+    ],
+    branchSet:[],
+  })
+
+  // branchConf
+  branchConf: BehaviorSubject<Branch> = new BehaviorSubject<Branch>({
+    CommandList: [
+      {
+        command: 'python',
+        optionMap : [
+          {
+            name: '-d',
+            value: 'asd'
+          }
+        ]
+      },
+      {
+        command: 'ls',
+        optionMap : [
+          {
+            name: '-l',
+            value: 'asd'
+          }
+        ]
+      }
+    ],
+    name: 'string',
+    podname: 'ee',
+    logPath: '/path/...',
+    status: undefined
+  })
 
   // observerList
   uploadProcessListObserver: Observer<Array<uploadProcess>> = {
@@ -77,6 +175,7 @@ export class agantCtr {
       this.muteUploadProcessList.next(false);
       this.curWs = wsname
       this.getConfig();
+      this.getBatchConf();
       // 從app service UploadprocessList 建立一個可觀察物件進行processlist的更新工作
       this.curUploadProcessManager = this.appCtr.registUploadProcess(wsname);
       this.curUploadProcessSubsription = this.curUploadProcessManager.uploadProcessList.subscribe(this.uploadProcessListObserver);
@@ -84,9 +183,22 @@ export class agantCtr {
     this.cytusAppconfig$.subscribe( config => {
       this.updateConfig(config)
     })
+    this.TaskList.subscribe(list => {
+      this.TaskList$ = list;
+    })
 
     console.log('agent Service init')
 
+  }
+
+  taskRegist(list: Array<task>){
+    let newlist = this.TaskList$.concat(list);
+    this.TaskList.next(newlist);
+  }
+
+  taskUnRegist(groupname: string){
+    let newList = this.TaskList$.filter(el => el.group != groupname)
+    this.TaskList.next(newList);
   }
 
   // agent status
@@ -120,9 +232,78 @@ export class agantCtr {
       },
       withCredentials:true
     }).subscribe(data => {
+      console.log({config:data as workspaceconfig})
       this.cytusAppconfig.next(data as workspaceconfig);
     })
   }
+
+  updateBatch_CommandTemplete(newcommandTemplete: Array<CommandTemplete>){
+    let url = `http://${environment.apiserver}/users/${this.userId}/management/api/setBatchConfig/${this.curWs}`
+
+    let newconf = Object.assign(this.batchConf.getValue()) as batchConfig;
+    // update batchConf
+    newconf.commandTemplete = newcommandTemplete;
+
+    console.log('update behaviorSub Inner value')
+    console.log({batchConf: newconf})   
+    this.batchConf.next(newconf) 
+
+    
+    // post
+    this.http.post(url,
+      newconf
+      ,{
+      headers: {
+        'Content-Type' : 'application/json'
+      },
+      withCredentials:true,
+    }).subscribe(data => {
+    })
+  }
+
+  appendNewBranch(newBranchConfig: Branch) {
+    let newconf = Object.assign(this.batchConf.getValue()) as batchConfig;
+    newconf.branchSet = newconf.branchSet.concat([newBranchConfig]);
+    this.updateBatch_branchSet(newconf);
+  }
+
+  DeleteBranch(target: Branch) {
+    let newconf = Object.assign(this.batchConf.getValue()) as batchConfig;
+    let index = newconf.branchSet.indexOf(target);
+    newconf.branchSet = newconf.branchSet.slice(0, index).concat(newconf.branchSet.slice(index+1))
+    this.updateBatch_branchSet(newconf);
+  }
+
+  updateBatch_branchSet(newconf: batchConfig){
+    let url = `http://${environment.apiserver}/users/${this.userId}/management/api/setBatchConfig/${this.curWs}`
+
+    
+    // post
+    this.http.post(url,
+      newconf
+      ,{
+      headers: {
+        'Content-Type' : 'application/json'
+      },
+      withCredentials:true,
+    }).subscribe(data => {
+      this.batchConf.next(data as batchConfig);
+    })
+  }
+
+  getBatchConf(){
+    let url = `http://${environment.apiserver}/users/${this.userId}/management/api/getBatchConfig/${this.curWs}`
+
+    this.http.get(url, {
+      headers: {
+      },
+      withCredentials:true
+    }).subscribe(data => {
+      this.batchConf.next(data as batchConfig);
+      console.log({batchConfigGet: data})
+    })
+  }
+
 
   // addfile to upload queue
   stageUploadfile(relativePath:string, filelist:FileList) {
@@ -136,7 +317,8 @@ export class agantCtr {
       let data = {
         name: filelist[i].name,
         percent: 0,
-        path: relativePath
+        path: relativePath,
+        hidden: false
       } as uploadProcess
 
       this.curUploadProcessManager.uploadProcess$.push(data);
@@ -171,26 +353,55 @@ export class agantCtr {
     }
   }
 
+  abortUploadProcess(process: uploadProcess) {
+    // abort a process if not finished
+    // hidden a process on list if finished
+    // abort fetch api
+    process.sub.unsubscribe();
+    if(process.percent != 100) {
+      let deletetargetDir = process.path.split('/').slice(1).join('/');
+      this.deleteTempFile(deletetargetDir, process.name);
+    }
+    // remove from list
+    let newList = this.curUploadProcessManager.uploadProcess$;
+    let processIndex = newList.indexOf(process)
+    newList[processIndex].hidden = true;
+    newList[processIndex].percent = 100;
+    this.curUploadProcessManager.uploadProcessList.next(newList);
+  }
+
+
+  deleteTempFile(relativepath:string, filename:string){
+    let url = `http://${environment.apiserver}/users/${this.userId}/management/api/deleteUploadTempFile`;
+    let payload = {
+      WsName: this.curWs,
+      relativepath: relativepath,
+      filename:filename,
+    };
+
+    this.http.post<any>(url, payload, {
+      headers: {
+        'Content-Type' : 'application/json'},
+      withCredentials:true,
+      responseType: 'json',
+      observe: 'response',
+    }).subscribe(Response => {
+      console.log(Response);
+
+      if(!Response.ok) {
+        alert('something wrong happens... reloadPage!')
+      }
+      else {
+        alert('sucess delete!')
+        this.fileList.next(Response.body)
+      }
+    })
+  }
+
   // call back used in fn: stageUploadfile
   getUploadPercentage(event: HttpUploadProgressEvent) {
     return Math.round((event.loaded/event.total)*100)
   }
-
-  // remove uploadprocess(if not finish upload, then abort request)
-  // 有bug => 需用事件與變數鎖 或上傳process必須視為同一個process只是做UI的變化。
-  removeUploadProcess(process :uploadProcess) {
-    // abort fetch api
-    process.sub.unsubscribe();
-    // remove from list
-    let newList = this.curUploadProcessManager.uploadProcess$;
-    let processIndex = newList.indexOf(process)
-    console.log({curList: newList});
-    newList = newList.slice(0, processIndex).concat(newList.slice(processIndex+1));
-    console.log({nextList: newList});
-    this.curUploadProcessManager.uploadProcessList.next(newList);
-  }
-
-  
 
   deleteWs(){
     let url = `http://${environment.apiserver}/users/${this.userId}/management/api/deleteWorkspace`;
@@ -266,6 +477,48 @@ export class agantCtr {
         alert('something wrong happens... please reloadPage!')
       }
     })
+  }
+
+  runworkspace(){
+    let url = `http://${environment.apiserver}/users/${this.userId}/management/api/runWorkspace/${this.curWs}` ;
+
+    let options = {
+      headers: {
+        'Content-Type' : 'application/json'},
+        withCredentials: true,
+    };
+
+
+    this.http.get<any>(url, options)
+    .subscribe((res => {
+      let {message} = res;
+      console.log(message)
+      alert(message)
+    }),
+    err => {
+      
+    });
+  }
+
+  runwbatch(){
+    let url = `http://${environment.apiserver}/users/${this.userId}/management/api/runBatch/${this.curWs}` ;
+
+    let options = {
+      headers: {
+        'Content-Type' : 'application/json'},
+        withCredentials: true,
+    };
+
+
+    this.http.get<any>(url, options)
+    .subscribe((res => {
+      let {message} = res;
+      console.log(message)
+      alert(message)
+    }),
+    err => {
+      
+    });
   }
 
 }

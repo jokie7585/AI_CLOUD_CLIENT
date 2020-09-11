@@ -1,0 +1,359 @@
+.pagebase {
+    position: relative;
+      display: flex;
+      flex-direction: column;
+      z-index: 11;
+      min-height: 85vh;
+      margin-top: 1px;
+      min-width: 100%;
+      /* background-color: #ffffff; */
+      background-color: #292929;
+      color: #e0e0e0;
+      text-align: center;
+}
+
+.menubar{
+    height: 30px;
+    display: flex;
+    border-bottom: 1px solid #7a7a7a;
+}
+
+.leftEl{
+    margin-left: 2rem;
+}
+
+.menubar-func{
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+    padding: 0px 0.5rem 0px 0.5rem;
+    border-bottom: 1px solid #292929;
+}
+
+.menubar-func:hover{
+    cursor: pointer;
+    border-bottom: 1px solid gray;
+}
+
+.OperatopnList{
+    flex: 1;
+    margin-top: 15px;
+    margin-left: 2.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.OperatopnList-func{
+    font-size: 14px;
+    display: flex;
+}
+
+.OperatopnList-func:hover{
+    cursor: pointer;
+    color: #999999;
+}
+
+
+.c{
+    display: flex;
+    flex-direction: row;
+}
+
+.c-l{
+    display: flex;
+    flex-direction: row;
+    flex: 2;
+    min-width: 200px;
+}
+
+.c-m{
+    display: flex;
+    flex-direction: column;
+    flex: 16;
+}
+
+.c-r{
+    flex: 0.5;
+}
+
+.title{
+    padding-top: 15px;
+    padding-bottom: 3px;
+    /* border-bottom: 1px solid #7a7a7a; */
+}
+
+.title-txt{
+    font-size: 24px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    text-align: left;
+    font-weight: bold;
+}
+
+.subTltle{
+    font-size: 18px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    text-align: left;
+    font-weight: bold;
+    margin-top: 10px ;
+}
+
+.detaile{
+    font-size: 12px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    text-align: left;
+    color: #c4c4c4;
+    margin-top: 5px ;
+}
+
+.branchManager-noBatchShow{
+    min-height: 15vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15px;
+    font-size: 18px;
+    border-radius: 6px;
+    color: #f9f9f9;
+    border: 1px solid #c5c5c5;
+    user-select: none;
+}
+
+.branchManager-noBatchShow:hover{
+    cursor: pointer;
+    
+}
+
+.CM{
+    display: flex;
+    flex-direction: column;
+}
+
+.CM-L{
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.CM-L-I{
+    display: flex;
+    flex-direction: row;
+    min-height: 48px;
+    white-space: pre;
+    border-left: 3px solid #c5c5c5;
+    margin-bottom: 4px;
+}
+
+.CM-L-I-C{
+    margin-left: 1em;
+    display: flex;
+    align-items: center;
+    white-space: pre;
+}
+
+.CM-L-I-C-P{
+    font-size: 12px;
+    color: #c5c5c5;
+    font-weight: bold;
+}
+
+.CM-L-I-C-C{
+    font-size: 14px;
+    display: flex;
+    font-family: monospace;
+    color: #428a30;;
+}
+
+.CM-L-I-FlagString{
+    flex: 1;
+    color: #428a30;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    margin-left: 1.5em ;
+}
+
+.CM-L-I-Func{
+    display: flex;
+    align-items: center;
+    justify-content: left;
+}
+
+
+.CM-L-I-Func-c:hover{
+    cursor: pointer;
+    background-color: #494949;
+}
+
+.CM-L-I-Func-icon{
+    margin-left: 0.5em;
+}
+
+.CM-L-I-creator{
+    font-size: 16px;
+    border: 1px solid #a3a3a3;
+    min-height: 48px;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+}
+
+.CM-L-I-creator--after{
+    font-size: 16px;
+    border: 1px solid #a3a3a3;
+    min-height: 48px;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+    background-color: #494949;
+}
+
+.CM-L-I-creator:hover{
+    background-color: #494949;
+    cursor: pointer;
+}
+
+.CM-L-I-creator-C{
+    height: 48px;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    margin-left: 1em;
+}
+
+.CM-Icon{
+    margin-right: 0.5em;
+    height: 1em;
+    width: 1em;
+    display: flex;
+}
+
+.Commandcreator{
+    min-height: 50px;
+    display: flex;
+    flex-direction: column;
+    margin-left: 1.5em;
+    color: #c5c5c5;
+}
+
+.Commandcreator-Setter{
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 3px;
+}
+
+.Commandcreator-Setter-txt{
+    width: 8rem;
+    text-align: right;
+}
+
+.Commandcreator-Setter-input{
+    flex: 1;
+    display: flex;
+    justify-content: left;
+    margin-right: 1rem;
+}
+
+#Commandcreator-input-flag{
+ width: 100%; 
+ box-sizing: border-box;
+}
+
+.Commandcreator-comfirm{
+    display: flex;
+    height: 30px;
+    box-sizing: border-box;
+    flex-direction: row-reverse;
+    align-items: center;
+    margin-top: 0.5rem;
+    margin-right: 1rem ;
+}
+
+.Commandcreator-comfirm-bt-g{
+    border: 1px solid #428a30;
+    height: 20px;
+    border-radius: 3px;
+    padding: 2px 4px 2px 4px;
+    margin-left: 3px;
+}
+
+.Commandcreator-comfirm-bt-g:hover{
+    cursor: pointer;
+    background-color: #428a30;
+}
+
+.Commandcreator-comfirm-bt-r{
+    border: 1px solid #d73a49;
+    height: 20px;
+    border-radius: 3px;
+    padding: 2px 4px 2px 4px;
+}
+
+.Commandcreator-comfirm-bt-r:hover{
+    cursor: pointer;
+    background-color: #d73a49;
+}
+
+.flag-Setter{
+    margin-left: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.flag-Setter-I{
+    display: flex;
+    margin-bottom: 3px;
+    flex-direction: column;
+    white-space: pre;
+}
+
+.flag-Setter-I-C{
+}
+
+.flag-Setter-I-C-txt{
+    border-left: 2px solid #428a30;
+    padding-left: 3px;
+    display: flex;
+    justify-content: left;
+    font-weight: bold;
+    font-size: 0.5rem;
+    align-items: center;
+}
+
+.flag-Setter-I-C-txt-ct{
+    font-weight: lighter;
+    font-size: 1rem;
+    font-family: monospace;
+    color: #bfce39;
+}
+
+.flag-Setter-I-C-txt-ft{
+    width: 8rem;
+}
+
+.flag-Setter-I-Flaglist{
+    flex: 1;
+    flex-direction: column;
+    margin-top: 0.5rem;
+}
+
+.flag-Setter-I-Flaglist-I{
+    margin-left: 1rem;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    margin-bottom: 5px ;
+}
+
+.branchCreatorSub{
+    font-size: 20px;
+    justify-content: left;
+    display: flex;
+}

@@ -4,6 +4,8 @@ import { Routes, RouterModule } from '@angular/router';
 import {AgentComponent} from './agent.component' ;
 import {FilesystemComponent} from './filesystem/filesystem.component'
 import {WsSetterComponent} from './ws-setter/ws-setter.component'
+import {BatchComponent} from './batch/batch.component'
+import { from } from 'rxjs';
 const routes: Routes = [
   {
     path: '',
@@ -23,6 +25,14 @@ const routes: Routes = [
       },
       {
         path: 'setting',
+        component: WsSetterComponent
+      },
+      {
+        path: 'Batch',
+        component: BatchComponent
+      },
+      {
+        path: 'Overview',
         component: WsSetterComponent
       }
     ]

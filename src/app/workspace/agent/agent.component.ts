@@ -4,22 +4,17 @@ import {environment} from 'src/environments/environment' ;
 import {HttpClient} from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service' ;
 import { cookieList} from 'src/utility/cookie' ;
-import {agantCtr} from 'src/myservice/agentCtr.service'
+import {agantCtr, task} from 'src/myservice/agentCtr.service'
 import { uploadProcess } from 'src/myservice/appUtility.service';
 import {AppbarControllerService} from 'src/myservice/appbar-controller.service';
 import { Subscription } from 'rxjs';
 
 interface Appfunction {
-  fs: string;
-  history: string;
-  setting: string;
-}
-
-// notifiction protocol
-interface notification{
-  type: 'Notification' | 'Error' | 'Warnning',
-  title: string,
-  detail:string
+  fs: string,
+  history: string,
+  setting: string,
+  batch: string,
+  overview: string
 }
 
 @Component({
@@ -30,16 +25,22 @@ interface notification{
 export class AgentComponent implements OnInit, OnDestroy {
   userId: string = '';
   wsName: string = null;
+  curbranch: string = null;
   appfunc: Appfunction = {
     fs: 'filesystem',
     history: 'history',
-    setting: 'setting'
+    setting: 'setting',
+    batch: 'Batch',
+    overview: 'Overview'
   }
   currentFunctionId: string = this.appfunc.fs;
   isMuteUploadList: boolean;
   isHasRunningUploadProcess:boolean;
   isHasNotification:boolean = false;
   showNotificationList:boolean = false;
+  showTaskList: boolean = true;
+  isBashShow: boolean = false;
+  taskList$: Array<task>
 
   // subscription
   allSub: Array<Subscription> = [];
@@ -78,6 +79,26 @@ export class AgentComponent implements OnInit, OnDestroy {
         this.isHasRunningUploadProcess = false;
       })
     )
+    this.allSub.push(
+      this.agentCtr.TaskList.subscribe(list => {
+        this.taskList$ = list;
+      })
+    )
+    this.allSub.push(
+      this.agentCtr.ShowTaskList.subscribe(val => {
+        this.showTaskList = val;
+      })
+    )
+    this.allSub.push(
+      this.agentCtr.isShowBash.subscribe(val => {
+        this.isBashShow = val;
+      })
+    )
+    this.allSub.push(
+      this.agentCtr.currentBranch.subscribe(val => {
+        this.curbranch = val;
+      })
+    )
   }
 
   ngOnDestroy(){
@@ -102,6 +123,16 @@ export class AgentComponent implements OnInit, OnDestroy {
 
   jumpWorkspace(){
     this.router.navigate(['workspace'])
+  }
+
+  togleTaskManager(togle: boolean) {
+    event.stopPropagation();
+    if(togle) {
+      this.agentCtr.ShowTaskList.next(!this.showTaskList);
+    }
+    else {
+      this.agentCtr.ShowTaskList.next(false);
+    }
   }
 
 }

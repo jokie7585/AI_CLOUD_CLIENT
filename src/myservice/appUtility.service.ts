@@ -9,6 +9,16 @@ interface loadingTask{
     onCancelCallback: Function,
 }
 
+interface userConfig {
+  // if ws first run, enable the tutorial
+  enableWsCreatePrompt: boolean,
+
+}
+
+interface paidContent {
+  batchWork: boolean,
+}
+
 /**
  * process managemet interface
  */
@@ -28,6 +38,7 @@ export interface uploadProcess {
   path: string,
   percent: number,
   sub: Subscription,
+  hidden: boolean
 }
 
 /**

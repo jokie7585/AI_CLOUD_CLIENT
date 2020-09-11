@@ -142,11 +142,13 @@
         </div>
         <div class="uploadModule-processList">
             
-                <div class="uploadModule-processList-item"
-                     (mouseleave)="hideCloseButtom()"
+                <div (mouseleave)="hideCloseButtom()"
                      (mouseenter)="hidProgressbar()"
                      *ngFor="let item of uploadList"
-                     >
+                >
+                <div *ngIf="!item.hidden"
+                     class="uploadModule-processList-item"
+                >
                     <div class="uploadModule-processList-item-name">
                         <span class="uploadModule-processList-item-name-text">
                             {{item.name}}
@@ -166,6 +168,7 @@
                     >
                         <img src="assets/close.svg" alt="">
                     </div>
+                </div>   
                 </div>
                 
             
@@ -203,18 +206,17 @@
     >
         <div class="fsConsole-title-zoomingBar" (mousedown)="ZoomTerminal($event)"></div>
         <div class="fsConsole-title-func">
-            <!-- <div class="fsConsole-title-func-item">
-                <img src="assets/operationInfo.svg" class="fsConsole-title-func-item-icon" alt="">
-                <div class="consolOpInfo">
-                    1
-                </div>
-            </div> -->
             <div class="fsConsole-title-func-item" (click)="openScripWriter()">
                 <img src="assets/collaps.svg" class="fsConsole-title-func-item-icon" alt="">
             </div>
         </div>
         <div class="fsConsole-title-text">
             {{userId}}/{{wsName}}'s bashCommand
+        </div>
+        <div class="fsConsole-title-func">
+            <div class="fsConsole-title-func-item">
+                <img src="assets/operationInfo.svg" class="fsConsole-title-func-item-icon" alt="">
+            </div>
         </div>
     </div>
     <div class="fsConsole-content">

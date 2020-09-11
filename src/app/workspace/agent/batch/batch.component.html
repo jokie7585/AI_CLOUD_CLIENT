@@ -1,0 +1,181 @@
+<div class="pagebase">
+  <div class="menubar">
+    <div class="menubar-func leftEl" [style.border-color]="isSelectt(showSettings)" (click)="pageSwitch('setting')">Settings</div>
+    <div class="menubar-func" [style.border-color]="isSelectt(showBatchList)" (click)="pageSwitch('list')">Batchs</div>
+  </div>  
+  <div class="c">
+      <div class="c-l">
+        <div class="OperatopnList" *ngIf="showSettings">
+            <div class="OperatopnList-func">
+                <div class="OperatopnList-func-icon">
+                    <img src="/assets/next.svg" alt="">
+                </div>
+                <div class="OperatopnList-func-txt">
+                    Command
+                </div>
+            </div>
+            <div class="OperatopnList-func">
+                <div class="OperatopnList-func-icon">
+                    <img src="/assets/next.svg" alt="">
+                </div>
+                <div class="OperatopnList-func-txt">
+                    Workload
+                </div>
+            </div>
+        </div>
+      </div>
+      <div class="c-m">
+        <div class="title">
+            <div class="title-txt">Batch Manager</div>
+        </div>
+        <!-- Batch Manager -->
+        <div class="CM" *ngIf="showBatchList">
+            <div class="subTltle">Batch list</div>
+            <div class="detaile">"Batch list" is that you can drive multiple tringning at same time.</div>
+            <div class="CM-L">
+                <div *ngFor="let el of branchset">
+                    <div class="CM-L-I">
+                        <div class="CM-L-I-C">
+                            <span class="CM-L-I-C-P">Branch :  </span><span class="CM-L-I-C-C">{{el.name}}</span>
+                        </div>
+                        <div class="CM-L-I-FlagString">
+                            <span class="CM-L-I-C-P">Flag :  </span>
+                        </div>
+                        <div class="CM-L-I-Func">
+                            <div class="CM-L-I-Func-c">
+                                <img class="CM-L-I-Func-icon" src="/assets/edit.svg" alt="">
+                            </div>
+                            <div class="CM-L-I-Func-c" (click)="deleteBranch(el)">
+                                <img class="CM-L-I-Func-icon" src="/assets/delete.svg" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div [class]="creatorStyleSelector(showBreanchCreator)"
+                     (click)="isshowBranchCreator(true, $event)"
+                >
+                    <div class="CM-L-I-creator-C">
+                        <img class="CM-Icon" src="/assets/plusInBatch.svg" alt=""><span class="CM-L-I-C-P">Create Branch</span>
+                    </div>
+                    <div class="Commandcreator" *ngIf="showBreanchCreator">
+                        <div class="Commandcreator-Setter">
+                            <div class="Commandcreator-Setter-txt branchCreatorSub">
+                                name : 
+                            </div>
+                            <div class="Commandcreator-Setter-input">
+                                <input id="branchCreator-input-name"
+                                        type="text"
+                                >
+                            </div>
+                        </div>
+                        <div class="Commandcreator-Setter">
+                            <div class="Commandcreator-Setter-txt branchCreatorSub">
+                                Flag Setter :
+                            </div>
+                        </div>
+                        <div class="flag-Setter">
+                            <div *ngFor="let el of creatingTemper.CommandList">
+                                <div class="flag-Setter-I">
+                                    
+                                        <div class="flag-Setter-I-C">
+                                            <div class="flag-Setter-I-C-txt">
+                                                Command : <span class="flag-Setter-I-C-txt-ct">{{el.command}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="flag-Setter-I-Flaglist">
+                                            <div *ngFor="let flag of el.optionMap">
+                                                <div class="flag-Setter-I-Flaglist-I">
+                                                    <span class="flag-Setter-I-C-txt-ft">{{flag.name}} : </span><input (change)="processBranchCreate(flag, $event)" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="Commandcreator-comfirm">
+                            <div class="Commandcreator-comfirm-bt-g" (click)="pushBranchToServer()">
+                                Comfirm
+                            </div>
+                            <div class="Commandcreator-comfirm-bt-r" (click)="isshowBranchCreator(false, $event)">
+                                Cancle
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        <!-- Command Manager -->
+        <div class="CM" *ngIf="showSettings">
+            <div class="subTltle">Commnd list</div>
+            <div class="detaile">"Commnd list" is command runs after "Bash".</div>
+            <div class="CM-L">
+                <div *ngFor="let el of batchConf">
+                    <div class="CM-L-I">
+                        <div class="CM-L-I-C">
+                            <span class="CM-L-I-C-P">Command :  </span><span class="CM-L-I-C-C">{{el.command}}</span>
+                        </div>
+                        <div class="CM-L-I-FlagString">
+                            <span class="CM-L-I-C-P">Flag :  </span>{{composeFlagstring(el)}}
+                        </div>
+                        <div class="CM-L-I-Func">
+                            <div class="CM-L-I-Func-c">
+                                <img class="CM-L-I-Func-icon" src="/assets/edit.svg" alt="">
+                            </div>
+                            <div class="CM-L-I-Func-c" (click)="deleteBatchCmdTemplete(el)">
+                                <img class="CM-L-I-Func-icon" src="/assets/delete.svg" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div [class]="creatorStyleSelector(showCreator)"
+                     (click)="isshowCreator(true, $event)"
+                >
+                    <div class="CM-L-I-creator-C">
+                        <img class="CM-Icon" src="/assets/plusInBatch.svg" alt=""><span class="CM-L-I-C-P">Add Command</span>
+                    </div>
+                    <div class="Commandcreator" *ngIf="showCreator">
+                        <div class="Commandcreator-Setter">
+                            <div class="Commandcreator-Setter-txt">
+                                Command : 
+                            </div>
+                            <div class="Commandcreator-Setter-input">
+                                <input id="Commandcreator-input-command"
+                                        type="text"
+                                >
+                            </div>
+                        </div>
+                        <div class="Commandcreator-Setter">
+                            <div class="Commandcreator-Setter-txt">
+                                FlagString : 
+                            </div>
+                            <div class="Commandcreator-Setter-input">
+                                <input id="Commandcreator-input-flag"
+                                        type="text"
+                                >
+                            </div>
+                        </div>
+                        <div class="Commandcreator-comfirm">
+                            <div class="Commandcreator-comfirm-bt-g" (click)="addNewBatchCommand()">
+                                Comfirm
+                            </div>
+                            <div class="Commandcreator-comfirm-bt-r" (click)="isshowCreator(false, $event)">
+                                Cancle
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+      </div>
+      <div class="c-r">
+    
+      </div>
+  </div>
+  
+</div>

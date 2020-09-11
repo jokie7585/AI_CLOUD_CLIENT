@@ -74,7 +74,7 @@ export class TerminalService {
 
   }
 
-  getLogs(){
+  getLogs(errProcessFuc){
 
     // if not getting logs
 
@@ -104,19 +104,18 @@ export class TerminalService {
               if(isLogEnd==='true') {
               }
               else{
-                that.getLogs()
+                that.getLogs(errProcessFuc)
               }
             }, 1000)
       
-        
     
     }),
     err => {
         console.log(err);
         let {message} = err.error
         alert(message)
+        errProcessFuc();
     });
-
   }
   
 }

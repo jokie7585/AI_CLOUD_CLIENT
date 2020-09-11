@@ -7,7 +7,7 @@ import { AppComponent } from './app.component';
 import {AppbarControllerService} from 'src/myservice/appbar-controller.service';
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
@@ -16,6 +16,7 @@ import {AppbarControllerService} from 'src/myservice/appbar-controller.service';
   ],
   providers: [AppbarControllerService],
   bootstrap: [AppComponent],
-  entryComponents:[]
+  entryComponents:[],
+  exports: []
 })
 export class AppModule { }

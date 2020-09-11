@@ -1,4 +1,4 @@
-<div class="pagebase">
+<div class="pagebase" (click)="togleTaskManager(false)">
 
     <div class="operationbar">
 
@@ -41,8 +41,21 @@
                     </div>
                 </div>
                 <div class="function"
-                     id='history'
-                     (click)="seleteFunction('history')">
+                     id='Batch'
+                     (click)="seleteFunction('Batch')">
+                    <div class=functionicon>
+                        <img src="assets/bat.svg" alt="">
+                    </div>
+                    <div class=functiontext>
+                      <div class=" functiontextItem"
+                      >
+                      Batch
+                      </div>
+                    </div>
+                </div>
+                <div class="function"
+                     id='Overview'
+                     (click)="seleteFunction('Overview')">
                     <div class=functionicon>
                         <img src="assets/info.svg" alt="">
                     </div>
@@ -89,8 +102,23 @@
         <router-outlet></router-outlet>
     </div>
 
+    <!-- status bar component -->
     <div class="statusBar">
       <div class="functionList">
+          <div class="statusBar-item"
+           (click)="togleTaskManager(true)"
+           *ngIf="isBashShow"
+          >
+            <div class="statusBar-item-txt">
+              Edit
+            </div>
+          </div>
+          <div class="statusBar-item"
+           (click)="togleTaskManager(true)"
+           *ngIf="!isBashShow"
+          >
+            <div class="statusBar-item-txt">Branch: &lt;{{curbranch}}&gt;</div>
+          </div>
         <div class="functionList-right">
           <div class="statusBar-item"
            (click)="togleMuteUploadList()"
@@ -150,6 +178,31 @@
       </div>
     </div>
 
-    
+    <!-- task runner component -->
+  <div class="taskManager" *ngIf="showTaskList">
+    <!-- runner -->
+    <div class="taskManager-runner">
+      <div class="taskManager-runner-query">
+        <div class="taskManager-runner-queryinput">
+          <input type="text" name="" id="taskManager-runner-queryinput-tg">
+        </div>
+      </div>
+
+      <!-- task Add-Element -->
+      <div class="taskManager-runner-list-item addEl">
+        <img class="taskManager-runner-list-item-icon" src="assets/plus.svg" alt="">
+        <div class="taskManager-runner-list-item-txt">new task</div>
+      </div>
+      <!-- task list -->
+      <div class="taskManager-runner-list">
+        <div class="taskManager-runner-list-item" *ngFor="let el of taskList$" (click)="el.action()">
+          <img class="taskManager-runner-list-item-icon" src="assets/task.svg" alt="">
+          <div class="taskManager-runner-list-item-txt">{{el.name}}</div>
+          <div class="taskManager-runner-list-item-hotkey">{{el.hotKet}}</div>
+        </div>
+      </div>
+    </div>
+    <!-- runner end -->
+  </div>
 </div>
 

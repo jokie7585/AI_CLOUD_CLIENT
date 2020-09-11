@@ -13,6 +13,7 @@ import { TexteditorService, CursorPosition, Line } from 'src/myservice/textedito
 import { subscribeOn } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { createComfirmStream } from 'src/utility/protocol';
+import { browser } from 'protractor';
 
 
 interface data {
@@ -275,7 +276,7 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
   deleteProcess(process: uploadProcess){
     // 隱藏fnc，為了處理無法觸發在close-fnc 上的onleave事件造成的UI問題
     this.showUploadListFn = false;
-    this.agent.removeUploadProcess(process)
+    this.agent.abortUploadProcess(process)
   }
 
   hidProgressbar(){
@@ -411,24 +412,32 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
     let pathURL: string = encodeURI(path.join('>>'));
     let url:string = `http://${environment.apiserver}/users/${this.userId}/${pathURL}/${name}/download`
 
-    this.http.get(url, {
-      headers: {
-      },
-      withCredentials:true,
-      responseType: "blob",
-      observe: "response",
-    }).subscribe( Response => {
-      if(Response.ok) {
-        console.log(Response)
-        let filename = Response.headers.get('Content-Disposition').match(/"(.*)"/)[1];
-        // 生成blobURL 透過a標籤 處理檔案下載
-        let blobURL = URL.createObjectURL(Response.body);
-        this.downloader.setAttribute('href', blobURL);
-        this.downloader.setAttribute('download', filename);
-        this.downloader.click();
-        window.URL.revokeObjectURL(blobURL);
-    }
-    })
+    this.downloader.setAttribute('href', url);
+    this.downloader.setAttribute('download', name);
+    this.downloader.click();
+    
+
+    /*
+      以下方法不會觸發chrome download api, 而是在get完成後才觸發 
+    */
+    // this.http.get(url, {
+    //   headers: {
+    //   },
+    //   withCredentials:true,
+    //   responseType: "blob",
+    //   observe: "response",
+    // }).subscribe( Response => {
+    //   if(Response.ok) {
+    //     console.log(Response)
+    //     let filename = Response.headers.get('Content-Disposition').match(/"(.*)"/)[1];
+    //     // 生成blobURL 透過a標籤 處理檔案下載
+    //     let blobURL = URL.createObjectURL(Response.body);
+    //     this.downloader.setAttribute('href', blobURL);
+    //     this.downloader.setAttribute('download', filename);
+    //     this.downloader.click();
+    //     window.URL.revokeObjectURL(blobURL);
+    // }
+    // })
 
   }
 
@@ -444,11 +453,13 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
       if(name) {
         path = '/mnt/' + ablulotePh.concat(name).join('/');
       }
-      let bottum: HTMLElement = event.target as HTMLElement;
+      let bottum: HTMLElement = event.currentTarget as HTMLElement;
+      console.log(bottum)
+      let btcordinate = bottum.getBoundingClientRect();
       // forced update view
       this.clipboard.value = path; 
-      this.cilpboardCordinate.left = bottum.offsetLeft+20
-      this.cilpboardCordinate.top = bottum.offsetTop+15
+      this.cilpboardCordinate.left = btcordinate.right+10
+      this.cilpboardCordinate.top = btcordinate.top
       this.clipbaordDisplay = 'flex'
     }
     
@@ -498,13 +509,19 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
     this.showconsole = false;
     this.showTerminal = !this.showTerminal;
     if(this.showTerminal) {
-      this.terminalCtr.getLogs()
+      this.terminalCtr.getLogs(this.closTerminal)
     }
+  }
+
+  closTerminal = () => {
+    this.showTerminal = false;
+    this.terminal.dispatchEvent(new Event('update'))
   }
 
   openScripWriter(){
     this.showTerminal = false;
     this.showconsole = !this.showconsole;
+    this.agent.isShowBash.next(this.showconsole)
     if(this.showconsole == true) {
       // 重要細節！！！ docuent的執行scope不在此context內，因此用arrow綁定
       this.editorCtr.initCommandList()

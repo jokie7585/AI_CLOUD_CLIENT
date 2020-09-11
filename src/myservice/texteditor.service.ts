@@ -3,6 +3,7 @@ import { Observable, Subject, from, Subscription, BehaviorSubject } from 'rxjs';
 import {webSocket, WebSocketSubject} from 'rxjs/webSocket'
 import {environment} from 'src/environments/environment' ;
 import {HttpClient} from '@angular/common/http';
+import {agantCtr, task} from 'src/myservice/agentCtr.service'
 
 interface Fetchconfig {
   wsName: string, userId: string
@@ -50,7 +51,7 @@ export class TexteditorService {
   copyingLock$: boolean = false;
   cursorPosition:Subject<CursorPosition> = new BehaviorSubject<CursorPosition>({top:0, left:0});
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private agantCtr: agantCtr) {
     // this.content$ = [{content: '', isEditing: true}];
     // this.editingLine$ = this.content$[0];
     this.config.subscribe(config => {
@@ -71,6 +72,8 @@ export class TexteditorService {
     this.editingCol.subscribe(val=> {
       this.editingCol$ = val;
     })
+    // init editor dependency service
+    this.registTask();
     
   }
 
@@ -78,6 +81,39 @@ export class TexteditorService {
     this.config.next({wsName: wsName, userId:userId});
     this.targetInput=targetInput;
     this.targetMeasureEl = targetMeasureEl;
+  }
+
+  registTask() {
+    this.agantCtr.taskRegist([
+      {
+        name: 'save',
+        group: 'BashEditor',
+        action: () => this.setCommandList(),
+        hotKet: 'CTRL/metaKey + S'
+      },
+      {
+        name: 'past',
+        group: 'BashEditor',
+        action: () => alert('Press CTRL/metaKey + V in Bash-editor directory!'),
+        hotKet: 'CTRL/metaKey + V'
+      },
+      {
+        name: 'redo',
+        group: 'BashEditor',
+        action: () => alert('Press CTRL/metaKey + V in Bash-editor directory!'),
+        hotKet: 'CTRL/metaKey + X'
+      },
+      {
+        name: 'undo',
+        group: 'BashEditor',
+        action: () => alert('Press CTRL/metaKey + V in Bash-editor directory!'),
+        hotKet: 'CTRL/metaKey + Z'
+      },
+    ])
+  }
+
+  unregistTask() {
+    this.agantCtr.taskUnRegist('BashEditor')
   }
 
   initCommandList(){
@@ -169,7 +205,7 @@ export class TexteditorService {
     // 計算editingCol$
   }
 
-  setCommandList(){
+  setCommandList(): void{
 
     let url = `http://${environment.apiserver}/users/${this.config$.userId}/management/api/setWorkspaceCommandList/${this.config$.wsName}` ;
 
