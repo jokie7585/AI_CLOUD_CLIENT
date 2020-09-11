@@ -144,7 +144,9 @@ export class BatchComponent implements OnInit, OnDestroy {
     this.creatingTemper = {
       logPath: 'none',
       name: '',
-      status: undefined,
+      root: '',
+      yamalPath: '',
+      status: 'undefined',
       podname: 'none',
       CommandList: this.batchConf.map(el => {
         return{
@@ -184,6 +186,10 @@ export class BatchComponent implements OnInit, OnDestroy {
     config.name = nameInput.value;
     this.agantCtr.appendNewBranch(config);
     this.showBreanchCreator = false
+  }
+
+  runBatch() {
+    this.agantCtr.runwbatch();
   }
 
 }

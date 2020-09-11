@@ -2,6 +2,7 @@
   <div class="menubar">
     <div class="menubar-func leftEl" [style.border-color]="isSelectt(showSettings)" (click)="pageSwitch('setting')">Settings</div>
     <div class="menubar-func" [style.border-color]="isSelectt(showBatchList)" (click)="pageSwitch('list')">Batchs</div>
+    <div class="menubar-func menubar-func-bt" [style.border-color]="isSelectt(showBatchList)" (click)="runBatch()">Run</div>
   </div>  
   <div class="c">
       <div class="c-l">
@@ -22,6 +23,7 @@
                     Workload
                 </div>
             </div>
+            
         </div>
       </div>
       <div class="c-m">

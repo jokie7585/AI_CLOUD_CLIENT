@@ -27,6 +27,8 @@ export interface Branch {
   podname: string,
   name:string,
   status: string,
+  root: string,
+  yamalPath: string
 }
 
 export interface CommandTemplete {
@@ -130,7 +132,9 @@ export class agantCtr {
     name: 'string',
     podname: 'ee',
     logPath: '/path/...',
-    status: undefined
+    status: undefined,
+    root: 'none',
+    yamalPath: 'none'
   })
 
   // observerList

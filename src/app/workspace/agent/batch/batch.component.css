@@ -37,6 +37,12 @@
     border-bottom: 1px solid gray;
 }
 
+.menubar-func-bt{
+    justify-self: right;
+    margin-left: auto;
+    margin-right: 1rem;
+}
+
 .OperatopnList{
     flex: 1;
     margin-top: 15px;
