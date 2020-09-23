@@ -7,6 +7,7 @@ import {HttpClient, HttpUploadProgressEvent, HttpHeaderResponse, HttpResponse, H
 import { CookieService } from 'ngx-cookie-service' ;
 import { cookieList} from 'src/utility/cookie' ;
 import {uploadProcess, UploadprocessList, AppUtilService} from './appUtility.service'
+import {CytusAppStatus, CytusBatchStatus} from 'src/utility/CetusProtocol'
 
 interface workspaceconfig {
     tensorflowVersion: string,
@@ -17,7 +18,8 @@ export interface batchConfig {
   name: string,
   discription: string,
   commandTemplete: Array<CommandTemplete>,
-  branchSet: Array<Branch>
+  branchSet: Array<Branch>,
+  status: 'waiting' | 'running' | 'completed' | 'terminate' | 'undefined'
 }
 
 export interface Branch {
@@ -29,6 +31,8 @@ export interface Branch {
   status: string,
   root: string,
   yamalPath: string
+  timeStart: Date,
+  timeEnd: Date
 }
 
 export interface CommandTemplete {
@@ -61,7 +65,15 @@ export interface task {
   name: string,
   group:string,
   action(): void,
-  hotKet: string
+  hotKet: string,
+  description: string,
+  isSuperTask: boolean
+}
+
+interface taskInterface {
+  group: string,
+  promptMassage: string,
+  taskList: Array<task>;
 }
 
 
@@ -73,10 +85,12 @@ export class agantCtr {
   currentFunctionId = new Subject<string>();
   cytusAppconfig = new BehaviorSubject<workspaceconfig>({tensorflowVersion: '', GpuNum: 0});
   currentWs = new Subject<string>();
-  currentBranch = new BehaviorSubject<string>('Defalt');
+  currentBranch = new BehaviorSubject<Branch>({name: 'Template'} as Branch);
   TaskList = new BehaviorSubject<Array<task>>([]);
+  TaskPlaceHolder =  new BehaviorSubject<string>('None task...');
   ShowTaskList =  new BehaviorSubject<boolean>(false);
-  isShowBash =  new BehaviorSubject<boolean>(false);
+  isShowEditCompnent =  new BehaviorSubject<boolean>(false);
+  isShowBranchManager =  new BehaviorSubject<boolean>(false);
   // fileupload
   // fs component add file(listen input-onchange)
   muteUploadProcessList = new BehaviorSubject<boolean>(false);
@@ -88,54 +102,11 @@ export class agantCtr {
   // processManager instance
   curUploadProcessManager: UploadprocessList;
   curUploadProcessSubsription: Subscription;
+  taskInterface$: Array<taskInterface> = []
   TaskList$: Array<task>;
-
+  batchConf$: batchConfig;
   // batchConf
-  batchConf: BehaviorSubject<batchConfig> = new BehaviorSubject<batchConfig>({
-    name: 'tt',
-    discription: 'ttt',
-    commandTemplete: [
-      {
-        command: 'python',
-        optionMap : ['-s']
-      },
-      {
-        command: 'ls',
-        optionMap : ['-l']
-        },
-    ],
-    branchSet:[],
-  })
-
-  // branchConf
-  branchConf: BehaviorSubject<Branch> = new BehaviorSubject<Branch>({
-    CommandList: [
-      {
-        command: 'python',
-        optionMap : [
-          {
-            name: '-d',
-            value: 'asd'
-          }
-        ]
-      },
-      {
-        command: 'ls',
-        optionMap : [
-          {
-            name: '-l',
-            value: 'asd'
-          }
-        ]
-      }
-    ],
-    name: 'string',
-    podname: 'ee',
-    logPath: '/path/...',
-    status: undefined,
-    root: 'none',
-    yamalPath: 'none'
-  })
+  batchConf: BehaviorSubject<batchConfig> = new BehaviorSubject<batchConfig>({} as batchConfig)
 
   // observerList
   uploadProcessListObserver: Observer<Array<uploadProcess>> = {
@@ -179,6 +150,7 @@ export class agantCtr {
       this.muteUploadProcessList.next(false);
       this.curWs = wsname
       this.getConfig();
+      console.log('call getBatchConf() in currentWs sub')
       this.getBatchConf();
       // 從app service UploadprocessList 建立一個可觀察物件進行processlist的更新工作
       this.curUploadProcessManager = this.appCtr.registUploadProcess(wsname);
@@ -190,19 +162,102 @@ export class agantCtr {
     this.TaskList.subscribe(list => {
       this.TaskList$ = list;
     })
+    this.batchConf.subscribe(config => {
+      this.batchConf$ = config as batchConfig;
+      console.log({updateBatchInAgent: this.batchConf$})
+      this.generateBranchSwitchTask(this.batchConf$.branchSet);
+    })
 
     console.log('agent Service init')
 
   }
 
-  taskRegist(list: Array<task>){
-    let newlist = this.TaskList$.concat(list);
-    this.TaskList.next(newlist);
+  generateBranchSwitchTask(branchSet: Array<Branch>) {
+    console.log('create branch manager Task Success')
+    console.log(branchSet)
+    if(branchSet) {
+      let taskList: Array<task> = branchSet.map(el => {
+        return {
+          name: el.name,
+          group:'BranchManager',
+          hotKet: '',
+          action: () => {
+            this.currentBranch.next(el)
+          },
+          isSuperTask: false,
+          description: 'try it!'
+        } as task;
+      })
+
+      taskList.push({
+        name: 'Template',
+          group:'BranchManager',
+          hotKet: '',
+          action: () => {
+            this.currentBranch.next({name: 'Template'} as Branch)
+          },
+          isSuperTask: true,
+          description: 'try it!'
+        } as task
+      )
+  
+      this.taskRegist('BranchManager', 'Click to switch', taskList);
+    }
   }
 
-  taskUnRegist(groupname: string){
-    let newList = this.TaskList$.filter(el => el.group != groupname)
-    this.TaskList.next(newList);
+  taskRegist(group: string, promptMassage, list: Array<task>){
+    let isSet = false;
+    for(let el of this.taskInterface$) {
+      if(el.group == group) {
+        this.taskInterface$.splice(this.taskInterface$.indexOf(el), 1, {
+          group: group,
+          promptMassage: promptMassage,
+          taskList: list
+        } as taskInterface)
+        this.TaskList.next(el.taskList);
+        isSet = true;
+      }
+    }
+
+    if(isSet) {
+      return;
+    }
+    else{
+      console.log('not quit in taskRegist')
+      this.taskInterface$.push({
+        group: group,
+        promptMassage: promptMassage,
+        taskList: list
+      } as taskInterface)
+      console.log(this.taskInterface$)
+      this.TaskList.next(this.taskInterface$[this.taskInterface$.length-1].taskList);
+
+    }
+  }
+
+  fetchTaskList(group: string) {
+    console.log('start Fatch task : ' + group)
+    for(let el of this.taskInterface$) {
+      if(el.group == group) {
+        console.log({FetchTask: el})
+        this.TaskPlaceHolder.next(el.promptMassage)
+        this.TaskList.next(el.taskList);
+        return
+      }
+    }
+
+    // 若無此group
+    this.TaskList.next([]);
+  }
+
+  taskUnRegist(groupname?: string){
+    for(let el of this.taskInterface$) {
+      if(el.group == groupname) {
+        let index = this.taskInterface$.indexOf(el);
+        this.taskInterface$.splice(index);
+      }
+    }
+
   }
 
   // agent status
@@ -268,17 +323,23 @@ export class agantCtr {
   appendNewBranch(newBranchConfig: Branch) {
     let newconf = Object.assign(this.batchConf.getValue()) as batchConfig;
     newconf.branchSet = newconf.branchSet.concat([newBranchConfig]);
-    this.updateBatch_branchSet(newconf);
+    this.updateBatch(newconf);
   }
 
-  DeleteBranch(target: Branch) {
+  updateBranchSet(newBranchSet: Array<Branch>) {
     let newconf = Object.assign(this.batchConf.getValue()) as batchConfig;
-    let index = newconf.branchSet.indexOf(target);
-    newconf.branchSet = newconf.branchSet.slice(0, index).concat(newconf.branchSet.slice(index+1))
-    this.updateBatch_branchSet(newconf);
+    newconf.branchSet = newBranchSet;
+    this.updateBatch(newconf);
+    
   }
 
-  updateBatch_branchSet(newconf: batchConfig){
+  DeleteBranch(target_Index: number) {
+    let newconf = this.batchConf.getValue();
+    newconf.branchSet = newconf.branchSet.slice(0, target_Index).concat(newconf.branchSet.slice(target_Index+1))
+    this.updateBatch(newconf);
+  }
+
+  updateBatch(newconf: batchConfig){
     let url = `http://${environment.apiserver}/users/${this.userId}/management/api/setBatchConfig/${this.curWs}`
 
     
@@ -308,12 +369,32 @@ export class agantCtr {
     })
   }
 
+  getCommandList(callBack?:(commandList: Array<string>) => void){
+    let url = `http://${environment.apiserver}/users/${this.userId}/management/api/getWorkspaceCommandList/${this.curWs}` ;
+
+    let options = {
+        withCredentials: true,
+    };
+
+
+    this.http.get<any>(url, options)
+    .subscribe((res => {
+      let source = res.commandList as Array<string>;
+      if(callBack) {
+        callBack(source);
+      }
+    }),
+    err => {
+      location.assign('/login')
+    })
+  }
+
 
   // addfile to upload queue
   stageUploadfile(relativePath:string, filelist:FileList) {
 
     let pathForexpress = ['root'].concat(relativePath.split('/')).join('>>');
-    let url = `http://${environment.apiserver}/users/${this.userId}/${pathForexpress}/upload`
+    let url = `http://${environment.apiserver}/users/${this.userId}/${pathForexpress}/upload/${this.currentBranch.getValue().name}`
 
     for(let i = 0; i < filelist.length; i++){
       let form = new FormData();
@@ -364,7 +445,7 @@ export class agantCtr {
     process.sub.unsubscribe();
     if(process.percent != 100) {
       let deletetargetDir = process.path.split('/').slice(1).join('/');
-      this.deleteTempFile(deletetargetDir, process.name);
+      this.deleteFile(deletetargetDir, process.name);
     }
     // remove from list
     let newList = this.curUploadProcessManager.uploadProcess$;
@@ -375,8 +456,8 @@ export class agantCtr {
   }
 
 
-  deleteTempFile(relativepath:string, filename:string){
-    let url = `http://${environment.apiserver}/users/${this.userId}/management/api/deleteUploadTempFile`;
+  deleteFile(relativepath:string, filename:string){
+    let url = `http://${environment.apiserver}/users/${this.userId}/management/api/deleteFile`;
     let payload = {
       WsName: this.curWs,
       relativepath: relativepath,
@@ -521,7 +602,7 @@ export class agantCtr {
       alert(message)
     }),
     err => {
-      
+      alert('file!')
     });
   }
 

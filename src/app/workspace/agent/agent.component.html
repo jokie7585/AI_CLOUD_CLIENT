@@ -1,4 +1,4 @@
-<div class="pagebase" (click)="togleTaskManager(false)">
+<div class="pagebase" (click)="muteTaskManager()">
 
     <div class="operationbar">
 
@@ -106,19 +106,21 @@
     <div class="statusBar">
       <div class="functionList">
           <div class="statusBar-item"
-           (click)="togleTaskManager(true)"
-           *ngIf="isBashShow"
+           (click)="togleTaskManager('BranchManager')"
+           *ngIf="isShowBranchManager"
+          >
+            <div class="statusBar-item-txt">Branch: &lt;{{curbranch}}&gt;</div>
+          </div>
+
+          <div class="statusBar-item"
+           (click)="togleTaskManager('BashEditor')"
+           *ngIf="isShowEditCompnent"
           >
             <div class="statusBar-item-txt">
               Edit
             </div>
           </div>
-          <div class="statusBar-item"
-           (click)="togleTaskManager(true)"
-           *ngIf="!isBashShow"
-          >
-            <div class="statusBar-item-txt">Branch: &lt;{{curbranch}}&gt;</div>
-          </div>
+
         <div class="functionList-right">
           <div class="statusBar-item"
            (click)="togleMuteUploadList()"
@@ -184,14 +186,17 @@
     <div class="taskManager-runner">
       <div class="taskManager-runner-query">
         <div class="taskManager-runner-queryinput">
-          <input type="text" name="" id="taskManager-runner-queryinput-tg">
+          <input type="text" name="" id="taskManager-runner-queryinput-tg" [placeholder]="TaskPlaceHolder$">
         </div>
       </div>
 
       <!-- task Add-Element -->
-      <div class="taskManager-runner-list-item addEl">
-        <img class="taskManager-runner-list-item-icon" src="assets/plus.svg" alt="">
-        <div class="taskManager-runner-list-item-txt">new task</div>
+      <div class="taskManager-runner-list superTask">
+        <div class="taskManager-runner-list-item superTaskItem" *ngFor="let el of supertaskList$" (click)="el.action()">
+          <img class="taskManager-runner-list-item-icon" src="assets/plus.svg" alt="">
+          <div class="taskManager-runner-list-item-txt">{{el.name}}</div>
+          <div class="taskManager-runner-list-item-hotkey">{{el.hotKet}}</div>
+        </div>
       </div>
       <!-- task list -->
       <div class="taskManager-runner-list">

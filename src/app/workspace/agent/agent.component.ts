@@ -34,14 +34,21 @@ export class AgentComponent implements OnInit, OnDestroy {
     overview: 'Overview'
   }
   currentFunctionId: string = this.appfunc.fs;
+  // statusbar
+  // uploadManager
   isMuteUploadList: boolean;
   isHasRunningUploadProcess:boolean;
+  //  notificationManager
   isHasNotification:boolean = false;
   showNotificationList:boolean = false;
   showTaskList: boolean = true;
-  isBashShow: boolean = false;
+  isShowEditCompnent: boolean = false;
+  isShowBranchManager: boolean = false;
+  // taskManager
   taskList$: Array<task>
-
+  supertaskList$: Array<task>
+  TaskPlaceHolder$: string = '';
+  curTask: string = '';
   // subscription
   allSub: Array<Subscription> = [];
 
@@ -53,6 +60,7 @@ export class AgentComponent implements OnInit, OnDestroy {
               private appCtr:AppbarControllerService) { }
 
   ngOnInit(): void {
+    console.log('agent component init Start!')
     this.appCtr.Closefooter();
     this.agentCtr.currentFunctionId$.subscribe(id => {
       document.getElementById(this.currentFunctionId).setAttribute('class', 'function');
@@ -81,7 +89,19 @@ export class AgentComponent implements OnInit, OnDestroy {
     )
     this.allSub.push(
       this.agentCtr.TaskList.subscribe(list => {
-        this.taskList$ = list;
+        
+          this.taskList$ = list.filter(el => {
+            return el.isSuperTask != true
+          });
+
+          this.supertaskList$ = list.filter(el => {
+            return el.isSuperTask == true
+          });
+      })
+    )
+    this.allSub.push(
+      this.agentCtr.TaskPlaceHolder.subscribe(list => {
+        this.TaskPlaceHolder$ = list;
       })
     )
     this.allSub.push(
@@ -90,15 +110,22 @@ export class AgentComponent implements OnInit, OnDestroy {
       })
     )
     this.allSub.push(
-      this.agentCtr.isShowBash.subscribe(val => {
-        this.isBashShow = val;
+      this.agentCtr.isShowEditCompnent.subscribe(val => {
+        this.isShowEditCompnent = val;
+      })
+    )
+    this.allSub.push(
+      this.agentCtr.isShowBranchManager.subscribe(val => {
+        this.isShowBranchManager = val;
       })
     )
     this.allSub.push(
       this.agentCtr.currentBranch.subscribe(val => {
-        this.curbranch = val;
+        this.curbranch = val.name;
       })
     )
+
+    console.log('agent component init End!')
   }
 
   ngOnDestroy(){
@@ -125,14 +152,20 @@ export class AgentComponent implements OnInit, OnDestroy {
     this.router.navigate(['workspace'])
   }
 
-  togleTaskManager(togle: boolean) {
+  togleTaskManager(task: string) {
     event.stopPropagation();
-    if(togle) {
+    if(task == this.curTask) {
       this.agentCtr.ShowTaskList.next(!this.showTaskList);
     }
     else {
-      this.agentCtr.ShowTaskList.next(false);
+      this.agentCtr.ShowTaskList.next(true);
+      this.agentCtr.fetchTaskList(task)
+      this.curTask = task;
     }
+  }
+
+  muteTaskManager(){
+    this.agentCtr.ShowTaskList.next(false);
   }
 
 

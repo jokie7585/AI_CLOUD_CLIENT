@@ -41,6 +41,17 @@
     justify-self: right;
     margin-left: auto;
     margin-right: 1rem;
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+    padding: 0px 0.5rem 0px 0.5rem;
+}
+
+.menubar-func-bt:hover{
+    cursor: pointer;
+    background-color: #d73a49;
 }
 
 .OperatopnList{
@@ -54,12 +65,87 @@
 
 .OperatopnList-func{
     font-size: 14px;
+    height: 24px;
     display: flex;
+    border-left: 1px solid #e0e0e0;
+    margin-bottom: 4px;
+    align-items: center;
 }
 
 .OperatopnList-func:hover{
     cursor: pointer;
     color: #999999;
+    border-color: #999999;
+}
+
+.OperatopnList-func-icon{
+    display: flex;
+    align-items: center;
+}
+
+.OperatopnList-func-txt{
+    margin-left: 8px;
+}
+
+.BranchManagerBt-g{
+    border: none;
+    background: none;
+    color: #e0e0e0;
+    margin-right: 0px;
+    margin-right: 0.4rem;
+    padding-left: 1rem;
+    border: 1px solid #57bb3e;
+}
+
+.BranchManagerBt-g:disabled{
+    border: none;
+    background: none;
+    color: #e0e0e05d;
+    margin-right: 0px;
+    margin-right: 0.4rem;
+    padding-left: 1rem;
+    border: 1px solid #57bb3e6c;
+}
+
+.BranchManagerBt-g:disabled:hover{
+    border: none;
+    background: none;
+    color: #e0e0e05d;
+    margin-right: 0px;
+    margin-right: 0.4rem;
+    padding-left: 1rem;
+    border: 1px solid #57bb3e6c;
+    cursor: default;
+}
+
+.BranchManagerBt-g:hover{
+    background-color: #57bb3e;
+    color: white;
+    border: none;
+}
+
+.BranchManagerBt-g:focus{
+    outline: none;
+}
+
+.BranchManagerBt-r{
+    border: none;
+    background: none;
+    color: #e0e0e0;
+    margin-right: 0rem;
+    margin-right: 0.4rem;
+    padding-left: 1rem;
+    border: 1px solid #d73a49;
+}
+
+.BranchManagerBt-r:focus{
+    outline: none;
+}
+
+.BranchManagerBt-r:hover{
+    background-color: #d73a49;
+    color: white;
+    border: none;
 }
 
 
@@ -145,6 +231,8 @@
 
 .CM-L-I{
     display: flex;
+    /* parent of */
+    position: relative;
     flex-direction: row;
     min-height: 48px;
     white-space: pre;
@@ -193,6 +281,11 @@
     background-color: #494949;
 }
 
+.dragable:hover{
+    cursor: row-resize;
+    background-color: #494949;
+}
+
 .CM-L-I-Func-icon{
     margin-left: 0.5em;
 }
@@ -229,6 +322,24 @@
     align-items: center;
     box-sizing: border-box;
     margin-left: 1em;
+    margin-right: 1rem;
+}
+
+.CM-L-I-creator-C-importor{
+    justify-self: right;
+    margin-left: auto;
+    background-color: #428a30;
+    font-size: 13px;
+    height: 18px;
+    width: 110px;
+    box-sizing: border-box;
+    border-radius: 3px;
+}
+
+.CM-L-I-creator-C-importor:hover{
+    background-color: #346e26;
+    color: #c4c3c3;
+    cursor: pointer;
 }
 
 .CM-Icon{
@@ -258,6 +369,7 @@
 .Commandcreator-Setter-txt{
     width: 8rem;
     text-align: right;
+    white-space: pre;
 }
 
 .Commandcreator-Setter-input{
@@ -268,23 +380,37 @@
 }
 
 #Commandcreator-input-flag{
- width: 100%; 
- box-sizing: border-box;
+    width: 100%; 
+    box-sizing: border-box;
+    border: 0px;
+}
+
+#Commandcreator-input-command{
+    width: 100%; 
+    box-sizing: border-box;
+    border: 0px;
+}
+
+.fullLenghthInput{
+    width: 100%; 
+    box-sizing: border-box;
+    border: 0px;
 }
 
 .Commandcreator-comfirm{
     display: flex;
-    height: 30px;
+    height: 40px;
     box-sizing: border-box;
     flex-direction: row-reverse;
     align-items: center;
-    margin-top: 0.5rem;
     margin-right: 1rem ;
+    font-size: 12px;
 }
 
 .Commandcreator-comfirm-bt-g{
     border: 1px solid #428a30;
-    height: 20px;
+    height: 16px;
+    width: 100px;
     border-radius: 3px;
     padding: 2px 4px 2px 4px;
     margin-left: 3px;
@@ -297,7 +423,8 @@
 
 .Commandcreator-comfirm-bt-r{
     border: 1px solid #d73a49;
-    height: 20px;
+    height: 16px;
+    width: 100px;
     border-radius: 3px;
     padding: 2px 4px 2px 4px;
 }

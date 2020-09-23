@@ -31,6 +31,7 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
 
   wsName: string = null;
   userId: string = '';
+  curBranch: string;
   path: Array<string> = [];
   dirList: Array<data> = [];
   showNoFileBoard:boolean = false;
@@ -77,6 +78,7 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
   ontrace: boolean = false;
 
   showimportoption: boolean = false;
+  showexportoption: boolean = false;
 
   
 
@@ -156,11 +158,10 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
     this.uploader = document.getElementById('FsUploader') as HTMLInputElement
     this.importor = document.getElementById('FsWsImportor') as HTMLInputElement
     this.clipboard = document.getElementById('fsClipboard') as HTMLInputElement
-    // 相依性資訊設定
+    // component 相依性資訊設定
     this.wsName = this.route.snapshot.parent.paramMap.get('wsName')
     this.userId = this.cookieService.get(cookieList.userID);
     this.path.push(this.wsName);
-    this.loadpath();
     this.editorCtr.content.subscribe(data => {
       this.scriptContent = data;
       console.log('Set render lock: true')
@@ -173,6 +174,9 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
       this.dirList = data;
       if(this.dirList.length > 0) {
        this.showNoFileBoard = false; 
+      }
+      else{
+        this.showNoFileBoard = true; 
       }
     })
     this.uploadListSub = this.agent.curUploadProcessManager.uploadProcessList.subscribe((list) => {
@@ -222,9 +226,19 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
       console.log({curCursor:cor} )
     }))
 
+    // subscribe branch switch
+    this.AllSub.push(this.agent.currentBranch.subscribe(branch => {
+      this.curBranch = branch.name;
+      this.editorCtr.switchBranch(this.curBranch);
+      this.path = [this.wsName];
+      this.loadpath()
+    }))
+
     // init service
     this.editorCtr.initByAgent(this.wsName, this.userId, this.sciptInput, this.scriptContentCalculator.getContext('2d'));
     this.terminalCtr.initByAgent(this.wsName, this.userId);
+    this.agent.isShowBranchManager.next(true);
+    this.agent.isShowEditCompnent.next(false);
   }
 
   ngOnDestroy(){
@@ -233,6 +247,8 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
     this.uploadListSub.unsubscribe();
     this.TerminalContentSub.unsubscribe();
     this.muteUploadListSub.unsubscribe();
+    this.agent.isShowBranchManager.next(false);
+    this.agent.isShowEditCompnent.next(false);
     this.AllSub.forEach(el=>{
       el.unsubscribe();
     })
@@ -382,7 +398,7 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
   loadpath(){
     let path = ['root'].concat(this.path);
     let pathURL: string = encodeURI(path.join('>>'));
-    let url = `http://${environment.apiserver}/users/${this.userId}/${pathURL}` ;
+    let url = `http://${environment.apiserver}/users/${this.userId}/${pathURL}/${this.curBranch}` ;
 
     let options = {
       headers: {
@@ -403,6 +419,7 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
       }
     }),
     err => {
+      alert('err in loadpath')
       window.location.assign('login')
     });
   }
@@ -410,7 +427,7 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
   download(name: string){
     let path = ['root'].concat(this.path);
     let pathURL: string = encodeURI(path.join('>>'));
-    let url:string = `http://${environment.apiserver}/users/${this.userId}/${pathURL}/${name}/download`
+    let url:string = `http://${environment.apiserver}/users/${this.userId}/${pathURL}/${name}/download/${this.curBranch}`
 
     this.downloader.setAttribute('href', url);
     this.downloader.setAttribute('download', name);
@@ -484,6 +501,12 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
 
   totgleimportOption(){
     this.showimportoption = !this.showimportoption;
+    this.showexportoption = false;
+  }
+
+  totgleexportOption(){
+    this.showexportoption = !this.showexportoption;
+    this.showimportoption = false;
   }
 
   startImport() {
@@ -511,20 +534,25 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
     if(this.showTerminal) {
       this.terminalCtr.getLogs(this.closTerminal)
     }
+    else{
+      this.terminalCtr.initLogProcess();
+    }
   }
 
   closTerminal = () => {
     this.showTerminal = false;
+    this.terminalCtr.initLogProcess();
     this.terminal.dispatchEvent(new Event('update'))
   }
 
   openScripWriter(){
     this.showTerminal = false;
     this.showconsole = !this.showconsole;
-    this.agent.isShowBash.next(this.showconsole)
+    this.agent.isShowEditCompnent.next(this.showconsole)
     if(this.showconsole == true) {
       // 重要細節！！！ docuent的執行scope不在此context內，因此用arrow綁定
       this.editorCtr.initCommandList()
+      this.editorCtr.registTask()
       this.sciptInput.focus()
       // closure
       // this.cursorStyleChangeInterval = setInterval(() => {
@@ -534,6 +562,8 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
       // document.onkeydown = this.listenKeyEvent;
     }
     else{
+      this.editorCtr.initailizeContent()
+      this.editorCtr.unregistTask();
       // clearInterval(this.cursorStyleChangeInterval);
       // document.onkeydown = ()=>{};
     }
@@ -582,6 +612,11 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
       return 'green'
     }
     return '#c4c4c4'
+  }
+
+  deleteFile(name){
+    let targetDir = this.path.slice(1).join('/');
+    this.agent.deleteFile(targetDir, name);
   }
 
   runworkspace(){

@@ -37,6 +37,7 @@
 
         <div class="fsOperationBar-item"
              (click)="uploader.click()"
+             *ngIf="curBranch=='Template'"
         >
             <div class="fsOperationBar-item-icon">
                 <img src="assets/upload.svg" alt="">
@@ -48,6 +49,7 @@
 
         <div class="fsOperationBar-item"
              (click)="runworkspace()"
+             *ngIf="curBranch=='Template'"
         >
             <div class="fsOperationBar-item-icon">
                 <img src="assets/start-button.svg" alt="">
@@ -60,12 +62,12 @@
     <div class="fsArea">
 
         <div class="fsArea-import-export">
-            <div class="container">
+            <div class="container" *ngIf="curBranch=='Template'">
                 <div class="fsArea-import-bt import-export-bt" (click)="totgleimportOption()">
                     import
                 </div>
-                <div class="fsArea-import-bt-drope" *ngIf="showimportoption" (click)="loadCach()">
-                    <div class="fsArea-import-bt-drope-it">
+                <div class="fsArea-import-bt-drope" *ngIf="showimportoption">
+                    <div class="fsArea-import-bt-drope-it" (click)="loadCach()">
                         from cach
                     </div>
                     <div class="fsArea-import-bt-drope-it" (click)="startImport()">
@@ -73,8 +75,18 @@
                     </div>
                 </div>
             </div>
-            <div class="fsArea-export-bt import-export-bt" (click)="startCach()">
-                export
+            <div class="container" *ngIf="curBranch=='Template'">
+                <div class="fsArea-export-bt import-export-bt" (click)="totgleexportOption()">
+                    export
+                </div>
+                <div class="fsArea-import-bt-drope" *ngIf="showexportoption">
+                    <div class="fsArea-import-bt-drope-it" (click)="startCach()">
+                        To cach
+                    </div>
+                    <div class="fsArea-import-bt-drope-it">
+                        To host
+                    </div>
+                </div>
             </div>
         </div>
         
@@ -114,6 +126,11 @@
                              (click)="download(item.name)"
                         >
                             <img src="assets/download.svg" alt="">
+                        </div>
+                        <div class="fileList-item-function_item"
+                             (click)="deleteFile(item.name)"
+                        >
+                            <img src="assets/delete_fs.svg" alt="">
                         </div>
                         <div class="fileList-item-function_item"
                              (click)="setmyclipboard($event,item.name)"

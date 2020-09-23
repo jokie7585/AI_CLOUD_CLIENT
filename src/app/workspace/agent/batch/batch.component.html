@@ -1,29 +1,47 @@
 <div class="pagebase">
   <div class="menubar">
     <div class="menubar-func leftEl" [style.border-color]="isSelectt(showSettings)" (click)="pageSwitch('setting')">Settings</div>
-    <div class="menubar-func" [style.border-color]="isSelectt(showBatchList)" (click)="pageSwitch('list')">Batchs</div>
-    <div class="menubar-func menubar-func-bt" [style.border-color]="isSelectt(showBatchList)" (click)="runBatch()">Run</div>
+    <div class="menubar-func" [style.border-color]="isSelectt(showBatchList)" (click)="pageSwitch('list')">Branches</div>
+    <div class="menubar-func-bt" *ngIf="showSettings" (click)="resetBatch()">Reset</div>
   </div>  
   <div class="c">
       <div class="c-l">
         <div class="OperatopnList" *ngIf="showSettings">
             <div class="OperatopnList-func">
-                <div class="OperatopnList-func-icon">
+                <!-- <div class="OperatopnList-func-icon">
                     <img src="/assets/next.svg" alt="">
-                </div>
+                </div> -->
                 <div class="OperatopnList-func-txt">
-                    Command
+                    Command List
                 </div>
             </div>
             <div class="OperatopnList-func">
-                <div class="OperatopnList-func-icon">
+                <!-- <div class="OperatopnList-func-icon">
                     <img src="/assets/next.svg" alt="">
-                </div>
+                </div> -->
                 <div class="OperatopnList-func-txt">
                     Workload
                 </div>
             </div>
-            
+        </div>
+        <div class="OperatopnList" *ngIf="!showSettings">
+            <button class="OperatopnList-func BranchManagerBt-g" [disabled]="!canRunBatch"
+                    (click)="runBatch()">
+                <div class="OperatopnList-func-icon">
+                    <img src="/assets/power.svg" alt="">
+                </div>
+                <div class="OperatopnList-func-txt">
+                    Run Batch
+                </div>
+            </button>
+            <button class="OperatopnList-func BranchManagerBt-r">
+                <div class="OperatopnList-func-icon">
+                    <img src="/assets/stop.svg" alt="">
+                </div>
+                <div class="OperatopnList-func-txt">
+                    Terminate All
+                </div>
+            </button>
         </div>
       </div>
       <div class="c-m">
@@ -35,15 +53,15 @@
             <div class="subTltle">Batch list</div>
             <div class="detaile">"Batch list" is that you can drive multiple tringning at same time.</div>
             <div class="CM-L">
-                <div *ngFor="let el of branchset">
+                <div *ngFor="let el of branchset; let i = index">
                     <div class="CM-L-I">
                         <div class="CM-L-I-C">
                             <span class="CM-L-I-C-P">Branch :  </span><span class="CM-L-I-C-C">{{el.name}}</span>
                         </div>
                         <div class="CM-L-I-FlagString">
-                            <span class="CM-L-I-C-P">Flag :  </span>
+                            <span class="CM-L-I-C-P">Status :       Running Time :  </span>
                         </div>
-                        <div class="CM-L-I-Func">
+                        <div class="CM-L-I-Func" (click)="togleBranchEditor(i)">
                             <div class="CM-L-I-Func-c">
                                 <img class="CM-L-I-Func-icon" src="/assets/edit.svg" alt="">
                             </div>
@@ -52,18 +70,66 @@
                             </div>
                         </div>
                     </div>
+                    <!-- branch editor -->
+                    <div class="Commandcreator" *ngIf="BranchEditingMonitor$[i]">
+                        <div class="Commandcreator-Setter">
+                            <div class="Commandcreator-Setter-txt branchCreatorSub">
+                                Name : 
+                            </div>
+                            <div class="Commandcreator-Setter-input">
+                                <input [value]="el.name"
+                                        type="text"
+                                        disabled
+                                >
+                            </div>
+                        </div>
+                        <div class="Commandcreator-Setter">
+                            <div class="Commandcreator-Setter-txt branchCreatorSub">
+                                Flag Setter :
+                            </div>
+                        </div>
+                        <div class="flag-Setter">
+                            <div *ngFor="let ele of el.CommandList">
+                                <div class="flag-Setter-I">
+                                    
+                                        <div class="flag-Setter-I-C">
+                                            <div class="flag-Setter-I-C-txt">
+                                                Command : <span class="flag-Setter-I-C-txt-ct">{{ele.command}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="flag-Setter-I-Flaglist">
+                                            <div *ngFor="let flag of ele.optionMap">
+                                                <div class="flag-Setter-I-Flaglist-I">
+                                                    <span class="flag-Setter-I-C-txt-ft">{{flag.name}} : </span><input (change)="processBranchCreateFlagset(flag, $event)" type="text" [value]="flag.value" autocomplete="off">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="Commandcreator-comfirm">
+                            <div class="Commandcreator-comfirm-bt-g" (click)="comfirmBranchEditing(i)">
+                                Comfirm
+                            </div>
+                            <div class="Commandcreator-comfirm-bt-r" (click)="togleBranchEditor(i)">
+                                Cancle
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 
-                <div [class]="creatorStyleSelector(showBreanchCreator)"
+                <div [class]="creatorStyleSelector(showBranchCreator)"
                      (click)="isshowBranchCreator(true, $event)"
                 >
                     <div class="CM-L-I-creator-C">
                         <img class="CM-Icon" src="/assets/plusInBatch.svg" alt=""><span class="CM-L-I-C-P">Create Branch</span>
                     </div>
-                    <div class="Commandcreator" *ngIf="showBreanchCreator">
+                    <div class="Commandcreator" *ngIf="showBranchCreator">
                         <div class="Commandcreator-Setter">
                             <div class="Commandcreator-Setter-txt branchCreatorSub">
-                                name : 
+                                Name : 
                             </div>
                             <div class="Commandcreator-Setter-input">
                                 <input id="branchCreator-input-name"
@@ -88,7 +154,7 @@
                                         <div class="flag-Setter-I-Flaglist">
                                             <div *ngFor="let flag of el.optionMap">
                                                 <div class="flag-Setter-I-Flaglist-I">
-                                                    <span class="flag-Setter-I-C-txt-ft">{{flag.name}} : </span><input (change)="processBranchCreate(flag, $event)" type="text">
+                                                    <span class="flag-Setter-I-C-txt-ft">{{flag.name}} : </span><input (change)="processBranchCreateFlagset(flag, $event)" type="text" autocomplete="off">
                                                 </div>
                                             </div>
                                         </div>
@@ -115,7 +181,7 @@
             <div class="subTltle">Commnd list</div>
             <div class="detaile">"Commnd list" is command runs after "Bash".</div>
             <div class="CM-L">
-                <div *ngFor="let el of batchConf">
+                <div *ngFor="let el of batchConf; let i = index;">
                     <div class="CM-L-I">
                         <div class="CM-L-I-C">
                             <span class="CM-L-I-C-P">Command :  </span><span class="CM-L-I-C-C">{{el.command}}</span>
@@ -124,11 +190,49 @@
                             <span class="CM-L-I-C-P">Flag :  </span>{{composeFlagstring(el)}}
                         </div>
                         <div class="CM-L-I-Func">
-                            <div class="CM-L-I-Func-c">
+                            <div class="CM-L-I-Func-c" (click)="togleCommandEditor(i)">
                                 <img class="CM-L-I-Func-icon" src="/assets/edit.svg" alt="">
                             </div>
                             <div class="CM-L-I-Func-c" (click)="deleteBatchCmdTemplete(el)">
                                 <img class="CM-L-I-Func-icon" src="/assets/delete.svg" alt="">
+                            </div>
+                            <div class="CM-L-I-Func-c dragable">
+                                <img class="CM-L-I-Func-icon" draggable="false" src="/assets/dragTemp.svg" alt="">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- editor -->
+                    <div class="Commandcreator" *ngIf="CommandEditingMonitor$[i]">
+                        <div class="Commandcreator-Setter">
+                            <div class="Commandcreator-Setter-txt">
+                                Command : 
+                            </div>
+                            <div class="Commandcreator-Setter-input">
+                                <input [id]="composeInputID(i, 'command')"
+                                        autocomplete="off"
+                                        class="fullLenghthInput"
+                                        type="text"
+                                >
+                            </div>
+                        </div>
+                        <div class="Commandcreator-Setter">
+                            <div class="Commandcreator-Setter-txt">
+                                FlagString : 
+                            </div>
+                            <div class="Commandcreator-Setter-input">
+                                <input [id]="composeInputID(i, 'flag')"
+                                        autocomplete="off"
+                                        class="fullLenghthInput"
+                                        type="text"
+                                >
+                            </div>
+                        </div>
+                        <div class="Commandcreator-comfirm">
+                            <div class="Commandcreator-comfirm-bt-g" (click)="completeEditing(i)">
+                                Comfirm
+                            </div>
+                            <div class="Commandcreator-comfirm-bt-r" (click)="togleCommandEditor(i)">
+                                Cancle
                             </div>
                         </div>
                     </div>
@@ -139,6 +243,11 @@
                 >
                     <div class="CM-L-I-creator-C">
                         <img class="CM-Icon" src="/assets/plusInBatch.svg" alt=""><span class="CM-L-I-C-P">Add Command</span>
+                        <div class="CM-L-I-creator-C-importor"  *ngIf="showCreator"
+                             (click)="openBashCommandImportor()"
+                        >
+                            Import
+                        </div>
                     </div>
                     <div class="Commandcreator" *ngIf="showCreator">
                         <div class="Commandcreator-Setter">
@@ -147,6 +256,7 @@
                             </div>
                             <div class="Commandcreator-Setter-input">
                                 <input id="Commandcreator-input-command"
+                                        autocomplete="off"
                                         type="text"
                                 >
                             </div>
@@ -157,6 +267,7 @@
                             </div>
                             <div class="Commandcreator-Setter-input">
                                 <input id="Commandcreator-input-flag"
+                                        autocomplete="off"
                                         type="text"
                                 >
                             </div>

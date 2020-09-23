@@ -30,6 +30,7 @@ export class TexteditorService {
   editingLine: Subject<Line> = new Subject<Line>();
   editingCol: Subject<number> = new Subject<number>();
   config: Subject<Fetchconfig> = new Subject<Fetchconfig>();
+  curBranch: string;
 
   content$: Array<Line> = [];
   editingCol$: number;
@@ -72,8 +73,6 @@ export class TexteditorService {
     this.editingCol.subscribe(val=> {
       this.editingCol$ = val;
     })
-    // init editor dependency service
-    this.registTask();
     
   }
 
@@ -83,31 +82,52 @@ export class TexteditorService {
     this.targetMeasureEl = targetMeasureEl;
   }
 
+  switchBranch(branch: string) {
+    this.curBranch = branch;
+  }
+
+  initailizeContent() {
+    let initLine = {content:'', columnOffset:[], colchroffset:[], elId:`texteditor-${Date.now()}`};
+      let newcontent = [initLine];
+      this.editingLine$ = initLine;
+      this.editingCol$ = 0;
+      console.log({resetContnt:newcontent})
+      this.content.next(newcontent);
+  }
+
   registTask() {
-    this.agantCtr.taskRegist([
+    this.agantCtr.taskRegist('BashEditor', 'Choose edit function to run...',[
       {
         name: 'save',
         group: 'BashEditor',
         action: () => this.setCommandList(),
-        hotKet: 'CTRL/metaKey + S'
+        hotKet: 'CTRL/metaKey + S',
+        isSuperTask: true,
+        description: 'try it!'
       },
       {
         name: 'past',
         group: 'BashEditor',
         action: () => alert('Press CTRL/metaKey + V in Bash-editor directory!'),
-        hotKet: 'CTRL/metaKey + V'
+        hotKet: 'CTRL/metaKey + V',
+        isSuperTask: false,
+        description: 'try it!'
       },
       {
         name: 'redo',
         group: 'BashEditor',
         action: () => alert('Press CTRL/metaKey + V in Bash-editor directory!'),
-        hotKet: 'CTRL/metaKey + X'
+        hotKet: 'CTRL/metaKey + X',
+        isSuperTask: false,
+        description: 'try it!'
       },
       {
         name: 'undo',
         group: 'BashEditor',
         action: () => alert('Press CTRL/metaKey + V in Bash-editor directory!'),
-        hotKet: 'CTRL/metaKey + Z'
+        hotKet: 'CTRL/metaKey + Z',
+        isSuperTask: false,
+        description: 'try it!'
       },
     ])
   }

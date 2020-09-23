@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import {CommandTemplete, Branch, batchConfig, Command, agantCtr, option} from 'src/myservice/agentCtr.service'
+import {CommandTemplete, Branch, batchConfig, Command, agantCtr, option, task} from 'src/myservice/agentCtr.service'
 import { BehaviorSubject, Subscription } from 'rxjs';
+import {CytusAppStatus, CytusBatchStatus} from 'src/utility/CetusProtocol'
 
 
 @Component({
@@ -13,8 +14,13 @@ export class BatchComponent implements OnInit, OnDestroy {
   showBatchList: boolean = false;
   showSettings: boolean = true;
   showCreator: boolean = false;
-  showBreanchCreator: boolean = false;
+  showBranchCreator: boolean = false;
+  canRunBatch: boolean = false;
+
+  //
   batchConf : Array<CommandTemplete>;
+  CommandEditingMonitor$: Array<boolean>;
+  BranchEditingMonitor$: Array<boolean>;
   branchset: Array<Branch>;
 
   // input
@@ -29,9 +35,26 @@ export class BatchComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.allSub.push(this.agantCtr.batchConf.subscribe(val => {
-      this.batchConf = val.commandTemplete;
-      this.branchset = val.branchSet;
-      console.log({insubBatchConf: val.name})
+      // initail and assign
+      this.CommandEditingMonitor$ = [];
+      this.BranchEditingMonitor$ = [];
+      this.canRunBatch = true;
+      let newObj = JSON.parse(JSON.stringify(val)) as batchConfig
+      // init CommandEditingMonitor array
+      this.batchConf = newObj.commandTemplete;
+      this.branchset = newObj.branchSet;
+      for(let i = 0; i < this.batchConf.length; i++) {
+        this.CommandEditingMonitor$.push(false);
+      }
+      for(let i = 0; i < this.BranchEditingMonitor$.length; i++) {
+        this.BranchEditingMonitor$.push(false);
+      }
+      for(let i = 0; i < this.branchset.length; i++) {
+        if(this.branchset[i].status != CytusAppStatus.WAIT && this.branchset[i].status != CytusAppStatus.UNDEFINED) {
+          this.canRunBatch = false;
+        }
+      }
+      if(this.branchset.length == 0) this.canRunBatch = false;
     }))
 
   }
@@ -51,12 +74,7 @@ export class BatchComponent implements OnInit, OnDestroy {
   }
 
   composeFlagstring(command: Command) {
-    let result = '' + command.optionMap[0];
-    for(let i = 1; i < command.optionMap.length; i++) {
-      result += command.optionMap[i] + ' ; '
-    }
-
-    return result
+    return command.optionMap.join(' ; ')
   }
 
   isshowCreator(isShow: boolean , event ?: Event){
@@ -68,12 +86,15 @@ export class BatchComponent implements OnInit, OnDestroy {
         this.flagStringInput = document.getElementById('Commandcreator-input-flag') as HTMLInputElement
       }, 2)
     }
+    else {
+      this.agantCtr.ShowTaskList.next(false)
+    }
   }
 
   isshowBranchCreator(isShow: boolean , event ?: Event) {
     event.stopPropagation();
-    if(this.showBreanchCreator && isShow) return;
-    this.showBreanchCreator = isShow;
+    if(this.showBranchCreator && isShow) return;
+    this.showBranchCreator = isShow;
     if(isShow) {
       this.startCreateNewBranch()
     }
@@ -95,9 +116,14 @@ export class BatchComponent implements OnInit, OnDestroy {
     //   command: this.commandInput.value,
     //   flagString: this.flagStringInput.value
     // })
+    // split
     let optionMap = this.flagStringInput.value.split(';').map(el => {
-      el.trim();
-      return el
+      let processedEl = el.trim();
+      return processedEl
+    })
+    // filter white space
+    optionMap = optionMap.filter(el => {
+      return el != ''
     })
     console.log('call adaddNewBatchCommand')
     console.log(this.batchConf)
@@ -144,10 +170,10 @@ export class BatchComponent implements OnInit, OnDestroy {
     this.creatingTemper = {
       logPath: 'none',
       name: '',
-      root: '',
-      yamalPath: '',
+      root: 'undefined',
+      yamalPath: 'undefined',
       status: 'undefined',
-      podname: 'none',
+      podname: 'undefined',
       CommandList: this.batchConf.map(el => {
         return{
           command: el.command,
@@ -158,7 +184,9 @@ export class BatchComponent implements OnInit, OnDestroy {
             }
           })
         }
-      })
+      }),
+      timeStart: undefined,
+      timeEnd: undefined
     }
     console.log({inittailizedBranchcreatingTemper: this.creatingTemper})
     setTimeout(()=> {
@@ -169,15 +197,21 @@ export class BatchComponent implements OnInit, OnDestroy {
     })
   }
 
-  processBranchCreate(targetRef: option, event: Event) {
+  processBranchCreateFlagset(targetRef: option, event: Event) {
     let targetinput = event.target as HTMLInputElement
     targetRef.value = targetinput.value;
 
     console.log({updat: targetRef.name, value: targetRef.value})
   }
 
+  proce
+
   deleteBranch(el: Branch) {
-    this.agantCtr.DeleteBranch(el);
+    this.agantCtr.DeleteBranch(this.branchset.indexOf(el));
+  }
+
+  comfirmBranchEditing(index){
+    this.agantCtr.updateBranchSet(this.branchset);
   }
 
   pushBranchToServer(){
@@ -185,11 +219,146 @@ export class BatchComponent implements OnInit, OnDestroy {
     let config = this.creatingTemper;
     config.name = nameInput.value;
     this.agantCtr.appendNewBranch(config);
-    this.showBreanchCreator = false
+    this.showBranchCreator = false
+  }
+
+  openBashCommandImportor(){
+    if(this.agantCtr.ShowTaskList.getValue() == true) {
+      // 如果是taskList已經打開，則關閉並刪除BashCommandImportor註冊的Task。
+      this.agantCtr.taskUnRegist('batchCommandImport');
+      this.agantCtr.ShowTaskList.next(false);
+    }
+    else{
+      if(this.showCreator) {
+        this.agantCtr.getCommandList((commandList) => {
+          let processedArray = commandList.filter(el => {
+            el = el.trim();
+            return el.length>0 && el[0]!='#';
+          })
+          this.agantCtr.taskRegist('batchCommandImport', 'Click to import...', this.createTaskElement(processedArray))
+          this.agantCtr.fetchTaskList('batchCommandImport')
+          this.agantCtr.ShowTaskList.next(true);
+        });
+      }
+    }
+  }
+
+  createTaskElement(commandList: Array<string>): Array<task>{
+    let taskList: Array<task> = commandList.map(el => {
+      return {
+        name: el,
+        group:'batchCommandImport',
+        hotKet: '',
+        action: () => {
+          this.commandInput.value = el;
+          this.agantCtr.ShowTaskList.next(false)
+        },
+        isSuperTask: false,
+        description: 'try it!'
+      } as task;
+    })
+
+    taskList.push({
+      name: 'Import All',
+        group:'batchCommandImport',
+        hotKet: '',
+        action: () => {
+          let allCommand = taskList.filter(el => {
+            return el.isSuperTask != true
+          })
+          let newCommdTemplete = Object.assign(this.batchConf) as Array<CommandTemplete>
+          for(let el of allCommand) {
+            newCommdTemplete.push({
+              command: el.name,
+              optionMap: []
+            } as CommandTemplete)
+            this.showCreator = false;
+          }
+          this.agantCtr.ShowTaskList.next(false)
+          this.agantCtr.updateBatch_CommandTemplete(newCommdTemplete);
+        },
+        isSuperTask: true,
+        description: 'Append all command in Template!'
+    } as task)
+    return taskList;
+  }
+
+  togleCommandEditor(index: number) {
+    this.CommandEditingMonitor$[index] = !this.CommandEditingMonitor$[index];
+    if(this.CommandEditingMonitor$[index]) {
+      console.log('open CommandEditor : ' + index)
+      setTimeout(() => {
+        let targetInput_Cmd = document.getElementById(`CM-L-I-Editor${index}command`) as HTMLInputElement;
+        let targetInput_flag = document.getElementById(`CM-L-I-Editor${index}flag`) as HTMLInputElement;
+        targetInput_Cmd.value = this.batchConf[index].command;
+        targetInput_flag.value = this.batchConf[index].optionMap.join(' ; ');
+        targetInput_flag.select();
+      }, 5)
+      
+    }
+    else{
+      this.agantCtr.ShowTaskList.next(false)
+      console.log('close CommandEditor : ' + index)
+    }
+  }
+
+  togleBranchEditor(index: number) {
+    this.BranchEditingMonitor$[index] = !this.BranchEditingMonitor$[index];
+    if(!this.BranchEditingMonitor$[index]) {
+      // 關閉editor時 要還原數據
+      console.log('sucess reset editing component')
+      console.log({serviceValue: this.agantCtr.batchConf.getValue()})
+      this.branchset[index] = this.agantCtr.batchConf.getValue().branchSet[index];
+    }
+  }
+
+  composeInputID(index: number, type: 'command' | 'flag'){
+    return `CM-L-I-Editor${index}${type}`
+  }
+
+  completeEditing(index: number) {
+    // push result to server
+    let targetInput_Cmd = document.getElementById(`CM-L-I-Editor${index}command`) as HTMLInputElement;
+    let targetInput_flag = document.getElementById(`CM-L-I-Editor${index}flag`) as HTMLInputElement;
+    if(targetInput_Cmd) {
+      let optionMap = targetInput_flag.value.split(';').map(el => {
+        let processedEl = el.trim();
+        return processedEl
+      })
+      // filter white space
+      optionMap = optionMap.filter(el => {
+        return el != ''
+      })
+      console.log(optionMap)
+      this.batchConf[index].command = targetInput_Cmd.value;
+      this.batchConf[index].optionMap = optionMap;
+      this.togleCommandEditor(index);
+      // push to server by agantCtr
+      this.agantCtr.updateBatch_CommandTemplete(this.batchConf)
+    }
+  }
+
+  resetBatch() {
+    this.agantCtr.updateBatch_CommandTemplete([])
   }
 
   runBatch() {
     this.agantCtr.runwbatch();
+  }
+
+  reloadBatchConfig(){
+    this.agantCtr.getBatchConf();
+  }
+
+  muteAll(){
+    this.BranchEditingMonitor$.forEach(el => {
+      el = false;
+    })
+    this.CommandEditingMonitor$.forEach(el => {
+      el = false;
+    })
+    this.showBranchCreator = false;
+    this.showCreator = false;
   }
 
 }
