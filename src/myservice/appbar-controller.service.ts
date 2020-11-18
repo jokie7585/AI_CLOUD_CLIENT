@@ -3,7 +3,8 @@ import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service' ;
 import { cookieList} from 'src/utility/cookie' ;
 import {Router} from '@angular/router'
-import { domain } from 'process';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../environments/environment'
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +23,7 @@ export class AppbarControllerService {
   showSingInUp$ = this.showSingInUp.asObservable();
 
   constructor(private cookieService: CookieService,
+              private http: HttpClient,
               private router: Router){
     this.userId = this.cookieService.get(cookieList.userID);
   }
@@ -48,9 +50,17 @@ export class AppbarControllerService {
   }
 
   signOut(){
-    this.cookieService.delete('userid')
-    this.router.navigate(['login']);
+    this.http.get(`http://${environment.apiserver}/api/auth/singOut/${this.userId}`,{
+      withCredentials: true,
+    }).subscribe( body => {
+      let {message} = body as any
+      alert(message);
+      this.cookieService.deleteAll();
     this.guestMode();
+    this.router.navigate(['login']);
+    }
+    );
   }
+
 
 }

@@ -1,8 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import {CommandTemplete, Branch, batchConfig, Command, agantCtr, option, task} from 'src/myservice/agentCtr.service'
+import {socketService} from 'src/myservice/socket.service'
 import { BehaviorSubject, Subscription } from 'rxjs';
 import {CytusAppStatus, CytusBatchStatus} from 'src/utility/CetusProtocol'
 
+interface runningTimeCounter {
+  curRuntime: number,
+  startTime: number,
+  isFinish:boolean
+}
 
 @Component({
   selector: 'app-batch',
@@ -22,23 +28,35 @@ export class BatchComponent implements OnInit, OnDestroy {
   CommandEditingMonitor$: Array<boolean>;
   BranchEditingMonitor$: Array<boolean>;
   branchset: Array<Branch>;
+  branchRunTimeCounter:Array<runningTimeCounter>;
 
-  // input
+  // input element ref
   commandInput: HTMLInputElement;
   flagStringInput: HTMLInputElement;
+
+  // constant
+  C_hours_ms:number =  1000 * 60 * 60;
+  C_mins_ms:number =  1000 * 60;
+  C_secs_ms:number =  1000;
 
   // BranchcreatingForm
   creatingTemper: Branch;
 
   allSub: Array<Subscription> = [];
-  constructor(private agantCtr: agantCtr) { }
+  branchRunTimeCounterTimer: NodeJS.Timeout
+  constructor(private agantCtr: agantCtr
+    ) { }
 
   ngOnInit(): void {
+    // subscribe branch
     this.allSub.push(this.agantCtr.batchConf.subscribe(val => {
+      console.log({curbatchConf:val})
       // initail and assign
       this.CommandEditingMonitor$ = [];
       this.BranchEditingMonitor$ = [];
+      this.branchRunTimeCounter = [];
       this.canRunBatch = true;
+      // deep copy
       let newObj = JSON.parse(JSON.stringify(val)) as batchConfig
       // init CommandEditingMonitor array
       this.batchConf = newObj.commandTemplete;
@@ -50,11 +68,51 @@ export class BatchComponent implements OnInit, OnDestroy {
         this.BranchEditingMonitor$.push(false);
       }
       for(let i = 0; i < this.branchset.length; i++) {
-        if(this.branchset[i].status != CytusAppStatus.WAIT && this.branchset[i].status != CytusAppStatus.UNDEFINED) {
+        let startDate
+        let endDate
+        if(this.branchset[i].timeStart) {
+          startDate = new Date(this.branchset[i].timeStart)
+        }
+        if(this.branchset[i].timeEnd) {
+          endDate = new Date(this.branchset[i].timeStart)
+        }
+        if(this.branchset[i].status == CytusAppStatus.RUNNING) {
+          this.branchRunTimeCounter.push({
+            curRuntime: Date.now() - Number.parseInt(startDate.toISOString()),
+            startTime: Number.parseInt(startDate.toISOString()),
+            isFinish: false
+          })
+        }
+        else if(this.branchset[i].status == CytusAppStatus.COMPLETE) {
+          this.branchRunTimeCounter.push({
+            curRuntime: Number.parseInt(endDate.toISOString())-Number.parseInt(startDate.toISOString()),
+            startTime: Number.parseInt(this.branchset[i].timeStart.toISOString()),
+            isFinish: true
+          })
+        }
+        else {
+          this.branchRunTimeCounter.push({
+            curRuntime: undefined,
+            startTime: undefined,
+            isFinish: true
+          })
+        }
+        console.log({branchTimer: this.branchRunTimeCounter})
+      }
+      for(let i = 0; i < this.branchset.length; i++) {
+        if(this.branchset[i].status == CytusAppStatus.RUNNING) {
           this.canRunBatch = false;
         }
       }
       if(this.branchset.length == 0) this.canRunBatch = false;
+      // 註冊runningtimeCounter timer
+      this.branchRunTimeCounterTimer = setInterval(() => {
+        this.branchRunTimeCounter.forEach(el => {
+          if(!el.isFinish) {
+            el.curRuntime += 1000;
+          }
+        })
+      }, 1000)
     }))
 
   }
@@ -172,7 +230,7 @@ export class BatchComponent implements OnInit, OnDestroy {
       name: '',
       root: 'undefined',
       yamalPath: 'undefined',
-      status: 'undefined',
+      status: CytusAppStatus.WAIT,
       podname: 'undefined',
       CommandList: this.batchConf.map(el => {
         return{
@@ -204,8 +262,6 @@ export class BatchComponent implements OnInit, OnDestroy {
     console.log({updat: targetRef.name, value: targetRef.value})
   }
 
-  proce
-
   deleteBranch(el: Branch) {
     this.agantCtr.DeleteBranch(this.branchset.indexOf(el));
   }
@@ -215,9 +271,13 @@ export class BatchComponent implements OnInit, OnDestroy {
   }
 
   pushBranchToServer(){
+    // branch name input
     let nameInput = document.getElementById('branchCreator-input-name') as HTMLInputElement;
+    // create new branch config from `creatingTemper`
     let config = this.creatingTemper;
+    // set config.name
     config.name = nameInput.value;
+    // push to server
     this.agantCtr.appendNewBranch(config);
     this.showBranchCreator = false
   }
@@ -359,6 +419,23 @@ export class BatchComponent implements OnInit, OnDestroy {
     })
     this.showBranchCreator = false;
     this.showCreator = false;
+  }
+
+  runningTimeStringGen(source: runningTimeCounter) {
+    if(source.curRuntime) {
+      let hour = source.curRuntime / this.C_hours_ms;
+      let min = source.curRuntime % this.C_hours_ms  / this.C_mins_ms;
+      let sec = source.curRuntime % this.C_hours_ms  % this.C_mins_ms / this.C_secs_ms;
+      return `${Math.floor(hour)}:${Math.floor(min)}:${Math.floor(sec)}`
+      // return source.curRuntime
+    }
+    else {
+      return 'N/A'
+    }
+    
+  }
+
+  testSocketPeek() {
   }
 
 }

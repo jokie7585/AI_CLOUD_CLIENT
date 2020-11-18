@@ -24,6 +24,11 @@ export class AppComponent implements OnInit{
   showFooter:boolean;
   userId: string = '';
 
+  // detailcard
+  show_detailcard: boolean = false;
+  detailcard_text: string = '';
+  detailcard_refLink: string = '';
+
   constructor(private cookieService: CookieService,
               private router: Router,
               private appbarCtr:AppbarControllerService,
@@ -72,7 +77,13 @@ export class AppComponent implements OnInit{
   }
 
   jumpWorkspace(){
+    this.showUserDropedown = false;
     this.router.navigate(['workspace']);
+  }
+
+  jumpOverview(){
+    this.showUserDropedown = false;
+    this.router.navigate(['workspace/manage/overview']);
   }
 
   toggleUserDropdeown(){

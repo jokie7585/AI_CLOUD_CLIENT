@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-
 import { WorkspaceComponent } from './workspace.component';
 import {WSPath} from './workspace-path.const' ;
 
@@ -20,6 +19,11 @@ const routes: Routes = [
     // agent is a component to controll a workspace(a cetus app)
     path: 'manage/marketplace',
     loadChildren: () => import('./marketplace/marketplace.module').then( m => m.MarketplaceModule)
+  },
+  {
+    // agent is a component to controll a workspace(a cetus app)
+    path: 'manage/overview',
+    loadChildren: () => import('./overview/overview.module').then( m => m.OverviewModule)
   },
   {
     // agent is a component to controll a workspace(a cetus app)

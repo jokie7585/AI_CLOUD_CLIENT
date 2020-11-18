@@ -19,4 +19,5 @@ import {AppbarControllerService} from 'src/myservice/appbar-controller.service';
   entryComponents:[],
   exports: []
 })
-export class AppModule { }
+export class AppModule { 
+}

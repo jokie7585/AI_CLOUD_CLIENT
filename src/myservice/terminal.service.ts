@@ -68,10 +68,12 @@ export class TerminalService {
   })
   this.agantCtr.currentBranch.subscribe(el => {
     this.curBranch = el.name;
+    this.initLogProcess();
   })
+  // if logEnding unsign log process(Interval)
   this.logEnding.subscribe(val => {
     if(val) {
-      
+      clearInterval(this.Intervel);
     }
   })
 

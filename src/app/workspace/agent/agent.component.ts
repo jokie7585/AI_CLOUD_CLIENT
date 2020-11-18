@@ -5,7 +5,7 @@ import {HttpClient} from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service' ;
 import { cookieList} from 'src/utility/cookie' ;
 import {agantCtr, task} from 'src/myservice/agentCtr.service'
-import { uploadProcess } from 'src/myservice/appUtility.service';
+import { socketService } from 'src/myservice/socket.service';
 import {AppbarControllerService} from 'src/myservice/appbar-controller.service';
 import { Subscription } from 'rxjs';
 
@@ -56,8 +56,10 @@ export class AgentComponent implements OnInit, OnDestroy {
               private route: ActivatedRoute,
               private router: Router,
               private cookieService: CookieService,
-              private agentCtr: agantCtr,
-              private appCtr:AppbarControllerService) { }
+              public agentCtr: agantCtr,
+              private appCtr:AppbarControllerService,
+              
+              private socketService: socketService) { }
 
   ngOnInit(): void {
     console.log('agent component init Start!')
@@ -71,7 +73,7 @@ export class AgentComponent implements OnInit, OnDestroy {
     this.userId = this.cookieService.get(cookieList.userID);
     this.wsName = this.route.snapshot.parent.paramMap.get('wsName');
     // 改變agent所代理的Ws(使set, get Api 針對目前正瀏覽的Ws做操作)
-    this.agentCtr.currentWs.next(this.wsName);
+    this.agentCtr.switchWs(this.wsName);
     this.allSub.push(
       this.agentCtr.muteUploadProcessList.subscribe((val) => {
         this.isMuteUploadList = val;

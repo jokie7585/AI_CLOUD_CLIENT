@@ -1,0 +1,142 @@
+<div class="pagebase">
+  <div class="pageOverview">
+    <div class="page_bar">
+      <div class="page_bar_left"></div>
+      <div class="page_bar_right">
+
+        <div class="bar_button" *ngFor="let list of barList">
+          {{list}}
+      </div>
+      </div>
+
+    </div>
+
+    <div class="page_container">
+      <div class="content_left">
+        <div class="content_left_iconlimiter">
+          <img src="assets/github.svg" alt="">
+        </div>
+        <div class="content_left_username">
+          {{this.Username}}
+        </div>
+
+        <div class="content_left_Editbutton">
+          Edit Profile
+        </div>
+      </div>
+      <div class="content_right">
+        <div class="Popular_repositories">
+          <div class="PR_head">
+            <div class="PR_head_left">
+              Popular repositories
+            </div>
+            <div class="PR_head_right">
+              Customize your pins
+            </div>
+          </div>
+          <div class="PR_content">
+            <div class="content_list">
+              test
+            </div>
+
+          </div>
+        </div>
+        <div class="contributions ">
+          <div class="Con_head">
+            <div class="Con_head_left">
+              15 contributions in the last year
+            </div>
+            <div class="Con_head_right">
+              Contribution settings
+            </div>
+          </div>
+          <div class="Con_content">
+            <div class="Con_content_daylist">
+              <div class="daylist_month">
+                <div class="month_text" *ngFor="let month_list of month_text">
+                  {{month_list}}
+                </div>
+              </div>
+              <div class="daylist_day">
+                <div class="day_text">Mon</div>
+                <div  class="day_text">Wes</div>
+                <div  class="day_text">Fri</div>
+              </div>
+              <div class="daylist_list" >
+                <div class="list_box" *ngFor="let biglist of Con_daylist_list"
+                [ngStyle]="{'background-color': this.color_test === '1' ?  '#ebedf0'
+                                              : this.color_test === '2' ?  '#9be9a8 '
+                                              : this.color_test === '3' ?  '#40c463 '
+                                              : this.color_test === '4' ?  '#30a14e ': '#216e39'}" >
+                  {{biglist}}
+
+
+                </div>
+              </div>
+            </div>
+            <div class="Con_content_bottom">
+              <div class="content_bottom_left">
+                Learn how we count contributions.
+              </div>
+              <div class="content_bottom_mid"></div>
+              <div class="content_bottom_right">
+                <div class="bottom_right_text">Less</div>
+
+                <div class="bottom_right_legend">
+                  <div class="color_box" style="background-color: #ebedf0"></div>
+                  <div class="color_box" style="background-color: #9be9a8"></div>
+                  <div class="color_box" style="background-color: #40c463"></div>
+                  <div class="color_box" style="background-color: #30a14e"></div>
+                  <div class="color_box" style="background-color: #216e39"></div>
+                </div>
+                <div class="bottom_right_text">More</div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="Contribution_activity">
+          <div class="CA_left">
+            <div class="CA_left_head">
+              Contribution activity
+            </div>
+
+            <div class="CA_left_content">
+              <div class="CA_onepackage" *ngFor="let list of CA_date">
+                <div class="CA_date">
+                  {{list}}
+                </div>
+                <div class="CA_L_Con_List">
+                  <div class="CA_L_Con_List_Created">
+                    Created 1 commit in 1 resposity
+                  </div>
+
+                  <div class="CA_L_Con_List_file">
+                    rex1123tw/AI_WEB_ANGULAR
+                  </div>
+
+                  <div class="CA_L_Con_List_CommitNumber">
+                    1 commit
+                  </div>
+              </div>
+
+
+
+              </div>
+              <div class="CA_more_button">
+                Show more activities
+              </div>
+            </div>
+          </div>
+          <div class="CA_right">
+            <div class="date_button" *ngFor="let Datelist of dateList">
+              {{Datelist}}
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

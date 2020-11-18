@@ -11,7 +11,7 @@ import { uploadProcess } from 'src/myservice/appUtility.service';
 import { TerminalService, TerminalLine } from 'src/myservice/terminal.service';
 import { TexteditorService, CursorPosition, Line } from 'src/myservice/texteditor.service';
 import { subscribeOn } from 'rxjs/operators';
-import { Subscription } from 'rxjs';
+import { Subscription, BehaviorSubject } from 'rxjs';
 import { createComfirmStream } from 'src/utility/protocol';
 import { browser } from 'protractor';
 
@@ -53,6 +53,7 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
   clipbaordDisplay: string = 'none';
   clipboard: HTMLInputElement;
   cilpboardCordinate: {top: number, left: number} = {top:0, left:0}
+  nowPathdedFile: number = 0;
   // script / terminal
   showconsole: boolean = false;
   showTerminal: boolean = false;
@@ -62,8 +63,10 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
   scriptHight: number;
   sciptInput: HTMLInputElement;
   scriptContentCalculator: HTMLCanvasElement;
+  consoleStatus: string;
   cursorCoordinate: CursorPosition;
-  showCursor: boolean = true;
+  showCursor: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
+  showCursor$: boolean;
   cursorStyleChangeInterval = undefined;
   titleBackground: string = 'rgb(122, 119, 119)';
   // terminal 元件相關
@@ -133,7 +136,7 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
     })
     this.sciptInput.addEventListener('keydown', (event) => {
       clearInterval(this.cursorStyleChangeInterval);
-      this.showCursor = true;
+      this.showCursor.next(true);
       this.editorCtr.eventProcess(event);
     })
     this.sciptInput.addEventListener('keyup', ()=>{
@@ -146,7 +149,8 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
     this.sciptInput.addEventListener('EditorCopyStart', ()=> {
       console.log('catch event: Editor CopyStart')
       // this.copyingLock$ = true;
-      this.showCursor = false;
+      this.showCursor.next(false);
+      
     })
     this.sciptInput.onpaste = (event) => {
       event.preventDefault();
@@ -229,9 +233,27 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
     // subscribe branch switch
     this.AllSub.push(this.agent.currentBranch.subscribe(branch => {
       this.curBranch = branch.name;
+      this.muteAll();
+      this.showCursor.next(false);
+      
+      this.showTerminal = false;
+      this.showconsole = false;
       this.editorCtr.switchBranch(this.curBranch);
       this.path = [this.wsName];
       this.loadpath()
+    }))
+
+    this.AllSub.push(this.editorCtr.consoleStatus.subscribe(val => {
+      this.consoleStatus = val;
+    }))
+
+    this.AllSub.push(this.showCursor.subscribe(val => {
+      if(this.editorCtr.isReadOnly$) {
+        this.showCursor$ = false;
+      }
+      else {
+        this.showCursor$ = val;
+      }
     }))
 
     // init service
@@ -249,6 +271,7 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
     this.muteUploadListSub.unsubscribe();
     this.agent.isShowBranchManager.next(false);
     this.agent.isShowEditCompnent.next(false);
+    this.terminalCtr.initLogProcess();
     this.AllSub.forEach(el=>{
       el.unsubscribe();
     })
@@ -458,12 +481,13 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
 
   }
 
-  setmyclipboard(event: MouseEvent,name?: string){
-    if(this.clipbaordDisplay == 'flex') {
+  setmyclipboard(event: MouseEvent,name?: string, index?: number){
+    if((this.clipbaordDisplay == 'flex') && (index == this.nowPathdedFile)) {
       this.clipbaordDisplay='none'
     }
     else{
       event.stopPropagation();
+      this.nowPathdedFile = index;
       let ablulotePh = this.path.slice(1);
       let path = '/mnt/' + ablulotePh.join('/');
 
@@ -523,8 +547,9 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
     this.agent.cachWs();
   }
 
-  import(event: Event){
+  import(){
     this.agent.muteUploadProcessList.next(false);
+    console.log({uploadFileList: this.importor.files})
     this.agent.importWs(this.path.join('/'), this.importor.files, this.importor);
   }
 
@@ -554,12 +579,7 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
       this.editorCtr.initCommandList()
       this.editorCtr.registTask()
       this.sciptInput.focus()
-      // closure
-      // this.cursorStyleChangeInterval = setInterval(() => {
-      //   this.showCursor = !this.showCursor;
-      // },1000)
-      // this.editorCtr.forceUpdateCursor()
-      // document.onkeydown = this.listenKeyEvent;
+      this.editorCtr.forceUpdateCursor();
     }
     else{
       this.editorCtr.initailizeContent()
@@ -572,9 +592,11 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
 
   setCousorBehavior(){
     clearInterval(this.cursorStyleChangeInterval);
-    this.cursorStyleChangeInterval = setInterval(() => {
-      this.showCursor = !this.showCursor;
-    },500)
+    
+      this.cursorStyleChangeInterval = setInterval(() => {
+        this.showCursor.next(!this.showCursor$);
+      },500)
+    
   }
 
   FocusScript(){
@@ -588,7 +610,7 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
 
   UnFocusScript(){
     clearInterval(this.cursorStyleChangeInterval);
-    this.showCursor = false
+    this.showCursor.next(false);
   }
 
   focusFsConsole(){

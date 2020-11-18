@@ -1,23 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject, BehaviorSubject, Subscription } from 'rxjs';
-import {webSocket, WebSocketSubject} from 'rxjs/webSocket'
+import {webSocket} from 'rxjs/webSocket'
 import {environment} from 'src/environments/environment' ;
-import {HttpClient} from '@angular/common/http';
 
-interface loadingTask{
-    massage: string,
-    onCancelCallback: Function,
-}
-
-interface userConfig {
-  // if ws first run, enable the tutorial
-  enableWsCreatePrompt: boolean,
-
-}
-
-interface paidContent {
-  batchWork: boolean,
-}
 
 /**
  * process managemet interface
@@ -66,10 +51,15 @@ export class AppUtilService {
     upProcessList: []
   });
 
-
   // bindedData(old/beforNext value of observeable) 
   wsProcessManager$: WsProcessManager;
 
+  /**
+   * Websocket
+   * 
+   * 
+   */
+  websocket = webSocket<any>(environment.socket);
 
 
   constructor(){
@@ -80,6 +70,15 @@ export class AppUtilService {
       console.log({newwsProcessManager: this.wsProcessManager$})
     })
   }
+
+  /**
+   * 
+   * @param WsName 
+   */
+
+   init(){
+     console.log('init appUtility.service')
+   }
 
   /**
    * inner app process management

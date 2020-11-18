@@ -8,6 +8,8 @@ import { NumberSymbol } from '@angular/common';
 import { cookieList} from 'src/utility/cookie' ;
 import {environment} from 'src/environments/environment' ;
 import {AppbarControllerService} from 'src/myservice/appbar-controller.service';
+import {AppUtilService} from 'src/myservice/appUtility.service';
+import {socketService} from 'src/myservice/socket.service';
 
 interface data {
   name: string
@@ -30,12 +32,16 @@ export class WorkspaceComponent implements OnInit {
               private http: HttpClient,
               private router: Router,
               private route: ActivatedRoute,
-              private appbarCtr: AppbarControllerService,) { }
+              private socket: socketService,
+              private appUtil: AppUtilService
+              ) { }
 
 
 
 
   public ngOnInit(): void {
+    this.socket.init()
+    this.appUtil.init();
     this.userId = this.cookieService.get(cookieList.userID)
     this.getWSLIST();
   }

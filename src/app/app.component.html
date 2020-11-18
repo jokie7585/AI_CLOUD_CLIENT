@@ -68,12 +68,24 @@
         </div>
         <div class="Dropdown-item">
           <div class="Dropdown-item-Containner">
-            <div class="Dropdown-item-fnc">
+            <div class="Dropdown-item-fnc"
+                 (click)="jumpOverview()"
+            >
               <div class="Dropdown-item-fncIcon">
                 <img src="/assets/folder_line.svg" alt="">
               </div>
               <div class="Dropdown-item-fnctxt Dropdown-item-text">
-                Your Workspaces
+                Profile
+              </div>
+            </div>
+            <div class="Dropdown-item-fnc"
+                 (click)="jumpWorkspace()"
+            >
+              <div class="Dropdown-item-fncIcon">
+                <img src="/assets/folder_line.svg" alt="">
+              </div>
+              <div class="Dropdown-item-fnctxt Dropdown-item-text">
+                Workspaces
               </div>
             </div>
             <div class="Dropdown-item-fnc"
@@ -106,6 +118,8 @@
   
 </div>
 
+<div class="detailCard" *ngIf="show_detailcard">
 
+</div>
 
 </div>

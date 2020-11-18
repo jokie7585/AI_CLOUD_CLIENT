@@ -2,5 +2,6 @@ export const cookieList = {
   WS_SUM : 'cookie-sum',
   WS_LIST : 'LIST',
   // formal cookies
-  userID : 'userid'
+  userID : 'userid',
+  curWs: 'curWs'
 }

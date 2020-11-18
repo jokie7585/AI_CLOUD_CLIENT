@@ -269,6 +269,21 @@
     margin-left: 1.5em ;
 }
 
+.CM-L-I-BranchStatus{
+    font-size: 10px;
+    color: #c5c5c5;
+    display: flex;
+    flex: 1;
+    font-weight: bold;
+    margin-left: 1rem;
+}
+
+.BranchStatus-item{
+    display: flex;
+    align-items: center;
+    margin-left: 0.5rem;
+}
+
 .CM-L-I-Func{
     display: flex;
     align-items: center;

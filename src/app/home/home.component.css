@@ -1,5 +1,5 @@
 .pagebase{
-  min-height: 85vh;
+  min-height: 95vh;
   min-width: 100%;
   max-width: 100%;
   
@@ -7,6 +7,7 @@
 
 .Cetus{
   position: absolute;
+  color: aliceblue;
   top: 30vh;
   left: 35vw;
   font-size: 10rem;

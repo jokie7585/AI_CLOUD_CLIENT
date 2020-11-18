@@ -250,3 +250,8 @@ a:hover {
 .router-link-active {
   text-decoration: none;
 }
+
+
+.detailCard {
+  position: absolute;
+}

@@ -27,12 +27,16 @@ export interface CursorPosition {
 export class TexteditorService {
 
   content: Subject<Array<Line>> = new Subject<Array<Line>>();
+  consoleStatus: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  isComfirmed: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   editingLine: Subject<Line> = new Subject<Line>();
   editingCol: Subject<number> = new Subject<number>();
   config: Subject<Fetchconfig> = new Subject<Fetchconfig>();
+  isReadOnly: Subject<boolean> = new Subject<boolean>();
   curBranch: string;
 
   content$: Array<Line> = [];
+  isReadOnly$: boolean = false;
   editingCol$: number;
   editingLine$ : Line;
   config$ :Fetchconfig;
@@ -73,6 +77,25 @@ export class TexteditorService {
     this.editingCol.subscribe(val=> {
       this.editingCol$ = val;
     })
+    this.isReadOnly.subscribe(val => {
+      this.isReadOnly$ = val;
+      if(val) {
+        this.consoleStatus.next('(Read Only)');
+      }
+      else {
+        this.consoleStatus.next('');
+      }
+    })
+    this.isComfirmed.subscribe(val => {
+      if(!val) {
+        this.consoleStatus.next('*');
+      }
+      else{
+        let curTime = new Date();
+        let status = `Last update : ${curTime.toDateString()}`
+        this.consoleStatus.next(status);
+      }
+    })
     
   }
 
@@ -84,6 +107,13 @@ export class TexteditorService {
 
   switchBranch(branch: string) {
     this.curBranch = branch;
+    this.initailizeContent();
+    if(branch == 'Template') {
+      this.isReadOnly.next(false);
+    }
+    else{
+      this.isReadOnly.next(true);
+    }
   }
 
   initailizeContent() {
@@ -137,7 +167,7 @@ export class TexteditorService {
   }
 
   initCommandList(){
-    let url = `http://${environment.apiserver}/users/${this.config$.userId}/management/api/getWorkspaceCommandList/${this.config$.wsName}` ;
+    let url = `http://${environment.apiserver}/users/${this.config$.userId}/management/api/getWorkspaceCommandList/${this.config$.wsName}/${this.curBranch}` ;
 
     let options = {
         withCredentials: true,
@@ -148,7 +178,10 @@ export class TexteditorService {
     .subscribe((res => {
       let source = res.commandList as Array<string>;
       console.log({initscript: source})
-      this.formateClipboardDataAsInput(source.join('\n'));
+      this.synchronizeFormateInput(source.join('\n'));
+      if(!this.isReadOnly$) {
+        this.consoleStatus.next(res.lastUpdate)
+      }
     }),
     err => {
       
@@ -199,6 +232,7 @@ export class TexteditorService {
 
   
   forceUpdateCursor(){
+    setTimeout(() => {
       if(this.editingLine$) {
         let targetEl = document.getElementById(this.editingLine$.elId);
         if(targetEl) {
@@ -217,6 +251,7 @@ export class TexteditorService {
         }
       }
       console.log('end cursor render')
+    }, 5)
   }
 
   selectColByMouse(event: MouseEvent) {
@@ -242,6 +277,7 @@ export class TexteditorService {
 
     this.http.post<any>(url,{commandList:payload}, options)
     .subscribe((res => {
+      this.isComfirmed.next(true);
       console.log(res)
     }),
     err => {
@@ -250,14 +286,33 @@ export class TexteditorService {
 
   }
 
+  // text inserter
+  // formateClipboardDataAsInput is "Asynchronize"
   formateClipboardDataAsInput(data: string) {
+    if(this.isReadOnly$) {
+      // if readOnly Mode is opening
+      return
+    }
     // 從目前的游標位置開始，將字串處理後插入
     this.targetInput.dispatchEvent(new Event('EditorCopyStart'));
     this.copyingLock$ = true;
     this.addToTempInputArray(data);
   }
 
+  synchronizeFormateInput(data: string) {
+    for(let char of data) {
+      this.insertTextAtCurCol(char)
+    }
+  }
+
+  /**
+   * insertTextAtCurCol provide all kind of insert function the foundamental 
+   * ficility fuction.
+   * @param text 
+   */  
   insertTextAtCurCol(text: string){
+    this.isComfirmed.next(false);
+    
     if(text == '\n') {
       this.subsitution();
       return;
@@ -281,7 +336,12 @@ export class TexteditorService {
     this.targetInput.dispatchEvent(new Event('NotEmptyEvent'))
   }
 
+  // called when `NotEmptyEvent` Event is created.
   processCharRender(){
+    if(this.isReadOnly$) {
+      // if readOnly Mode is opening
+      return
+    }
     this.deleteMode = false;
     if(this.inputTempArray$.length > 0) {
       while( this.inputTempArray$.length > 0 ) {
@@ -299,6 +359,11 @@ export class TexteditorService {
 
   // following are edotor methode
   eventProcess = (event: KeyboardEvent) =>{
+    if(this.isReadOnly$) {
+      // if readOnly Mode is opening
+      return
+    }
+
     if(this.renderlock$) return;
     console.log('catch: ' + event.key)
     if(!event.altKey && !event.ctrlKey && !event.metaKey) {
@@ -422,16 +487,40 @@ export class TexteditorService {
   }
 
   subsitution(){
-    let insertPoint = this.content$.indexOf(this.editingLine$);
-    console.log(insertPoint)
-    console.log(this.content$)
-    this.content$ = this.content$.slice(0, insertPoint+1).concat({content:'', colchroffset:[], columnOffset:[this.editingLine$.columnOffset[0]], elId: `${this.elIdPredix}${Date.now()}`}, this.content$.slice(insertPoint+1));
-    this.editingLine$ = this.content$[insertPoint+1];
-    console.log(this.content$)
+    // insertPoint is the new Lines Position
+    let insertPoint = this.content$.indexOf(this.editingLine$) + 1 ;
+    // A_Section is the content remain in the original `editingLine`.
+    // B_Section is the content brings to new Line when subsitution is excute.
+    let A_Section = this.editingLine$.content.slice(0, this.editingCol$);
+    let B_Section = this.editingLine$.content.slice(this.editingCol$);
+    console.log({
+      A_Section:A_Section,
+      B_Section: B_Section
+    })
+    // reCalculate columnOffset:Array<number>, colchroffset: Array<number>
+    // init a new line
+    this.content$ = this.content$.slice(0, insertPoint).concat({content:'', colchroffset:[], columnOffset:[this.editingLine$.columnOffset[0]], elId: `${this.elIdPredix}${Date.now()}`}, this.content$.slice(insertPoint));
+    // initialize the `curEditingLine` and set A_Section as new content
+    console.log({
+      oldeditinLine: this.editingLine$.content
+    })
     this.editingCol$ = 0;
+    this.editingLine$.content = ''
+    this.editingLine$.colchroffset = []
+    this.editingLine$.columnOffset = []
+    this.synchronizeFormateInput(A_Section);
+    // process new line with B_Section
+    console.log({
+      neweditinLine: this.editingLine$.content
+    })
+    this.editingLine$ = this.content$[insertPoint];
+    this.editingCol$ = 0;
+    this.synchronizeFormateInput(B_Section);
 
     if(!this.copyingLock$) {
       this.content.next(this.content$);
     }
   }
+
+
 }

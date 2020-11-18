@@ -112,7 +112,7 @@
                     No Files under this directory! Upload your project to start training!
             </div>
 
-            <div *ngFor="let item of dirList">
+            <div *ngFor="let item of dirList;let i = index">
                 <div class="fileList-item">
                     <div class="fileList-item-icon">
                         <img src={{iconSelector(item.type)}} alt="">
@@ -133,7 +133,7 @@
                             <img src="assets/delete_fs.svg" alt="">
                         </div>
                         <div class="fileList-item-function_item"
-                             (click)="setmyclipboard($event,item.name)"
+                             (click)="setmyclipboard($event,item.name, i)"
                         >
                             <img src="assets/copy.svg" alt="">
                         </div>
@@ -196,7 +196,7 @@
 
 <a id="Fsdownloader" href="" download="" class="notdisplay"></a>
 <input type="file" multiple id="FsUploader" class="notdisplay" (change)="upload($event)">
-<input type="file" multiple id="FsWsImportor" class="notdisplay" webkitdirectory (change)="import($event)">
+<input type="file" multiple id="FsWsImportor" class="notdisplay" webkitdirectory webkitEntries (change)="import()">
 
 <div class="fsclipboard" [style.display]="clipbaordDisplay" [style.left.px]="cilpboardCordinate.left" [style.top.px]="cilpboardCordinate.top">
     <div class="fsclipboard-msg">
@@ -205,7 +205,8 @@
     <input (click)="getpath($event)" class="fsclipboardContent" type="text" id="fsClipboard">
 </div>
 
-<input type="text" id="fsScriptInput" 
+<input  type="text" id="fsScriptInput" 
+        [style.left.px]="cursorCoordinate.left" [style.top.px]="cursorCoordinate.top"
         class="fsScriptInputEl"
        (focus)="FocusScript()"
        (blur)="UnFocusScript()"
@@ -228,7 +229,7 @@
             </div>
         </div>
         <div class="fsConsole-title-text">
-            {{userId}}/{{wsName}}'s bashCommand
+            {{userId}}/{{wsName}}'s bashCommand &lt;{{consoleStatus}}&gt;
         </div>
         <div class="fsConsole-title-func">
             <div class="fsConsole-title-func-item">
@@ -245,7 +246,7 @@
     </div>
 
     <div class="Mycursor" [style.left.px]="cursorCoordinate.left" [style.top.px]="cursorCoordinate.top"
-         [style.display]="isShow(showCursor)">|</div>
+         [style.display]="isShow(showCursor$)">|</div>
 </div>
 
 <!-- terminal vomponent -->

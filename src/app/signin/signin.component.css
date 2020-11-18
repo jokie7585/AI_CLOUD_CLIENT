@@ -50,7 +50,7 @@ span{
 }
 
 .clickableword:hover {
-  border: solid blue 1px;
+  border-bottom: solid blue 1px;
   cursor: pointer;
 }
 

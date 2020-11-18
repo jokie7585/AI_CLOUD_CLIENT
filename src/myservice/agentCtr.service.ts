@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject, from, pipe, Observer, Subscription, BehaviorSubject } from 'rxjs';
-import { filter, map} from 'rxjs/operators';
+import { filter, first, map, skip} from 'rxjs/operators';
 import {webSocket, WebSocketSubject} from 'rxjs/webSocket'
+import {} from 'jszip'
 import {environment} from 'src/environments/environment' ;
 import {HttpClient, HttpUploadProgressEvent, HttpHeaderResponse, HttpResponse, HttpEventType} from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service' ;
 import { cookieList} from 'src/utility/cookie' ;
 import {uploadProcess, UploadprocessList, AppUtilService} from './appUtility.service'
 import {CytusAppStatus, CytusBatchStatus} from 'src/utility/CetusProtocol'
+import * as JSZip from 'jszip';
 
 interface workspaceconfig {
     tensorflowVersion: string,
@@ -146,17 +148,17 @@ export class agantCtr {
       if(this.curUploadProcessSubsription) {
         this.curUploadProcessSubsription.unsubscribe();
       }
+      console.log('switch workspace:'+  wsname)
       // 當 workspace 切換時，載入相依資訊與相依設定
       this.muteUploadProcessList.next(false);
       this.curWs = wsname
       this.getConfig();
-      console.log('call getBatchConf() in currentWs sub')
       this.getBatchConf();
       // 從app service UploadprocessList 建立一個可觀察物件進行processlist的更新工作
       this.curUploadProcessManager = this.appCtr.registUploadProcess(wsname);
       this.curUploadProcessSubsription = this.curUploadProcessManager.uploadProcessList.subscribe(this.uploadProcessListObserver);
     })
-    this.cytusAppconfig$.subscribe( config => {
+    this.cytusAppconfig$.pipe(skip(1)).subscribe( config => {
       this.updateConfig(config)
     })
     this.TaskList.subscribe(list => {
@@ -164,12 +166,15 @@ export class agantCtr {
     })
     this.batchConf.subscribe(config => {
       this.batchConf$ = config as batchConfig;
-      console.log({updateBatchInAgent: this.batchConf$})
       this.generateBranchSwitchTask(this.batchConf$.branchSet);
     })
 
     console.log('agent Service init')
 
+  }
+
+  switchWs(WsName: string) {
+    this.currentWs.next(WsName)
   }
 
   generateBranchSwitchTask(branchSet: Array<Branch>) {
@@ -229,8 +234,6 @@ export class agantCtr {
         promptMassage: promptMassage,
         taskList: list
       } as taskInterface)
-      console.log(this.taskInterface$)
-      this.TaskList.next(this.taskInterface$[this.taskInterface$.length-1].taskList);
 
     }
   }
@@ -303,7 +306,7 @@ export class agantCtr {
     // update batchConf
     newconf.commandTemplete = newcommandTemplete;
 
-    console.log('update behaviorSub Inner value')
+    console.log('update behaviorSub Inner value: ' + this.curWs)
     console.log({batchConf: newconf})   
     this.batchConf.next(newconf) 
 
@@ -335,6 +338,8 @@ export class agantCtr {
 
   DeleteBranch(target_Index: number) {
     let newconf = this.batchConf.getValue();
+    console.log('delete branch at index: ' + target_Index)
+    console.log({curWs: this.curWs })
     newconf.branchSet = newconf.branchSet.slice(0, target_Index).concat(newconf.branchSet.slice(target_Index+1))
     this.updateBatch(newconf);
   }
@@ -356,7 +361,10 @@ export class agantCtr {
     })
   }
 
-  getBatchConf(){
+  // update branch info
+  getBatchConf = ()  => {
+    console.log('in get batchconfig of :' + this.curWs)
+    console.log('user: ' + this.userId)
     let url = `http://${environment.apiserver}/users/${this.userId}/management/api/getBatchConfig/${this.curWs}`
 
     this.http.get(url, {
@@ -364,13 +372,19 @@ export class agantCtr {
       },
       withCredentials:true
     }).subscribe(data => {
-      this.batchConf.next(data as batchConfig);
       console.log({batchConfigGet: data})
+      this.batchConf.next(data as batchConfig);
     })
   }
 
+  /**
+   * Get Bash Command Tamplate
+   * 
+   * @param callBack 
+   */
+
   getCommandList(callBack?:(commandList: Array<string>) => void){
-    let url = `http://${environment.apiserver}/users/${this.userId}/management/api/getWorkspaceCommandList/${this.curWs}` ;
+    let url = `http://${environment.apiserver}/users/${this.userId}/management/api/getWorkspaceCommandList/${this.curWs}/Template` ;
 
     let options = {
         withCredentials: true,
@@ -385,11 +399,17 @@ export class agantCtr {
       }
     }),
     err => {
-      location.assign('/login')
+      console.log(err)
     })
   }
 
 
+  /**
+   * Upload process manage
+   * 
+   * @param relativePath 
+   * @param filelist 
+   */
   // addfile to upload queue
   stageUploadfile(relativePath:string, filelist:FileList) {
 
@@ -398,6 +418,7 @@ export class agantCtr {
 
     for(let i = 0; i < filelist.length; i++){
       let form = new FormData();
+      console.log(filelist[i].name + '')
       form.append("uploadfiles", filelist[i]);
       let data = {
         name: filelist[i].name,
@@ -604,6 +625,10 @@ export class agantCtr {
     err => {
       alert('file!')
     });
+  }
+
+  skipSub() {
+    // donothing
   }
 
 }

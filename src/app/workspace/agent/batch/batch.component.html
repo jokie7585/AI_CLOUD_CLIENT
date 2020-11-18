@@ -58,8 +58,13 @@
                         <div class="CM-L-I-C">
                             <span class="CM-L-I-C-P">Branch :  </span><span class="CM-L-I-C-C">{{el.name}}</span>
                         </div>
-                        <div class="CM-L-I-FlagString">
-                            <span class="CM-L-I-C-P">Status :       Running Time :  </span>
+                        <div class="CM-L-I-BranchStatus">
+                            <div class="BranchStatus-item">
+                                <span class="CM-L-I-C-P">Status : <span style="color:green">{{branchset[i].status}}</span></span>
+                            </div>
+                            <div class="BranchStatus-item">
+                                <span class="CM-L-I-C-P">Running Time : <span style="color:green">{{runningTimeStringGen(branchRunTimeCounter[i])}}</span> </span>
+                            </div>
                         </div>
                         <div class="CM-L-I-Func" (click)="togleBranchEditor(i)">
                             <div class="CM-L-I-Func-c">
