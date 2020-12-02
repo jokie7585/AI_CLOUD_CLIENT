@@ -73,7 +73,7 @@ export class AgentComponent implements OnInit, OnDestroy {
     this.userId = this.cookieService.get(cookieList.userID);
     this.wsName = this.route.snapshot.parent.paramMap.get('wsName');
     // 改變agent所代理的Ws(使set, get Api 針對目前正瀏覽的Ws做操作)
-    this.agentCtr.switchWs(this.wsName);
+    this.agentCtr.switchWs(this.wsName, this.route);
     this.allSub.push(
       this.agentCtr.muteUploadProcessList.subscribe((val) => {
         this.isMuteUploadList = val;
@@ -139,7 +139,6 @@ export class AgentComponent implements OnInit, OnDestroy {
 
   seleteFunction(htmlId: string){
     this.agentCtr.seletFuction(htmlId);
-    this.router.navigate([htmlId], {relativeTo: this.route});
   }
 
   togleMuteUploadList() {

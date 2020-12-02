@@ -8,21 +8,16 @@
       <div class="c-l">
         <div class="OperatopnList" *ngIf="showSettings">
             <div class="OperatopnList-func">
-                <!-- <div class="OperatopnList-func-icon">
-                    <img src="/assets/next.svg" alt="">
-                </div> -->
                 <div class="OperatopnList-func-txt">
                     Command List
                 </div>
             </div>
-            <div class="OperatopnList-func">
-                <!-- <div class="OperatopnList-func-icon">
-                    <img src="/assets/next.svg" alt="">
-                </div> -->
+            <!-- <div class="OperatopnList-func">
                 <div class="OperatopnList-func-txt">
                     Workload
                 </div>
-            </div>
+            </div> -->
+            
         </div>
         <div class="OperatopnList" *ngIf="!showSettings">
             <button class="OperatopnList-func BranchManagerBt-g" [disabled]="!canRunBatch"
@@ -104,8 +99,19 @@
                                         </div>
                                         <div class="flag-Setter-I-Flaglist">
                                             <div *ngFor="let flag of ele.optionMap">
-                                                <div class="flag-Setter-I-Flaglist-I">
-                                                    <span class="flag-Setter-I-C-txt-ft">{{flag.name}} : </span><input (change)="processBranchCreateFlagset(flag, $event)" type="text" [value]="flag.value" autocomplete="off">
+                                                <div [ngSwitch]="flag.type">
+                                                    <div *ngSwitchCase="'flag'" class="flag-Setter-I-Flaglist-I">
+                                                        <span class="flag-Setter-I-C-txt-ft">{{flag.name}}</span>
+                                                        <label (click)="processBranchFlagSet_radio_click(flag, true)"> Enable
+                                                            <input  type="radio" [checked]="processBranchFlagSet_radio_Check(flag, true)" name={{composeInputRadioname(i)}}>
+                                                        </label>
+                                                        <label (click)="processBranchFlagSet_radio_click(flag, false)"> Disable
+                                                            <input  type="radio" [checked]="processBranchFlagSet_radio_Check(flag, false)" name={{composeInputRadioname(i)}}>
+                                                        </label>
+                                                    </div>
+                                                    <div *ngSwitchDefault class="flag-Setter-I-Flaglist-I">
+                                                        <span class="flag-Setter-I-C-txt-ft">{{flag.name}}</span><input class="flag-Setter-I-C-txt-inp" (change)="processBranchCreateFlagset(flag, $event)" [value]="flag.value" type="text" autocomplete="off">
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -157,9 +163,20 @@
                                             </div>
                                         </div>
                                         <div class="flag-Setter-I-Flaglist">
-                                            <div *ngFor="let flag of el.optionMap">
-                                                <div class="flag-Setter-I-Flaglist-I">
-                                                    <span class="flag-Setter-I-C-txt-ft">{{flag.name}} : </span><input (change)="processBranchCreateFlagset(flag, $event)" type="text" autocomplete="off">
+                                            <div *ngFor="let flag of el.optionMap; let i = index">
+                                                <div [ngSwitch]="flag.type">
+                                                    <div *ngSwitchCase="'flag'" class="flag-Setter-I-Flaglist-I">
+                                                        <span class="flag-Setter-I-C-txt-ft">{{flag.name}}</span>
+                                                        <label (click)="processBranchFlagSet_radio_click(flag, true)"> Enable
+                                                            <input type="radio" name={{composeInputRadioname(i)}}>
+                                                        </label>
+                                                        <label (click)="processBranchFlagSet_radio_click(flag, false)"> Disable
+                                                            <input type="radio" name={{composeInputRadioname(i)}}>
+                                                        </label>
+                                                    </div>
+                                                    <div *ngSwitchDefault class="flag-Setter-I-Flaglist-I">
+                                                        <span class="flag-Setter-I-C-txt-ft">{{flag.name}}</span><input class="flag-Setter-I-C-txt-inp" (change)="processBranchCreateFlagset(flag, $event)" type="text" autocomplete="off">
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -192,11 +209,14 @@
                             <span class="CM-L-I-C-P">Command :  </span><span class="CM-L-I-C-C">{{el.command}}</span>
                         </div>
                         <div class="CM-L-I-FlagString">
-                            <span class="CM-L-I-C-P">Flag :  </span>{{composeFlagstring(el)}}
+                            <span class="CM-L-I-C-P">Args :  </span>{{composeParamTemplateMapToString(el.optionMap)}}
                         </div>
                         <div class="CM-L-I-Func">
                             <div class="CM-L-I-Func-c" (click)="togleCommandEditor(i)">
                                 <img class="CM-L-I-Func-icon" src="/assets/edit.svg" alt="">
+                            </div>
+                            <div class="CM-L-I-Func-c" (click)="generatePythonCode(el.optionMap, i)">
+                                <img class="CM-L-I-Func-icon" src="/assets/code_white.svg" alt="">
                             </div>
                             <div class="CM-L-I-Func-c" (click)="deleteBatchCmdTemplete(el)">
                                 <img class="CM-L-I-Func-icon" src="/assets/delete.svg" alt="">
@@ -222,7 +242,7 @@
                         </div>
                         <div class="Commandcreator-Setter">
                             <div class="Commandcreator-Setter-txt">
-                                FlagString : 
+                                ArgsString : 
                             </div>
                             <div class="Commandcreator-Setter-input">
                                 <input [id]="composeInputID(i, 'flag')"
@@ -293,6 +313,34 @@
       </div>
       <div class="c-r">
     
+      </div>
+  </div>
+
+  <div class="codeGenerator" *ngIf="showCodeGenerator">
+      <div class="functionbar">
+        <img (click)="closeCodeGenerator()" src="/assets/collaps.svg" class="functionbar-icon" alt="">
+      </div>
+      <div class="import">
+          <div class="codeGenerator-head">
+            Import the folowing module
+          </div>
+          <div class="codeArea" (click)="copycontent('icodeGenerator-import')">
+              <div id="codeGenerator-import" >
+                <span class="py-reserved">import</span> argparse<br>
+              </div>
+          </div>
+      </div>
+      <div class="code">
+        <div class="codeGenerator-head">
+            Copy the folowing Code to your python script
+        </div>
+        <div class="codeArea" (click)="copycontent('icodeGenerator-code')">
+            <div class="codeArea-scrollArea">
+                <div id="codeGenerator-code" >
+
+                </div>
+            </div>
+        </div>
       </div>
   </div>
   

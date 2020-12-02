@@ -16,3 +16,8 @@ export const CytusBatchStatus = {
     // undefined is used when client first generate branch Record(But not push to Server)
     UNDEFINED : 'undefined',
 }
+
+export const CytusBatchConst = {
+    CytusTrue:'True',
+    CytusFalse:'False'
+}

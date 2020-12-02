@@ -54,8 +54,6 @@ export class AppComponent implements OnInit{
     if(id != '') {
       this.appbarCtr.userMode();
       this.appbarCtr.Closefooter();
-      console.log(this.showSingInUp)
-      this.router.navigate([appPath.workspace])
     }
     else {
       this.appbarCtr.guestMode()

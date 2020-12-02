@@ -2,8 +2,7 @@
   position: absolute;
   top: 0px;
   z-index: 10;
-  min-height: 100vh;
-  min-width: 100vw;
+  min-width: 100%;
   background-color: #f9f9f9;
   text-align: center;
 
@@ -12,11 +11,9 @@
   display: flex;
   min-height: 85vh;
   width: 50vw;
-  margin-left: 25vw;
+  margin-left: 327px;
   flex-direction: column ;
   flex-wrap: wrap ;
-
-  padding:2.5vw;
 }
 
 .box_intro{
@@ -68,6 +65,7 @@ h1{
   .box_input_main_username{
 
     flex: 1;
+    font-weight: bold;
 
 
   }
@@ -93,6 +91,8 @@ h1{
     }
 
     .box_input_main_repository{
+      font-weight: bold;
+      font-size: 15px;
       margin-left: 1vw;
       flex: 4;
       text-align: left;
@@ -133,7 +133,7 @@ input[type="text"]:focus{
   min-width: 5px;
   font-size: 2rem;
   text-align: center;
-  font-weight: bold;
+  color: rgb(27, 27, 27);
   padding: 0;
 }
 
@@ -223,7 +223,9 @@ mat-radio-group{
   width:0 ;
 }
 .createbutton{
-  background-color: #38c560;
+  display: flex;
+  background-color: #3fbb62;
+  color: rgb(252, 252, 252);
   border-radius: 4px;
   min-width: 30px;
   max-width: 10vw;
@@ -235,17 +237,12 @@ mat-radio-group{
 
 .createbutton:hover{
   background-color: #1aa140;
-  border-radius: 4px;
-  min-width: 30px;
-  max-width: 10vw;
-  min-height: 28px;
-  margin: 30px 15px 0px 0px;
-  justify-content: center;
-  align-items: center;
+  color: rgb(214, 214, 214);
   cursor: pointer;
 }
 
 .createbutton_text{
   line-height: 30px;
   text-align: center;
+  color: w;
 }

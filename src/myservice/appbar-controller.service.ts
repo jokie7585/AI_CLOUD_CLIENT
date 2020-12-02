@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service' ;
 import { cookieList} from 'src/utility/cookie' ;
-import {Router} from '@angular/router'
+import {Router, RouterModule} from '@angular/router'
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../environments/environment'
+import {socketService} from './socket.service'
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +25,8 @@ export class AppbarControllerService {
 
   constructor(private cookieService: CookieService,
               private http: HttpClient,
-              private router: Router){
+              private router: Router,
+              private socket: socketService){
     this.userId = this.cookieService.get(cookieList.userID);
   }
  
@@ -56,6 +58,7 @@ export class AppbarControllerService {
       let {message} = body as any
       alert(message);
       this.cookieService.deleteAll();
+      this.socket.websocket.unsubscribe()
     this.guestMode();
     this.router.navigate(['login']);
     }

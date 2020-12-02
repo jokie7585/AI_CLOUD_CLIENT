@@ -5,10 +5,10 @@
 export const environment = {
   production: false,
   // apiserver: '140.135.11.224:3001',
-  // apiserver: '192.168.43.219:3001',
-  // socket: 'ws://192.168.43.219:3001',
-  apiserver: 'localhost:3001',
-  socket:'ws://localhost:3001',
+  apiserver: '192.168.43.219:3001',
+  socket: 'ws://192.168.43.219:3001',
+  // apiserver: 'localhost:3001',
+  // socket:'ws://localhost:3001',
   fileSocketServer: 'ws://192.168.43.219:3002/upload'
 };
 

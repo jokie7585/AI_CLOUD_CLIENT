@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject, BehaviorSubject, Subscription } from 'rxjs';
-import {webSocket} from 'rxjs/webSocket'
 import {environment} from 'src/environments/environment' ;
-
+import {HttpClient, HttpUploadProgressEvent, HttpHeaderResponse, HttpResponse, HttpEventType} from '@angular/common/http';
 
 /**
  * process managemet interface
@@ -30,9 +29,26 @@ export interface uploadProcess {
  * app notifycation
  */
 
- interface notifycation{
-   title: string,
-   detail: string,
+ interface notification {
+  type:string, // type='workspace'|'system'
+  Title:string,
+  Timestamp: Date,
+  Message:string,
+  isread:boolean,
+  payload: workspace_notification_payload | system_notification_payload
+ }
+
+ interface workspace_notification_payload{
+  workspace: string,
+  branch?: string,
+  workload: 'batch' | 'branch'
+ }
+
+ interface system_notification_payload{
+  routerLink: string, // target routing path to announcement or doc
+}
+
+ interface notification_Extend extends notification{
    routerlink:string,
  }
 
@@ -50,19 +66,14 @@ export class AppUtilService {
   wsProcessManager =  new BehaviorSubject<WsProcessManager>({
     upProcessList: []
   });
-
+  notificationList = new BehaviorSubject<notification_Extend>(undefined)
+  _local_notificationList = new BehaviorSubject<notification>(undefined)
+  _server_notificationList = new BehaviorSubject<notification>(undefined)
   // bindedData(old/beforNext value of observeable) 
   wsProcessManager$: WsProcessManager;
 
-  /**
-   * Websocket
-   * 
-   * 
-   */
-  websocket = webSocket<any>(environment.socket);
 
-
-  constructor(){
+  constructor(private http: HttpClient,){
     console.log('appUtility service init')
     // 綁定oberver
     this.wsProcessManager.subscribe((wsProcessManager) => {
@@ -120,6 +131,16 @@ export class AppUtilService {
     */
    isNoRunningProcess():boolean {
      return false;
+   }
+
+   /**
+    * exchange_notification will:
+    *   1. read in server
+    */
+   GetNotificationList() {
+    let url = ``
+
+
    }
 
    

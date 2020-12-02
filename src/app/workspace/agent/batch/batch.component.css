@@ -394,6 +394,10 @@
     margin-right: 1rem;
 }
 
+#branchCreator-input-name{
+    width: 100%; 
+}
+
 #Commandcreator-input-flag{
     width: 100%; 
     box-sizing: border-box;
@@ -484,6 +488,12 @@
 
 .flag-Setter-I-C-txt-ft{
     width: 8rem;
+    text-align: left;
+}
+
+.flag-Setter-I-C-txt-inp{
+    width: 100%;
+    margin-right: 1rem;
 }
 
 .flag-Setter-I-Flaglist{
@@ -504,4 +514,127 @@
     font-size: 20px;
     justify-content: left;
     display: flex;
+}
+
+.codeGenerator{
+    display: flex;
+    position: absolute;
+    flex-direction: column;
+    background-color: #19181f;
+    top: 10rem;
+    min-height: 35vh;
+    min-width: 50vw;
+    max-height: 40vh;
+    max-width: 50vw;
+    left: 25vw;
+    box-shadow: 0px 0px 8px black;
+}
+
+.functionbar{
+    display: flex;
+   background-color: rgb(75, 73, 73);
+   color: aliceblue;
+    top: 0;
+    min-height: 20.73px;
+    max-height: 2vh;
+    z-index: 19;
+    user-select: none;
+    display: flex;
+    flex-direction: row;
+    font-size: 14px;
+    justify-content: left;
+    align-items: center;
+
+}
+
+.functionbar-icon{
+ margin-left: 0.5rem;
+}
+
+.functionbar-icon:hover {
+    cursor: pointer;
+}
+
+.import{
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: left;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+    min-height: 50px;
+}
+
+.code{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.codeGenerator-head {
+    text-align: left;
+    font-weight: 100;
+}
+
+.codeArea{
+    flex: 1;
+    display: flex;
+    background-color: #292733;
+    white-space: pre-wrap;
+    font-weight: 400;
+    color: #c0c0c0;
+    text-align: left;
+    margin-top: 0.3rem;
+    max-height: 25vh;
+    max-width: 100%;
+    overflow: scroll;
+}
+
+
+
+  .codeArea::-webkit-scrollbar-track{
+    background-color: rgb(10, 10, 10)33;
+  }
+  
+  .codeArea::-webkit-scrollbar-thumb{
+    background-color: rgb(168, 0, 168);
+  }
+  
+  .codeArea::-webkit-scrollbar{
+    width: 0.25rem;
+    height: 0.25rem;
+  }
+
+  .codeArea::-webkit-scrollbar-corner{
+    background-color: #292733;
+  }
+  
+
+#icodeGenerator-import {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    white-space: pre-wrap;
+}
+
+#codeGenerator-code{
+}
+
+.codeArea:hover{
+    cursor: pointer;
+}
+
+.py-reserved{
+    color: rgb(199, 2, 2);
+}
+
+.py-reservedvalue{
+    color: rgb(6, 88, 212);
+  }
+
+.py-command{
+    color: rgb(2, 199, 77);
 }

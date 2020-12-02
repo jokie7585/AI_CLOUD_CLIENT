@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject, from, pipe, Observer, Subscription, BehaviorSubject } from 'rxjs';
 import { filter, first, map, skip} from 'rxjs/operators';
+
 import {webSocket, WebSocketSubject} from 'rxjs/webSocket'
 import {} from 'jszip'
 import {environment} from 'src/environments/environment' ;
@@ -9,11 +10,13 @@ import { CookieService } from 'ngx-cookie-service' ;
 import { cookieList} from 'src/utility/cookie' ;
 import {uploadProcess, UploadprocessList, AppUtilService} from './appUtility.service'
 import {CytusAppStatus, CytusBatchStatus} from 'src/utility/CetusProtocol'
-import * as JSZip from 'jszip';
+import { Router,ActivatedRoute } from '@angular/router';
 
-interface workspaceconfig {
+export interface workspaceconfig {
     tensorflowVersion: string,
     GpuNum: number
+    MemoryCapacity: string,
+    CpuRequest: number
 }
 
 export interface batchConfig {
@@ -39,8 +42,15 @@ export interface Branch {
 
 export interface CommandTemplete {
   command: string,
-  optionMap: Array<string>
+  optionMap: Array<optionTemplete>
 }
+
+export interface optionTemplete {
+    name: string,
+    type: optionType
+}
+
+export type optionType = 'flag' | 'option' | 'counter' | 'position';
 
 export interface Command {
   command: string,
@@ -50,6 +60,7 @@ export interface Command {
 export interface option {
   name: string,
   value: string, // if empty, its an boolean flag
+  type: optionType
 }
 
 /**
@@ -85,7 +96,7 @@ interface taskInterface {
 export class agantCtr {
   // utility: 根據當前workspace自動更新
   currentFunctionId = new Subject<string>();
-  cytusAppconfig = new BehaviorSubject<workspaceconfig>({tensorflowVersion: '', GpuNum: 0});
+  cytusAppconfig = new BehaviorSubject<workspaceconfig>({} as workspaceconfig);
   currentWs = new Subject<string>();
   currentBranch = new BehaviorSubject<Branch>({name: 'Template'} as Branch);
   TaskList = new BehaviorSubject<Array<task>>([]);
@@ -93,6 +104,7 @@ export class agantCtr {
   ShowTaskList =  new BehaviorSubject<boolean>(false);
   isShowEditCompnent =  new BehaviorSubject<boolean>(false);
   isShowBranchManager =  new BehaviorSubject<boolean>(false);
+  curActiveRouter :ActivatedRoute= undefined
   // fileupload
   // fs component add file(listen input-onchange)
   muteUploadProcessList = new BehaviorSubject<boolean>(false);
@@ -108,7 +120,7 @@ export class agantCtr {
   TaskList$: Array<task>;
   batchConf$: batchConfig;
   // batchConf
-  batchConf: BehaviorSubject<batchConfig> = new BehaviorSubject<batchConfig>({} as batchConfig)
+  batchConf: BehaviorSubject<batchConfig> = new BehaviorSubject<batchConfig>(undefined as batchConfig)
 
   // observerList
   uploadProcessListObserver: Observer<Array<uploadProcess>> = {
@@ -140,7 +152,8 @@ export class agantCtr {
   // defineAsync
   constructor(private cookieService: CookieService,
               private http: HttpClient,
-              private appCtr: AppUtilService){
+              private appCtr: AppUtilService,
+              private router: Router){
     this.userId = this.cookieService.get(cookieList.userID);
     
     this.currentWs.subscribe( wsname => {
@@ -165,16 +178,19 @@ export class agantCtr {
       this.TaskList$ = list;
     })
     this.batchConf.subscribe(config => {
-      this.batchConf$ = config as batchConfig;
-      this.generateBranchSwitchTask(this.batchConf$.branchSet);
+      if(config) {
+        this.batchConf$ = config as batchConfig;
+        this.generateBranchSwitchTask(this.batchConf$.branchSet);
+      }
     })
 
     console.log('agent Service init')
 
   }
 
-  switchWs(WsName: string) {
+  switchWs(WsName: string, activeRoute: ActivatedRoute) {
     this.currentWs.next(WsName)
+    this.curActiveRouter = activeRoute;
   }
 
   generateBranchSwitchTask(branchSet: Array<Branch>) {
@@ -208,6 +224,10 @@ export class agantCtr {
   
       this.taskRegist('BranchManager', 'Click to switch', taskList);
     }
+  }
+
+  jumpTemplateBranch() {
+    this.currentBranch.next( {name: 'Template'} as Branch)
   }
 
   taskRegist(group: string, promptMassage, list: Array<task>){
@@ -266,6 +286,36 @@ export class agantCtr {
   // agent status
   seletFuction(htmlId: string) {
     this.currentFunctionId.next(htmlId);
+    this.router.navigate([htmlId], {relativeTo: this.curActiveRouter});
+  }
+
+  checkSettingOk(): boolean {
+    let config = this.cytusAppconfig.getValue();
+    console.log({'in_check_of':config })
+    let shouldSet = false;
+    let alertString = 'You are not well config your app。Now jump to setting!'
+    
+    if(config.CpuRequest == undefined) {
+      shouldSet = true;
+    }
+    if(config.GpuNum  == undefined) {
+      shouldSet = true;
+    }
+    if(config.MemoryCapacity  == undefined) {
+      shouldSet = true;
+    }
+    if(config.tensorflowVersion  == undefined) {
+      shouldSet = true;
+    }
+
+    if(shouldSet) {
+      alert(alertString);
+      this.seletFuction('setting')
+      return false;
+    }
+    else {
+      return true;
+    }
   }
   
   // Cytusconfig
@@ -310,7 +360,6 @@ export class agantCtr {
     console.log({batchConf: newconf})   
     this.batchConf.next(newconf) 
 
-    
     // post
     this.http.post(url,
       newconf
@@ -342,6 +391,16 @@ export class agantCtr {
     console.log({curWs: this.curWs })
     newconf.branchSet = newconf.branchSet.slice(0, target_Index).concat(newconf.branchSet.slice(target_Index+1))
     this.updateBatch(newconf);
+  }
+
+  isBranchAvailibal(branchName: string): boolean {
+    for(let el of this.batchConf$.branchSet) {
+      if(el.name == branchName && (el.status!='waiting' &&  el.status!='undefined')) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   updateBatch(newconf: batchConfig){
@@ -528,7 +587,7 @@ export class agantCtr {
         alert('something wrong happens... please reloadPage!')
       }
 
-      location.reload();
+      this.router.navigate(['/workspace']);
     })
   }
 
@@ -618,12 +677,12 @@ export class agantCtr {
 
     this.http.get<any>(url, options)
     .subscribe((res => {
-      let {message} = res;
-      console.log(message)
-      alert(message)
+      // let {message} = res;
+      // console.log(message)
+      // alert(message)
     }),
     err => {
-      alert('file!')
+      alert('fail!')
     });
   }
 

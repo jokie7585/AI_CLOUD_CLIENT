@@ -1,8 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import {CommandTemplete, Branch, batchConfig, Command, agantCtr, option, task} from 'src/myservice/agentCtr.service'
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
+import {CommandTemplete, Branch, batchConfig, Command, agantCtr, option, optionTemplete, task} from 'src/myservice/agentCtr.service'
 import {socketService} from 'src/myservice/socket.service'
 import { BehaviorSubject, Subscription } from 'rxjs';
-import {CytusAppStatus, CytusBatchStatus} from 'src/utility/CetusProtocol'
+import {CytusAppStatus, CytusBatchConst, CytusBatchStatus} from 'src/utility/CetusProtocol'
+import {pythonCodeEditorCompilerService} from 'src/myservice/pythonCodeEditorCompiler'
 
 interface runningTimeCounter {
   curRuntime: number,
@@ -21,6 +22,8 @@ export class BatchComponent implements OnInit, OnDestroy {
   showSettings: boolean = true;
   showCreator: boolean = false;
   showBranchCreator: boolean = false;
+  showCodeGenerator: boolean = false;
+  CodeGeneratorlastGenerateIndex: number = -1;
   canRunBatch: boolean = false;
 
   //
@@ -39,25 +42,35 @@ export class BatchComponent implements OnInit, OnDestroy {
   C_mins_ms:number =  1000 * 60;
   C_secs_ms:number =  1000;
 
+  // rex
+  findFlagOption = /-[_a-zA-z][_a-zA-z0-9]*/;
+  findPostionalOption = /[_a-zA-z][_a-z0-9A-z]*/;
+  findOptionalOption = /--[_a-zA-z][_a-z0-9A-z]*/;
+
   // BranchcreatingForm
   creatingTemper: Branch;
 
   allSub: Array<Subscription> = [];
   branchRunTimeCounterTimer: NodeJS.Timeout
-  constructor(private agantCtr: agantCtr
+  constructor(private agantCtr: agantCtr,
+              private pyContentCompiler:pythonCodeEditorCompilerService
     ) { }
 
   ngOnInit(): void {
+    this.agantCtr.seletFuction('Batch')
     // subscribe branch
     this.allSub.push(this.agantCtr.batchConf.subscribe(val => {
-      console.log({curbatchConf:val})
+      if(val) {
+        console.log({curbatchConf:val})
       // initail and assign
       this.CommandEditingMonitor$ = [];
       this.BranchEditingMonitor$ = [];
+      clearInterval(this.branchRunTimeCounterTimer);
       this.branchRunTimeCounter = [];
       this.canRunBatch = true;
       // deep copy
       let newObj = JSON.parse(JSON.stringify(val)) as batchConfig
+      console.log({newObj:newObj})
       // init CommandEditingMonitor array
       this.batchConf = newObj.commandTemplete;
       this.branchset = newObj.branchSet;
@@ -68,25 +81,27 @@ export class BatchComponent implements OnInit, OnDestroy {
         this.BranchEditingMonitor$.push(false);
       }
       for(let i = 0; i < this.branchset.length; i++) {
-        let startDate
-        let endDate
+        let startDate:Date
+        let endDate: Date
         if(this.branchset[i].timeStart) {
           startDate = new Date(this.branchset[i].timeStart)
         }
         if(this.branchset[i].timeEnd) {
-          endDate = new Date(this.branchset[i].timeStart)
+          endDate = new Date(this.branchset[i].timeEnd)
         }
+        // 註冊計時器
         if(this.branchset[i].status == CytusAppStatus.RUNNING) {
           this.branchRunTimeCounter.push({
-            curRuntime: Date.now() - Number.parseInt(startDate.toISOString()),
+            
+            curRuntime: Date.now() - startDate.getTime(),
             startTime: Number.parseInt(startDate.toISOString()),
             isFinish: false
           })
         }
         else if(this.branchset[i].status == CytusAppStatus.COMPLETE) {
           this.branchRunTimeCounter.push({
-            curRuntime: Number.parseInt(endDate.toISOString())-Number.parseInt(startDate.toISOString()),
-            startTime: Number.parseInt(this.branchset[i].timeStart.toISOString()),
+            curRuntime: endDate.getTime()-startDate.getTime(),
+            startTime: startDate.getTime(),
             isFinish: true
           })
         }
@@ -113,6 +128,8 @@ export class BatchComponent implements OnInit, OnDestroy {
           }
         })
       }, 1000)
+      }
+
     }))
 
   }
@@ -129,10 +146,6 @@ export class BatchComponent implements OnInit, OnDestroy {
     }
 
     return '#292929'
-  }
-
-  composeFlagstring(command: Command) {
-    return command.optionMap.join(' ; ')
   }
 
   isshowCreator(isShow: boolean , event ?: Event){
@@ -175,16 +188,16 @@ export class BatchComponent implements OnInit, OnDestroy {
     //   flagString: this.flagStringInput.value
     // })
     // split
-    let optionMap = this.flagStringInput.value.split(';').map(el => {
+    let paramMap = this.flagStringInput.value.split(';').map(el => {
       let processedEl = el.trim();
       return processedEl
     })
     // filter white space
-    optionMap = optionMap.filter(el => {
+    paramMap = paramMap.filter(el => {
       return el != ''
     })
-    console.log('call adaddNewBatchCommand')
-    console.log(this.batchConf)
+
+    let optionMap = this.generateoptionTemplete(paramMap);
     let newCommdTemplete = Object.assign(this.batchConf);
     // update batchConf
     if(targetCmd) {
@@ -237,9 +250,10 @@ export class BatchComponent implements OnInit, OnDestroy {
           command: el.command,
           optionMap: el.optionMap.map(ele => {
             return {
-              name: ele,
+              name: ele.name,
+              type: ele.type,
               value: ''
-            }
+            } as option
           })
         }
       }),
@@ -351,7 +365,7 @@ export class BatchComponent implements OnInit, OnDestroy {
         let targetInput_Cmd = document.getElementById(`CM-L-I-Editor${index}command`) as HTMLInputElement;
         let targetInput_flag = document.getElementById(`CM-L-I-Editor${index}flag`) as HTMLInputElement;
         targetInput_Cmd.value = this.batchConf[index].command;
-        targetInput_flag.value = this.batchConf[index].optionMap.join(' ; ');
+        targetInput_flag.value = this.composeParamTemplateMapToString(this.batchConf[index].optionMap);
         targetInput_flag.select();
       }, 5)
       
@@ -376,34 +390,107 @@ export class BatchComponent implements OnInit, OnDestroy {
     return `CM-L-I-Editor${index}${type}`
   }
 
+  composeInputRadioname(index: number) {
+    return `BranchFlagSetRadio${index}`
+  }
+  
+  processBranchFlagSet_radio_click(ref: option, CytusTrue: boolean){
+    console.log('radioChange to: ' + CytusTrue)
+    if(CytusTrue) {
+      ref.value = CytusBatchConst.CytusTrue
+    }
+    else {
+      ref.value = CytusBatchConst.CytusFalse
+    }
+  }
+
+  processBranchFlagSet_radio_Check(ref: option, defalut?:boolean){
+    if((ref.value == CytusBatchConst.CytusTrue) == defalut) {
+      return true
+    }
+    else{
+      return false
+    }
+  }
+
   completeEditing(index: number) {
     // push result to server
     let targetInput_Cmd = document.getElementById(`CM-L-I-Editor${index}command`) as HTMLInputElement;
     let targetInput_flag = document.getElementById(`CM-L-I-Editor${index}flag`) as HTMLInputElement;
     if(targetInput_Cmd) {
-      let optionMap = targetInput_flag.value.split(';').map(el => {
+      let parameterArray = targetInput_flag.value.split(';').map(el => {
         let processedEl = el.trim();
         return processedEl
       })
       // filter white space
-      optionMap = optionMap.filter(el => {
+      parameterArray = parameterArray.filter(el => {
         return el != ''
       })
+      console.log({parameterArray:parameterArray})
+      let optionMap = this.generateoptionTemplete(parameterArray)
       console.log(optionMap)
       this.batchConf[index].command = targetInput_Cmd.value;
       this.batchConf[index].optionMap = optionMap;
+      console.log({finishedEditing:this.batchConf[index]})
       this.togleCommandEditor(index);
       // push to server by agantCtr
       this.agantCtr.updateBatch_CommandTemplete(this.batchConf)
     }
   }
 
+  generateoptionTemplete(parameterArray: Array<string>): Array<optionTemplete>{
+    let optionTemplete:  Array<optionTemplete> = []
+    for(let param of parameterArray) {
+      if(param.match(this.findFlagOption) && param.match(this.findFlagOption)[0].length == param.length) {
+        // flag param find
+        optionTemplete.push({name:param, type:'flag'})
+      }
+      else if(param.match(this.findOptionalOption) && param.match(this.findOptionalOption)[0].length == param.length) {
+        // Optional param find
+        optionTemplete.push({name:param, type:'option'})
+      }
+      else if(param.match(this.findPostionalOption) && param.match(this.findPostionalOption)[0].length == param.length) {
+        // Postional param find
+         optionTemplete.push({name:param, type:'position'})
+      }
+    }
+
+    return optionTemplete;
+  }
+
+  composeParamTemplateMapToString(map: Array<optionTemplete>):string {
+    let composeString = ''
+    for(let param of map) {
+      composeString = composeString.concat(param.name, ';')
+    }
+    return composeString
+  }
+
+
   resetBatch() {
     this.agantCtr.updateBatch_CommandTemplete([])
   }
 
   runBatch() {
-    this.agantCtr.runwbatch();
+    if(this.agantCtr.checkSettingOk()) {
+      this.canRunBatch = false;
+      this.branchset.forEach(el => {
+      el.status = 'submiting'
+      })
+      this.branchRunTimeCounter.forEach
+      this.agantCtr.runwbatch();
+    }
+  }
+
+  maskBranchRuntimeCounter() {
+    clearInterval(this.branchRunTimeCounterTimer)
+    setTimeout(() => {
+      this.branchRunTimeCounter.forEach(el => {
+        el.isFinish = true;
+        el.curRuntime = undefined;
+      })
+    },1000)
+  
   }
 
   reloadBatchConfig(){
@@ -435,7 +522,32 @@ export class BatchComponent implements OnInit, OnDestroy {
     
   }
 
-  testSocketPeek() {
+  // 
+  generatePythonCode(optionTemplete: Array<optionTemplete>, indexOfTemplate:number) {
+    if(!this.showCodeGenerator || this.CodeGeneratorlastGenerateIndex != indexOfTemplate) {
+      this.showCodeGenerator = true;
+      this.CodeGeneratorlastGenerateIndex =  indexOfTemplate;
+      setTimeout(() => {
+        let targetEl = document.getElementById('codeGenerator-code') as HTMLDivElement
+       targetEl.innerHTML = '' // 先清空
+        // 產生code
+        let CompiledPyCode = this.pyContentCompiler.parseFromCommandTemplete(optionTemplete);
+        targetEl.innerHTML = CompiledPyCode
+      },500)
+    }
+    else {
+      this.showCodeGenerator = false;
+    }
+  }
+
+  closeCodeGenerator() {
+    this.showCodeGenerator = false;
+  }
+
+  copycontent(id: string) {
+    let targetEl = document.getElementById(id) as HTMLDivElement
+    console.log(targetEl.innerHTML)
   }
 
 }
+

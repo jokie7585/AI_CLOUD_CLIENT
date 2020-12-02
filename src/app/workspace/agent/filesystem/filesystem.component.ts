@@ -430,6 +430,14 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
         'Cookie': 'token',
     };
 
+    // check
+    if(this.curBranch != 'Template') {
+      if( !this.agent.isBranchAvailibal(this.curBranch) ) {
+        alert(`${this.curBranch} is never run! please run batch_work in batch manager first`)
+        this.agent.jumpTemplateBranch();
+      }
+    }
+
 
     this.http.get<any>(url, options)
     .subscribe((res => {
@@ -554,7 +562,9 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
   }
 
   openTerminal(){
-    this.showconsole = false;
+    if(!this.showTerminal && this.showconsole) {
+      this.openScripWriter()
+    }
     this.showTerminal = !this.showTerminal;
     if(this.showTerminal) {
       this.terminalCtr.getLogs(this.closTerminal)
@@ -571,7 +581,9 @@ export class FilesystemComponent implements OnInit, AfterViewChecked,OnDestroy {
   }
 
   openScripWriter(){
-    this.showTerminal = false;
+    if(this.showTerminal && !this.showconsole) {
+      this.openTerminal()
+    }
     this.showconsole = !this.showconsole;
     this.agent.isShowEditCompnent.next(this.showconsole)
     if(this.showconsole == true) {

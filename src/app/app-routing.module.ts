@@ -24,6 +24,10 @@ const routes: Routes = [
     loadChildren: () => import('src/app/workspace/workspace.module').then(m => m.WorkspaceModule)
   },
   {
+    path: appPath.doc,
+    loadChildren: () => import('src/app/document/document.module').then(m => m.DocumentModule)
+  },
+  {
     path: '**',
     redirectTo: appPath.home,
     pathMatch: 'full'

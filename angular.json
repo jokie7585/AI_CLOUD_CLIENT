@@ -63,6 +63,7 @@
               "src/assets/next.svg",
               "src/assets/dragTemp.svg",
               "src/assets/code.svg",
+              "src/assets/code_white.svg",
               "src/assets/bat.svg",
               "src/assets/plus.svg",
               "src/assets/desktop.svg",
@@ -87,10 +88,12 @@
               "src/assets/power.svg",
               "src/assets/directory.svg",
               "src/assets/workspace_new.svg",
-              "src/assets/workspace_lock.svg"
+              "src/assets/workspace_lock.svg",
+              "src/assets/doc/*"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "node_modules/prismjs/themes/prism-okaidia.css"
             ],
             "scripts": []
           },

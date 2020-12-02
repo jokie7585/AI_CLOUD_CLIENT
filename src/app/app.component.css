@@ -59,6 +59,8 @@
   min-width: 327px;
   max-width: 327px;
   align-items: center;
+  padding-right: 30px;
+  padding-left: 20px;
   }
 
 
@@ -197,12 +199,13 @@
 
 
 a{
-  color: 	white;
+  color: 	rgb(243, 243, 243);
   font-size: 14px;
   text-decoration: none;
   display: block;
   cursor: pointer;
-  margin-right: 1rem;
+  font-weight: bold;
+  margin-right: 1.5rem;
   margin-left: 0.5rem;
 }
 

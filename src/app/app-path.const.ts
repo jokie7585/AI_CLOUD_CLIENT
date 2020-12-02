@@ -8,6 +8,7 @@ export const appPath  = {
   login: 'login',
   // 工作區
   workspace: 'workspace',
+  doc:'document',
   marketplace: 'workspace/manage/marketplace',
   overview: 'workspace/manage/overview'
 

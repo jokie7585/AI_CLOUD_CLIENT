@@ -25,6 +25,10 @@ body::-webkit-scrollbar{
   height: 0.25rem;
 }
 
+body::-webkit-scrollbar-corner{
+
+}
+
 .default-applevel-pagebase {
   display: flex;
   flex-direction: column;
@@ -39,4 +43,16 @@ body::-webkit-scrollbar{
 
 .boldText{
   font-weight: 600;
+}
+
+.py-reserved{
+  color: rgb(199, 2, 2);
+}
+
+.py-reservedvalue{
+  color: rgb(6, 88, 212);
+}
+
+.py-command{
+  color: rgb(2, 199, 77);
 }

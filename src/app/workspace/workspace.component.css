@@ -17,6 +17,7 @@
   max-width: 327px;
   padding-right: 30px;
   padding-left: 20px;
+  border-right: solid 1px #e9e9e9;
 }
 
 
@@ -71,7 +72,6 @@
   min-height: 20px;
   max-width: 69px;
   max-height: 20px;
-  margin-right: 1rem;
   padding: 4px;
   justify-content: center;
   align-items: center;
@@ -192,7 +192,53 @@ h2{
 .pageNewsfeedAndfooter{
   flex: 7;
   display: flex;
+  flex-direction: column;
   background-color:#f6f8fa ;
+}
+
+.newsBox{
+  display: flex;
+  flex-direction: column;
+  margin-top: 2rem;
+  margin-right: 4vw;
+  margin-left: 2vw;
+  min-height: 24vh;
+  background-color: white;
+  border-radius: 6px;
+  border: solid 1px #d4d4d4;
+  color: #212222;
+}
+
+.newsBox-Title{
+  display: flex;
+  font-size: 24px;
+  font-weight: bold;
+  justify-content: left;
+  flex: 1;
+  align-items: center;
+  margin-left: 2rem;
+}
+
+.newsBox-detail{
+  display: flex;
+  margin-left: 2rem;
+  flex: 3;
+  justify-content: left;
+  align-items: top;
+  font-size: 16px;
+  color: #3b3b3b;
+}
+
+.tips {
+  font-size: 10;
+  margin-left: 2rem;
+  margin-top: 1.5rem;
+  color: rgb(107, 107, 107);
+}
+
+.tips-item{
+  margin-left: 0.5rem;
+  text-align: left;
 }
 
 

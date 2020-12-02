@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject, BehaviorSubject, Subscription } from 'rxjs';
+import { Observable, Subject, BehaviorSubject, Subscription, from } from 'rxjs';
 import {webSocket} from 'rxjs/webSocket'
 import {agantCtr} from 'src/myservice/agentCtr.service'
 import {environment} from 'src/environments/environment' ;
 import {socketReponse, forceUpdate} from 'src/utility/SocketProtocol'
+import {AppUtilService} from 'src/myservice/appUtility.service'
 
 
 @Injectable({
@@ -21,7 +22,8 @@ export class socketService {
   websocket = webSocket<any>(environment.socket);
 
 
-  constructor(public agentCtr: agantCtr){
+  constructor(public agentCtr: agantCtr,
+              public appUtil:AppUtilService){
     console.log('socket service init')
     // socket subscribe
     this.websocket.subscribe(
@@ -41,6 +43,9 @@ export class socketService {
               console.log('in forceupdate batchComponent')
             this.agentCtr.getBatchConf()
           }
+          else if(body.target === 'nofification') {
+            this.appUtil.GetNotificationList();
+          }
         }
       },
       err => {
@@ -50,6 +55,21 @@ export class socketService {
         console.log()
       }
     )
+
+
+    // window.addEventListener('beforeunload' , (e) => {
+    //     e.preventDefault();
+    //     e.returnValue = 'onbeforeunload';
+
+    //     console.log('fq')
+
+    //     return 'bye!'
+    // })
+
+    
+
+   
+
   }
 
   /**
