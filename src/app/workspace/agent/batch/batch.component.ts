@@ -51,6 +51,7 @@ export class BatchComponent implements OnInit, OnDestroy {
   creatingTemper: Branch;
 
   allSub: Array<Subscription> = [];
+  pollingInterval;
   branchRunTimeCounterTimer: NodeJS.Timeout
   constructor(private agantCtr: agantCtr,
               private saocketSv: socketService,
@@ -133,12 +134,19 @@ export class BatchComponent implements OnInit, OnDestroy {
 
     }))
 
+    this.pollingInterval = setInterval(()=> {
+      this.agantCtr.getBatchConf();
+    },1000)
+    
+
   }
 
   ngOnDestroy(){
     for(let el of this.allSub ) {
       el.unsubscribe();
     }
+
+    clearInterval(this.pollingInterval)
   }
 
   isSelectt(isSelect){

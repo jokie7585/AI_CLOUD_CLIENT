@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject, BehaviorSubject, Subscription, from } from 'rxjs';
 import {webSocket} from 'rxjs/webSocket'
-import {agantCtr} from 'src/myservice/agentCtr.service'
+import {agantCtr, batchConfig} from 'src/myservice/agentCtr.service'
 import {environment} from 'src/environments/environment' ;
 import {socketReponse, forceUpdate} from 'src/utility/SocketProtocol'
 import {AppUtilService} from 'src/myservice/appUtility.service'
@@ -13,7 +13,7 @@ import {AppUtilService} from 'src/myservice/appUtility.service'
 export class socketService {
   // SubjectList
   
-
+  batchConf: Subject<batchConfig> = new Subject<batchConfig>();
   /**
    * Websocket
    * 
@@ -65,7 +65,7 @@ export class socketService {
           let body = res.body as forceUpdate
           if(body.target === 'batchComponent') {
               console.log('in forceupdate batchComponent')
-              that.agentCtr.getBatchConf(body.ws)
+              this.agentCtr.batchConf.next(body.ws as batchConfig)
           }
           else if(body.target === 'nofification') {
             that.appUtil.GetNotificationList();
