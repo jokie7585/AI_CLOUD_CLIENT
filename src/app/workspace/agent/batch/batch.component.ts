@@ -53,6 +53,7 @@ export class BatchComponent implements OnInit, OnDestroy {
   allSub: Array<Subscription> = [];
   branchRunTimeCounterTimer: NodeJS.Timeout
   constructor(private agantCtr: agantCtr,
+              private saocketSv: socketService,
               private pyContentCompiler:pythonCodeEditorCompilerService
     ) { }
 

@@ -94,6 +94,7 @@ interface taskInterface {
   providedIn: 'root'
 })
 export class agantCtr {
+  ref = this
   // utility: 根據當前workspace自動更新
   currentFunctionId = new Subject<string>();
   cytusAppconfig = new BehaviorSubject<workspaceconfig>({} as workspaceconfig);
@@ -421,10 +422,16 @@ export class agantCtr {
   }
 
   // update branch info
-  getBatchConf = ()  => {
-    console.log('in get batchconfig of :' + this.curWs)
+  getBatchConf(ws?:string) {
+    console.log('in get batchconfig of :' + this.ref.curWs)
     console.log('user: ' + this.userId)
+
+
     let url = `http://${environment.apiserver}/users/${this.userId}/management/api/getBatchConfig/${this.curWs}`
+
+    if(ws) {
+      url = `http://${environment.apiserver}/users/${this.userId}/management/api/getBatchConfig/${ws}`
+    }
 
     this.http.get(url, {
       headers: {

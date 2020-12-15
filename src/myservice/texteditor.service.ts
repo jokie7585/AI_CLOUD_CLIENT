@@ -303,6 +303,7 @@ export class TexteditorService {
     for(let char of data) {
       this.insertTextAtCurCol(char)
     }
+    console.log({content: this.content$})
   }
 
   /**
@@ -423,10 +424,10 @@ export class TexteditorService {
 
   moveUpline(indirectCall?:boolean){
     let curLineIndex = this.content$.indexOf(this.editingLine$);
-    console.log({curLine: curLineIndex})
     if(curLineIndex > 0) {
       // change editingLine
       this.editingLine$ = this.content$[curLineIndex-1];
+      console.log({curLine: curLineIndex, LineObj: this.editingLine$})
       // process col
       if(!indirectCall ) {
         if(this.editingCol$ > this.content$[curLineIndex-1].content.length) {
@@ -443,6 +444,7 @@ export class TexteditorService {
     if(curLineIndex < this.content$.length-1) {
       // change editingLine
       this.editingLine$ = this.content$[curLineIndex+1];
+      console.log({curLine: curLineIndex, LineObj: this.editingLine$})
       // process col
       if(!indirectCall ) {
         if(this.editingCol$ > this.content$[curLineIndex+1].content.length) {
@@ -502,21 +504,26 @@ export class TexteditorService {
     this.content$ = this.content$.slice(0, insertPoint).concat({content:'', colchroffset:[], columnOffset:[this.editingLine$.columnOffset[0]], elId: `${this.elIdPredix}${Date.now()}`}, this.content$.slice(insertPoint));
     // initialize the `curEditingLine` and set A_Section as new content
     console.log({
-      oldeditinLine: this.editingLine$.content
+      oldeditinLine: A_Section
     })
     this.editingCol$ = 0;
     this.editingLine$.content = ''
     this.editingLine$.colchroffset = []
-    this.editingLine$.columnOffset = []
+    this.editingLine$.columnOffset = this.editingLine$.columnOffset.slice(0,1);
     this.synchronizeFormateInput(A_Section);
+    console.log({
+      oldeditinLineRender: this.editingLine$
+    })
     // process new line with B_Section
     console.log({
-      neweditinLine: this.editingLine$.content
+      neweditinLine: B_Section
     })
     this.editingLine$ = this.content$[insertPoint];
     this.editingCol$ = 0;
     this.synchronizeFormateInput(B_Section);
-
+    console.log({
+      neweditinLineRender: this.editingLine$
+    })
     if(!this.copyingLock$) {
       this.content.next(this.content$);
     }

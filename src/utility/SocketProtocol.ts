@@ -13,5 +13,6 @@ export interface socketHeader {
 
 
 export interface forceUpdate {
-    target: 'batchComponent' | 'nofification'
+    target: 'batchComponent' | 'nofification',
+    ws:string
 }

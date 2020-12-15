@@ -24,37 +24,6 @@ export class socketService {
 
   constructor(public agentCtr: agantCtr,
               public appUtil:AppUtilService){
-    console.log('socket service init')
-    // socket subscribe
-    this.websocket.subscribe(
-      onMsg => {
-        let res = onMsg as socketReponse
-        console.log({incommingSocketRes: res})
-        if(res.action === 'message') {
-          console.log({socketMessage: res.body})
-        }
-        else if (res.action === 'update') {
-          console.log('in forceupdate')
-          console.log({peekAgentCurWs: this.agentCtr.curWs})
-          console.log({peekAgentCuruserid: this.agentCtr.userId})
-          console.log({peekAgent: this.agentCtr.batchConf$})
-          let body = res.body as forceUpdate
-          if(body.target === 'batchComponent') {
-              console.log('in forceupdate batchComponent')
-            this.agentCtr.getBatchConf()
-          }
-          else if(body.target === 'nofification') {
-            this.appUtil.GetNotificationList();
-          }
-        }
-      },
-      err => {
-
-      },
-      () => {
-        console.log()
-      }
-    )
 
 
     // window.addEventListener('beforeunload' , (e) => {
@@ -78,6 +47,38 @@ export class socketService {
    */
 
    init(){
+    console.log('socket service init')
+    // socket subscribe
+    let that = this;
+    this.websocket.subscribe(
+      onMsg => {
+        let res = onMsg as socketReponse
+        console.log({incommingSocketRes: res})
+        if(res.action === 'message') {
+          console.log({socketMessage: res.body})
+        }
+        else if (res.action === 'update') {
+          console.log('in forceupdate')
+          // console.log({peekAgentCurWs: this.agentCtr.curWs})
+          // console.log({peekAgentCuruserid: this.agentCtr.userId})
+          // console.log({peekAgent: this.agentCtr.batchConf$})
+          let body = res.body as forceUpdate
+          if(body.target === 'batchComponent') {
+              console.log('in forceupdate batchComponent')
+              that.agentCtr.getBatchConf(body.ws)
+          }
+          else if(body.target === 'nofification') {
+            that.appUtil.GetNotificationList();
+          }
+        }
+      },
+      err => {
+
+      },
+      () => {
+        console.log()
+      }
+    )
      console.log('init socket.service')
    }
 
